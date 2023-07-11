@@ -44,6 +44,7 @@ dependencies:
   url_launcher: ^6.1.7
   flutter_dialogs: ^3.0.0
   google_fonts: ^4.0.4
+  chewie_audio: ^1.5.0
   amazon_cognito_identity_dart_2: ^3.1.1
   path_provider: ^2.0.11
   location_geocoder: ^1.0.5
