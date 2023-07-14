@@ -23,6 +23,7 @@ import '../../provider/uploader_provider.dart';
 import 'authComponent/auth_textfield.dart';
 
 import 'authComponent/password_hint.dart';
+
 class Auth extends StatefulWidget {
   const Auth({Key? key}) : super(key: key);
 
@@ -63,17 +64,14 @@ class _AuthState extends State<Auth> {
 
   @override
   void initState() {
-
     messaging = FirebaseMessaging.instance;
     messaging.getToken().then((value) {
       setState(() {
         fcm_token = value!;
       });
-      
+
       print("fcmTokenn $value");
-
     });
-
 
     firstnameController = TextEditingController();
     lastnameController = TextEditingController();
@@ -112,7 +110,7 @@ class _AuthState extends State<Auth> {
     confirmPasswordController.clear();
   }
 
-  void valueChanger(value){
+  void valueChanger(value) {
     setState(() {
       placeQuery = value;
     });
@@ -125,467 +123,586 @@ class _AuthState extends State<Auth> {
     });
   }
 
-
   void phoneNumberSetter(String value) {
     setState(() {
       phoneNumber = value;
+      print("phoneNumber $phoneNumber");
     });
   }
 
-  void phoneValidationSetter(String? value){
+  void phoneValidationSetter(String? value) {
     setState(() {
       phoneValidation = value;
     });
   }
 
-  void hintPasswordShower(){
+  void hintPasswordShower() {
     setState(() {
       ishintPassowrdShow = true;
     });
   }
 
-
   submitAllData() {
     _formKey.currentState!.save();
 
-    if (
-       stateController.text.isNotEmpty && cityController.text.isNotEmpty &&
-       streetController.text.isNotEmpty && zipcodeController.text.isNotEmpty
-    ) {
-      if(nameValidator(stateController.text) != null){
-        displayErrorSnackBar(context, nameValidator(stateController.text) ?? "");
-      }else if(nameValidator(cityController.text) != null){
+    if (stateController.text.isNotEmpty &&
+        cityController.text.isNotEmpty &&
+        streetController.text.isNotEmpty &&
+        zipcodeController.text.isNotEmpty) {
+      if (nameValidator(stateController.text) != null) {
+        displayErrorSnackBar(
+            context, nameValidator(stateController.text) ?? "");
+      } else if (nameValidator(cityController.text) != null) {
         displayErrorSnackBar(context, nameValidator(cityController.text) ?? "");
-      }else if(streetValidator(streetController.text) != null){
-        displayErrorSnackBar(context, streetValidator(streetController.text) ?? "");
-      }else if(zipcodeValidator(zipcodeController.text) != null){
-        displayErrorSnackBar(context, zipcodeValidator(zipcodeController.text) ?? "");
-      } else{
+      } else if (streetValidator(streetController.text) != null) {
+        displayErrorSnackBar(
+            context, streetValidator(streetController.text) ?? "");
+      } else if (zipcodeValidator(zipcodeController.text) != null) {
+        displayErrorSnackBar(
+            context, zipcodeValidator(zipcodeController.text) ?? "");
+      } else {
         if (isChecked) {
-
           SignUpModel signupmodel = SignUpModel(
-            firstName: firstnameController.text,
-            lastName: lastnameController.text,
-            profilePicture: context.read<UploaderProvider>().uplodedFile ?? "",
-            email: emailController.text,
-            phoneNumber: formatPhoneNumber(phoneNumber),
-            state: stateController.text,
-            city: cityController.text,
-            password: passwordController.text,
-            zipCode: int.parse(zipcodeController.text),
-            userRole: "customer",
-            street: streetController.text,
-            fcm_token: fcm_token
-          );
+              firstName: firstnameController.text,
+              lastName: lastnameController.text,
+              profilePicture:
+                  context.read<UploaderProvider>().uplodedFile ?? "",
+              email: emailController.text,
+              phoneNumber: formatPhoneNumber(phoneNumber),
+              state: stateController.text,
+              city: cityController.text,
+              password: passwordController.text,
+              zipCode: int.parse(zipcodeController.text),
+              userRole: "customer",
+              street: streetController.text,
+              fcm_token: fcm_token);
           context.read<AuthProvider>().signUp(context, signupmodel);
         } else {
           displayInfoSnackBar(
               context, "You have to accept our Terms & Conditions  first");
         }
       }
-
     } else {
       displayErrorSnackBar(context, "Please fill out the above form ");
     }
   }
 
-
   submitData() {
-     _formKey.currentState!.save();
+    _formKey.currentState!.save();
 
-     if(true){
-        if (signUp) {
-          if(
-          firstnameController.text.isNotEmpty && lastnameController.text.isNotEmpty &&
-              emailController.text.isNotEmpty && phoneNumber !='' && passwordController.text.isNotEmpty
-          ){
-            if(
-            is8Char(passwordController.text) && containsNumb(passwordController.text)
-                && containsLowerCase(passwordController.text) && containsUpperCase(passwordController.text)
-                && containsSymbols(passwordController.text)
-            ){
-              if (_image != null) {
-                if(nameValidator(firstnameController.text) != null){
-                  displayErrorSnackBar(context, nameValidator(firstnameController.text) ?? "");
-                }else if(nameValidator(lastnameController.text) != null){
-                  displayErrorSnackBar(context, nameValidator(lastnameController.text) ?? "");
-                }else if(emailValidator(emailController.text) != null){
-                  displayErrorSnackBar(context, emailValidator(emailController.text) ?? "");
-                }else if(phoneValidation != null){
-                  displayErrorSnackBar(context, phoneValidation ?? "");
-                }else if(passwordValidator(passwordController.text) != null){
-                  displayErrorSnackBar(context, passwordValidator(passwordController.text) ?? "");
-                }else{
-                  setState(() {
-                    SecondPage = true;
-                  });
-                }
-
+    if (true) {
+      if (signUp) {
+        if (firstnameController.text.isNotEmpty &&
+            lastnameController.text.isNotEmpty &&
+            emailController.text.isNotEmpty &&
+            phoneNumber != '' &&
+            passwordController.text.isNotEmpty) {
+          if (is8Char(passwordController.text) &&
+              containsNumb(passwordController.text) &&
+              containsLowerCase(passwordController.text) &&
+              containsUpperCase(passwordController.text) &&
+              containsSymbols(passwordController.text)) {
+            if (_image != null) {
+              if (nameValidator(firstnameController.text) != null) {
+                displayErrorSnackBar(
+                    context, nameValidator(firstnameController.text) ?? "");
+              } else if (nameValidator(lastnameController.text) != null) {
+                displayErrorSnackBar(
+                    context, nameValidator(lastnameController.text) ?? "");
+              } else if (emailValidator(emailController.text) != null) {
+                displayErrorSnackBar(
+                    context, emailValidator(emailController.text) ?? "");
+              } else if (phoneValidation != null) {
+                displayErrorSnackBar(context, phoneValidation ?? "");
+              } else if (passwordValidator(passwordController.text) != null) {
+                displayErrorSnackBar(
+                    context, passwordValidator(passwordController.text) ?? "");
               } else {
-                displayErrorSnackBar(context, "please upload profile picture ");
+                setState(() {
+                  SecondPage = true;
+                });
               }
-            }else{
-              displayErrorSnackBar(context, "please enter valid password ");
+            } else {
+              displayErrorSnackBar(context, "please upload profile picture ");
             }
-          } else{
-            displayErrorSnackBar(context, "Please fill out the above form");
+          } else {
+            displayErrorSnackBar(context, "please enter valid password ");
           }
-
         } else {
-          if(emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-            if(emailValidator(emailController.text) != null){
-              displayErrorSnackBar(context, emailValidator(emailController.text) ?? "");
-            }else if(passwordValidator(passwordController.text) != null){
-              displayErrorSnackBar(context, passwordValidator(passwordController.text) ?? "");
-            }else{
-              context
-                  .read<AuthProvider>()
-                  .signIn(context, emailController.text, passwordController.text,fcm_token);
-            }
-          }else{
-            displayErrorSnackBar(context, "Please fill out the above form ");
+          displayErrorSnackBar(context, "Please fill out the above form");
+        }
+      } else {
+        if (emailController.text.isNotEmpty &&
+            passwordController.text.isNotEmpty) {
+          if (emailValidator(emailController.text) != null) {
+            displayErrorSnackBar(
+                context, emailValidator(emailController.text) ?? "");
+          } else if (passwordValidator(passwordController.text) != null) {
+            displayErrorSnackBar(
+                context, passwordValidator(passwordController.text) ?? "");
+          } else {
+            context.read<AuthProvider>().signIn(context, emailController.text,
+                passwordController.text, fcm_token);
           }
+        } else {
+          displayErrorSnackBar(context, "Please fill out the above form ");
         }
       }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
-    DateTime timeBackPresed  =DateTime.now();
+    DateTime timeBackPresed = DateTime.now();
 
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         final diffrence = DateTime.now().difference(timeBackPresed);
         final isExitWarning = diffrence >= const Duration(seconds: 2);
         timeBackPresed = DateTime.now();
-        if(isExitWarning){
+        if (isExitWarning) {
           return false;
-        }else{
+        } else {
           exit(0);
         }
       },
-
       child: Scaffold(
-          appBar: signUp? AppBar(
-              foregroundColor: Colors.black,
-              title: const Text("Sign Up", style: TextStyle(color: Colors.black)),
-              backgroundColor: Colors.white,
-                leading: BackButton(
-                  onPressed: (){
-                    setState(() {
-                      if(SecondPage){
-                        setState(() {
-                          SecondPage = false;
-                        });
-                      }else{
-                        setState(() {
-                          signUp = false;
-                        });
-                      }
-                    });
-                  },
-                ),
-            ): null,
-          body: Center(
-
-          child: SafeArea(
-
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(32.0),
-            child:
-            Form(
-              key: _formKey,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                if (!isKeyboard)
-                  Visibility(
-                    visible: !signUp,
-                    child: Center(
-                      child: Image.asset("lib/assets/logo.png"),
-                    ),
+          appBar: signUp
+              ? AppBar(
+                  foregroundColor: Colors.black,
+                  title: const Text("Sign Up",
+                      style: TextStyle(color: Colors.black)),
+                  backgroundColor: Colors.white,
+                  leading: BackButton(
+                    onPressed: () {
+                      setState(() {
+                        if (SecondPage) {
+                          setState(() {
+                            SecondPage = false;
+                          });
+                        } else {
+                          setState(() {
+                            signUp = false;
+                          });
+                        }
+                      });
+                    },
                   ),
-
-                const SizedBox(height: 10),
-                Column(
-                  children: [
-                      Column(
-                        children: [
+                )
+              : null,
+          body: Center(
+            child: SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(32.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (!isKeyboard)
                           Visibility(
-                            visible: signUp && !SecondPage,
-                            child: Stack(children: [
-                              InkWell(
-                                onTap: () {
-                                  showSelectPhotoOptions(context, _pickImage);
-                                },
-                                child: Card(
-                                  elevation: 8.0,
-                                  shape: const CircleBorder(),
-                                  clipBehavior: Clip.antiAlias,
-                                  child: profileAvatar(null, _image, false),
-                                ),
-                              ),
-                              if (context.watch<UploaderProvider>().isLoading)
-                                const Positioned(
-                                  top: 45,
-                                  right: 47,
-                                  child: CircularProgressIndicator(
-                                    color: kPrimaryColor,
-                                  ),
-                                ),
-                              Positioned(
-                                bottom: 0,
-                                right: 5,
-                                child: InkWell(
-                                  onTap: () {
-                                    showSelectPhotoOptions(context, _pickImage);
-                                  },
-                                  child: const CircleAvatar(
-                                      backgroundColor: Colors.grey,
-                                      child: Icon(Icons.photo_camera,
-                                          size: 23, color: Colors.white)),
-                                ),
-                              )
-                            ]),
+                            visible: !signUp,
+                            child: Center(
+                              child: Image.asset("lib/assets/logo.png"),
+                            ),
                           ),
-                          const SizedBox(height: 20),
-                          Visibility(
-                            visible: !SecondPage,
-                            child: Column(
+                        const SizedBox(height: 10),
+                        Column(
+                          children: [
+                            Column(
                               children: [
                                 Visibility(
                                   visible: signUp && !SecondPage,
-                                  child:
-                                  CustomAuthTextField(isTag: false,isState: false,isNumber: false,icon: Icons.person, nameController: firstnameController, hintText: "First Name", submitData: submitData, isEmail: false, isCity: true, isZipCode: false, isStreet: false, isPassword: false, isConfirmPassword: false,)
-                                ),
-
-
-
-                                Visibility(
-                                  visible: signUp && !SecondPage,
-                                  child:
-                                  CustomAuthTextField(isTag: false,isState: false,isNumber: false,icon: Icons.person, nameController: lastnameController, hintText: "Last Name", submitData: submitData, isEmail: false, isCity: true, isZipCode: false, isStreet: false, isPassword: false, isConfirmPassword: false,)
-                                ),
-
-                                Visibility(
-                                    visible: !SecondPage,
-                                    child:
-                                    CustomAuthTextField(isTag: false,isState: false,isNumber: false,icon:  Icons.email, nameController: emailController, hintText: "Email", submitData: submitData, isEmail: true, isCity: false, isZipCode: false, isStreet: false, isPassword: false, isConfirmPassword: false,),
-
-                                       ),
-
-                                Visibility(
-                                  visible:  !SecondPage,
-                                  child:
-                                  CustomAuthTextField(isTag: false,isState: false, hintPasswordShower:hintPasswordShower, isNumber: false, icon:  Icons.lock, nameController: passwordController, hintText: "Password", submitData: submitData, isEmail: false, isCity: false, isZipCode: false, isStreet: false, isPassword: true,isPasswordNotVisible: isPasswordNotVisible,changeVisibility: changeVisibility, isConfirmPassword: false,),
-                                ),
-
-
-                                Visibility(
-                                    visible: signUp && !SecondPage && ishintPassowrdShow,
-                                    child:  Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: passwordHint(passwordController.text)
-                                    )
-                                ),
-
-                                Visibility(
-                                    visible: signUp,
-                                    child:
-                                    // CustomConfirmPasswordAuthTextField(nameController: confirmPasswordController, submitData: submitData)
-                                    CustomAuthTextField(isTag: false,isState: false,isNumber: false,icon: Icons.lock,isPasswordNotVisible: isPasswordNotVisible,changeVisibility: changeVisibility, nameController: confirmPasswordController, hintText: "Confirm Password", submitData: submitData, isEmail: false, isCity: false, isZipCode: false, isStreet: false, isPassword: false, isConfirmPassword: true)
-
-                                  ),
-
-                                Visibility(
-                                    visible: signUp && !SecondPage,
-                                    child:
-
-                                    CustomPhoneTextField( phoneValidation: phoneValidation,phoneValidationSetter: phoneValidationSetter,  phoneNumberSetter: phoneNumberSetter, phoneController: phoneController)
-
-                                ),
-
-                              ],
-                            ),
-                          ),
-
-                          const SizedBox(height: 10),
-
-                          Visibility(
-                              visible: SecondPage,
-                              child: Column(
-                                children: [
-
-                                  CustomAuthTextField(isTag: false,isState: false,isNumber: false,icon: Icons.location_city, nameController: streetController, hintText: "Street", submitData: submitData,valueChanger: valueChanger, isEmail: false, isCity: false, isZipCode: false, isStreet: true, isPassword: false, isConfirmPassword: false,),
-
-                                  if(placeQuery != null)
-                                      Consumer<AutoCompleteProvider>(
-                                      builder: (context,value,child) {
-                                      return  value.isLoading ?
-
-                                      ListView.builder(
-                                          itemCount: 3,
-                                          shrinkWrap: true,
-                                          itemBuilder:(context,index){
-                                            return const CustomAutoCompleteCardSkeletal();
-                                          }
-                                      )
-                                        :
-                                        ListView.builder(
-                                            itemCount: value.placeList?.length,
-                                            shrinkWrap: true,
-                                            itemBuilder:(context,index){
-                                              final req = value.placeList![index];
-                                              return Column(
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        streetController.text = getStreet(req?.description);
-                                                        cityController.text = getCity(req?.description);
-                                                        stateController.text = getState(req?.description);
-
-                                                        placeQuery = null;
-                                                      });
-                                                    },
-                                                    child: ListTile(
-                                                      title: Text(req?.description ?? ""),
-                                                    ),
-                                                  ),
-                                                  const Divider()
-                                                ],
-                                              );
-
-                                            }
-                                        );
-
-                                      }
-                                  ),
-
-
-                                  const SizedBox(height: 20),
-
-                                  CustomAuthTextField(isTag: false,isState: false,isNumber: false, icon: Icons.location_city, nameController: cityController, hintText: "City", submitData: submitData, isEmail: false, isCity: true, isZipCode: false, isStreet: false, isPassword: false, isConfirmPassword: false,),
-
-                                  const SizedBox(height: 20),
-
-                                  CustomAuthTextField(isTag: false,isState: true,isNumber: false,icon: Icons.location_city, nameController: stateController, hintText: "State", submitData: submitData, isEmail: false, isCity: false, isZipCode: false, isStreet: true, isPassword: false, isConfirmPassword: false,),
-
-                                  const SizedBox(height: 20),
-
-                                  CustomAuthTextField(isTag: false,isState: false,isNumber: true,icon: Icons.code, nameController: zipcodeController, hintText: "Zip Code", submitData: submitData, isEmail: false, isCity: false, isZipCode: true, isStreet: false, isPassword: false, isConfirmPassword: false,),
-
-                                  SizedBox(height: height * 0.03),
-
-                                  Visibility(
-                                    visible: SecondPage && signUp,
-                                    child: Row(
-                                      children: [
-                                        Checkbox(
-                                            value: isChecked,
-                                            activeColor: kPrimaryColor,
-                                            onChanged: (newVal) {
-                                              setState(() {
-                                                isChecked = newVal!;
-                                              });
-                                            }),
-                                        const
-                                        TermsOfUse(),
-                                      ],
+                                  child: Stack(children: [
+                                    InkWell(
+                                      onTap: () {
+                                        showSelectPhotoOptions(
+                                            context, _pickImage);
+                                      },
+                                      child: Card(
+                                        elevation: 8.0,
+                                        shape: const CircleBorder(),
+                                        clipBehavior: Clip.antiAlias,
+                                        child:
+                                            profileAvatar(null, _image, false),
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: height * 0.03),
-                                ],
-                              )),
-
-                          Visibility(
-                            visible: !signUp,
-                            child:  TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, "/forget");
-                                },
-                                child:  Text(
-                                  "Forgot password?                                            ",
-                                  style: KNativeTextStyle,
-                                )),
-                          ),
-
-                          SizedBox(height: height * 0.02),
-
-                          MaterialButton(
-                            onPressed: () {
-                              SecondPage ? submitAllData() : submitData();
-                            },
-                            height: 48,
-                            minWidth: double.infinity,
-                            color: kPrimaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: signUp
-                                ? Text(SecondPage ? "SIGN UP" : "NEXT",
-                                    style: KAuthTextStyle)
-                                :  Text("LOGIN", style: KAuthTextStyle),
-                          ),
-
-                          SizedBox(height: height * 0.05),
-
-                          Visibility(
-                            visible: !context.watch<AuthProvider>().isLoading,
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  signUp = !signUp;
-                                });
-                                clearControllers();
-                              },
-                              child: signUp
-                                  ? Visibility(
-                                      visible: !SecondPage,
-                                      child: RichText(
-                                        text:  TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: "Have an account? ",
-                                              style: KNormalTextStyle,
-                                            ),
-                                             TextSpan(
-                                              text: "Sign In",
-                                              style: KNativeTextStyle,
-                                            )
-                                          ],
+                                    if (context
+                                        .watch<UploaderProvider>()
+                                        .isLoading)
+                                      const Positioned(
+                                        top: 45,
+                                        right: 47,
+                                        child: CircularProgressIndicator(
+                                          color: kPrimaryColor,
                                         ),
                                       ),
-                                    )
-                                  : RichText(
-                                      text:  TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: "Not a member? ",
-                                            style: KNormalTextStyle,
-                                          ),
-                                           TextSpan(
-                                            text: "Sign Up Now",
-                                            style: KNativeTextStyle,
-                                          )
-                                        ],
+                                    Positioned(
+                                      bottom: 0,
+                                      right: 5,
+                                      child: InkWell(
+                                        onTap: () {
+                                          showSelectPhotoOptions(
+                                              context, _pickImage);
+                                        },
+                                        child: const CircleAvatar(
+                                            backgroundColor: Colors.grey,
+                                            child: Icon(Icons.photo_camera,
+                                                size: 23, color: Colors.white)),
                                       ),
-                                    ),
+                                    )
+                                  ]),
+                                ),
+                                const SizedBox(height: 20),
+                                Visibility(
+                                  visible: !SecondPage,
+                                  child: Column(
+                                    children: [
+                                      Visibility(
+                                          visible: signUp && !SecondPage,
+                                          child: CustomAuthTextField(
+                                            isTag: false,
+                                            isState: false,
+                                            isNumber: false,
+                                            icon: Icons.person,
+                                            nameController: firstnameController,
+                                            hintText: "First Name",
+                                            submitData: submitData,
+                                            isEmail: false,
+                                            isCity: true,
+                                            isZipCode: false,
+                                            isStreet: false,
+                                            isPassword: false,
+                                            isConfirmPassword: false,
+                                          )),
+                                      Visibility(
+                                          visible: signUp && !SecondPage,
+                                          child: CustomAuthTextField(
+                                            isTag: false,
+                                            isState: false,
+                                            isNumber: false,
+                                            icon: Icons.person,
+                                            nameController: lastnameController,
+                                            hintText: "Last Name",
+                                            submitData: submitData,
+                                            isEmail: false,
+                                            isCity: true,
+                                            isZipCode: false,
+                                            isStreet: false,
+                                            isPassword: false,
+                                            isConfirmPassword: false,
+                                          )),
+                                      Visibility(
+                                        visible: !SecondPage,
+                                        child: CustomAuthTextField(
+                                          isTag: false,
+                                          isState: false,
+                                          isNumber: false,
+                                          icon: Icons.email,
+                                          nameController: emailController,
+                                          hintText: "Email",
+                                          submitData: submitData,
+                                          isEmail: true,
+                                          isCity: false,
+                                          isZipCode: false,
+                                          isStreet: false,
+                                          isPassword: false,
+                                          isConfirmPassword: false,
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible: !SecondPage,
+                                        child: CustomAuthTextField(
+                                          isTag: false,
+                                          isState: false,
+                                          hintPasswordShower:
+                                              hintPasswordShower,
+                                          isNumber: false,
+                                          icon: Icons.lock,
+                                          nameController: passwordController,
+                                          hintText: "Password",
+                                          submitData: submitData,
+                                          isEmail: false,
+                                          isCity: false,
+                                          isZipCode: false,
+                                          isStreet: false,
+                                          isPassword: true,
+                                          isPasswordNotVisible:
+                                              isPasswordNotVisible,
+                                          changeVisibility: changeVisibility,
+                                          isConfirmPassword: false,
+                                        ),
+                                      ),
+                                      Visibility(
+                                          visible: signUp &&
+                                              !SecondPage &&
+                                              ishintPassowrdShow,
+                                          child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: passwordHint(
+                                                  passwordController.text))),
+                                      Visibility(
+                                          visible: signUp,
+                                          child:
+                                              // CustomConfirmPasswordAuthTextField(nameController: confirmPasswordController, submitData: submitData)
+                                              CustomAuthTextField(
+                                                  isTag: false,
+                                                  isState: false,
+                                                  isNumber: false,
+                                                  icon: Icons.lock,
+                                                  isPasswordNotVisible:
+                                                      isPasswordNotVisible,
+                                                  changeVisibility:
+                                                      changeVisibility,
+                                                  nameController:
+                                                      confirmPasswordController,
+                                                  hintText: "Confirm Password",
+                                                  submitData: submitData,
+                                                  isEmail: false,
+                                                  isCity: false,
+                                                  isZipCode: false,
+                                                  isStreet: false,
+                                                  isPassword: false,
+                                                  isConfirmPassword: true)),
+                                      Visibility(
+                                          visible: signUp && !SecondPage,
+                                          child: CustomPhoneTextField(
+                                              phoneValidation: phoneValidation,
+                                              phoneValidationSetter:
+                                                  phoneValidationSetter,
+                                              phoneNumberSetter:
+                                                  phoneNumberSetter,
+                                              phoneController:
+                                                  phoneController)),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Visibility(
+                                    visible: SecondPage,
+                                    child: Column(
+                                      children: [
+                                        CustomAuthTextField(
+                                          isTag: false,
+                                          isState: false,
+                                          isNumber: false,
+                                          icon: Icons.location_city,
+                                          nameController: streetController,
+                                          hintText: "Street",
+                                          submitData: submitData,
+                                          valueChanger: valueChanger,
+                                          isEmail: false,
+                                          isCity: false,
+                                          isZipCode: false,
+                                          isStreet: true,
+                                          isPassword: false,
+                                          isConfirmPassword: false,
+                                        ),
+                                        if (placeQuery != null)
+                                          Consumer<AutoCompleteProvider>(
+                                              builder: (context, value, child) {
+                                            return value.isLoading
+                                                ? ListView.builder(
+                                                    itemCount: 3,
+                                                    shrinkWrap: true,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return const CustomAutoCompleteCardSkeletal();
+                                                    })
+                                                : ListView.builder(
+                                                    itemCount:
+                                                        value.placeList?.length,
+                                                    shrinkWrap: true,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      final req = value
+                                                          .placeList![index];
+                                                      return Column(
+                                                        children: [
+                                                          InkWell(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                streetController
+                                                                        .text =
+                                                                    getStreet(req
+                                                                        ?.description);
+                                                                cityController
+                                                                        .text =
+                                                                    getCity(req
+                                                                        ?.description);
+                                                                stateController
+                                                                        .text =
+                                                                    getState(req
+                                                                        ?.description);
+
+                                                                placeQuery =
+                                                                    null;
+                                                              });
+                                                            },
+                                                            child: ListTile(
+                                                              title: Text(
+                                                                  req?.description ??
+                                                                      ""),
+                                                            ),
+                                                          ),
+                                                          const Divider()
+                                                        ],
+                                                      );
+                                                    });
+                                          }),
+                                        const SizedBox(height: 20),
+                                        CustomAuthTextField(
+                                          isTag: false,
+                                          isState: false,
+                                          isNumber: false,
+                                          icon: Icons.location_city,
+                                          nameController: cityController,
+                                          hintText: "City",
+                                          submitData: submitData,
+                                          isEmail: false,
+                                          isCity: true,
+                                          isZipCode: false,
+                                          isStreet: false,
+                                          isPassword: false,
+                                          isConfirmPassword: false,
+                                        ),
+                                        const SizedBox(height: 20),
+                                        CustomAuthTextField(
+                                          isTag: false,
+                                          isState: true,
+                                          isNumber: false,
+                                          icon: Icons.location_city,
+                                          nameController: stateController,
+                                          hintText: "State",
+                                          submitData: submitData,
+                                          isEmail: false,
+                                          isCity: false,
+                                          isZipCode: false,
+                                          isStreet: true,
+                                          isPassword: false,
+                                          isConfirmPassword: false,
+                                        ),
+                                        const SizedBox(height: 20),
+                                        CustomAuthTextField(
+                                          isTag: false,
+                                          isState: false,
+                                          isNumber: true,
+                                          icon: Icons.code,
+                                          nameController: zipcodeController,
+                                          hintText: "Zip Code",
+                                          submitData: submitData,
+                                          isEmail: false,
+                                          isCity: false,
+                                          isZipCode: true,
+                                          isStreet: false,
+                                          isPassword: false,
+                                          isConfirmPassword: false,
+                                        ),
+                                        SizedBox(height: height * 0.03),
+                                        Visibility(
+                                          visible: SecondPage && signUp,
+                                          child: Row(
+                                            children: [
+                                              Checkbox(
+                                                  value: isChecked,
+                                                  activeColor: kPrimaryColor,
+                                                  onChanged: (newVal) {
+                                                    setState(() {
+                                                      isChecked = newVal!;
+                                                    });
+                                                  }),
+                                              const TermsOfUse(),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(height: height * 0.03),
+                                      ],
+                                    )),
+                                Visibility(
+                                  visible: !signUp,
+                                  child: TextButton(
+                                      onPressed: () {
+                                        Navigator.pushNamed(context, "/forget");
+                                      },
+                                      child: Text(
+                                        "Forgot password?                                            ",
+                                        style: KNativeTextStyle,
+                                      )),
+                                ),
+                                SizedBox(height: height * 0.02),
+                                MaterialButton(
+                                  onPressed: () {
+                                    SecondPage ? submitAllData() : submitData();
+                                  },
+                                  height: 48,
+                                  minWidth: double.infinity,
+                                  color: kPrimaryColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: signUp
+                                      ? Text(SecondPage ? "SIGN UP" : "NEXT",
+                                          style: KAuthTextStyle)
+                                      : Text("LOGIN", style: KAuthTextStyle),
+                                ),
+                                SizedBox(height: height * 0.05),
+                                Visibility(
+                                  visible:
+                                      !context.watch<AuthProvider>().isLoading,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        signUp = !signUp;
+                                      });
+                                      clearControllers();
+                                    },
+                                    child: signUp
+                                        ? Visibility(
+                                            visible: !SecondPage,
+                                            child: RichText(
+                                              text: TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                    text: "Have an account? ",
+                                                    style: KNormalTextStyle,
+                                                  ),
+                                                  TextSpan(
+                                                    text: "Sign In",
+                                                    style: KNativeTextStyle,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        : RichText(
+                                            text: TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text: "Not a member? ",
+                                                  style: KNormalTextStyle,
+                                                ),
+                                                TextSpan(
+                                                  text: "Sign Up Now",
+                                                  style: KNativeTextStyle,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                  ),
+                                ),
+                                SizedBox(height: height * 0.05),
+                              ],
                             ),
-                          ),
-                          SizedBox(height: height * 0.05),
-                        ],
-                      ),
-                  ],
-                )
-              ]),
+                          ],
+                        )
+                      ]),
+                ),
+              ),
             ),
-          ),
-        ),
-      )),
+          )),
     );
   }
 
@@ -610,5 +727,4 @@ class _AuthState extends State<Auth> {
       context.read<UploaderProvider>().imageUploader(context, _image!);
     }
   }
-
 }
