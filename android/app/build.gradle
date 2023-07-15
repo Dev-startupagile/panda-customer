@@ -67,9 +67,9 @@ android {
     signingConfigs {
         release {
             storeFile file("../keystore.jks")
-            storePassword "1621Fiya"
-            keyAlias "upload"
-            keyPassword "1621Fiya"
+            storePassword "OurSelf4Health@2023"
+            keyAlias "key"
+            keyPassword "OurSelf4Health@2023"
         }
     }
 
