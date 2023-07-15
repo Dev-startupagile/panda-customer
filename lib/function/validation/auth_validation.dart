@@ -15,10 +15,11 @@ String? nameValidator(value) {
 bool? namValidator(value) {
   RegExp regex = RegExp(r'^.{1,}$');
   if (value!.isEmpty) {
-    return true;//("Field cannot be Empty");
+    return true; //("Field cannot be Empty");
   }
   if (!regex.hasMatch(value)) {
-    return true;("Enter Valid name(Min. 2 Character)");
+    return true;
+    ("Enter Valid name(Min. 2 Character)");
   }
   return null;
 }
@@ -47,7 +48,7 @@ String? emailValidator(value) {
   }
   // reg expression for email validation
   if (!RegExp(r'^(?!_)\w+([\.-]?\w+)*@(?!_)\w+([\.-]?\w+)*(\.\w{2,3})+$')
-          .hasMatch(value.trim())) {
+      .hasMatch(value.trim())) {
     return ("Please Enter a valid email");
   }
 
@@ -74,15 +75,12 @@ String? passwordValidator(value) {
   }
   passwordController = value;
 
-  if(confirmPasswordController != null){
+  if (confirmPasswordController != null) {
     confirmPasswordValidator(confirmPasswordController);
   }
 
   return null;
 }
-
-
-
 
 String? confirmPasswordValidator(value) {
   print("i am success $value $passwordController");
@@ -94,4 +92,3 @@ String? confirmPasswordValidator(value) {
 
   return null;
 }
-

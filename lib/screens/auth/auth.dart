@@ -168,7 +168,8 @@ class _AuthState extends State<Auth> {
               profilePicture:
                   context.read<UploaderProvider>().uplodedFile ?? "",
               email: emailController.text,
-              phoneNumber: formatPhoneNumber(phoneNumber),
+              // phoneNumber: formatPhoneNumber(phoneNumber),
+              phoneNumber: phoneNumber,
               state: stateController.text,
               city: cityController.text,
               password: passwordController.text,
