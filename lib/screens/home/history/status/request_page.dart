@@ -257,7 +257,7 @@ class _RequestPageState extends State<RequestPage>
                                 height: 45,
                               ),
                               EmptyWidget(
-                                image: "lib/assets/logo.png",
+                                image: "assets/logo.png",
                                 title: widget.status == pendingConst
                                     ? 'No Pending Request'
                                     : widget.status == acceptedConst

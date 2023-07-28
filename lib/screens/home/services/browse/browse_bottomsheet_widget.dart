@@ -7,13 +7,14 @@ import '../../../../commonComponents/skeletal/custom_card_skeletal.dart';
 import '../../../../provider/nearby_provider.dart';
 import 'components/mechanics_profile.dart';
 
-
 class Browse extends StatefulWidget {
   final dynamic getFunc;
   double longitude;
   double latitude;
 
-  Browse({ required this.latitude, required this.longitude, this.getFunc,Key? key}) : super(key: key);
+  Browse(
+      {required this.latitude, required this.longitude, this.getFunc, Key? key})
+      : super(key: key);
 
   @override
   State<Browse> createState() => _BrowseState();
@@ -21,23 +22,23 @@ class Browse extends StatefulWidget {
 
 class _BrowseState extends State<Browse> {
   bool isDetail = false;
-  late  TextEditingController searchController;
+  late TextEditingController searchController;
   final ScrollController _scrollController = ScrollController();
 
-  void openCloseDetail(email){
+  void openCloseDetail(email) {
     setState(() {
       isDetail = !isDetail;
     });
   }
 
-  void closeDetail(){
+  void closeDetail() {
     setState(() {
       isDetail = !isDetail;
     });
   }
 
-  void searchMechanic(String value){
-      print("hallo, $value");
+  void searchMechanic(String value) {
+    print("hallo, $value");
   }
 
   @override
@@ -56,128 +57,122 @@ class _BrowseState extends State<Browse> {
     // TODO: implement dispose
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Container(
       color: Colors.white,
       child: SizedBox(
-        height: height*0.8,
+        height: height * 0.8,
         child: SingleChildScrollView(
           child: Column(
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: const Icon(
-                        Icons.chevron_left,
-                        size: 45,
-                      ),
-                      color: Colors.black54,
-                      onPressed: () {
-                        isDetail?closeDetail():widget.getFunc();
-                      },
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: const Icon(
+                      Icons.chevron_left,
+                      size: 45,
                     ),
-                    Text(
-                      isDetail? "Best Mechanics Ever" :"Browse",
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                    ),
-                  ],
-                ),
-
-                Column(
-                    children: [
-
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: customSearchTextField(searchController, "Search", context, searchMechanic),
-                      ),
-
-                      Consumer<NearByProvider>(
-                              builder: (context,value,child){
-
-                                return value.nearby.isEmpty && value.isLoaded?
-
-                                const Padding(
-                                  padding:  EdgeInsets.all(8.0),
-                                  child: Center(child:
-                                  Padding(
-                                    padding:  EdgeInsets.all(8.0),
-                                    child: Center(child: Text('no Nearby technicians')),
-                                  )
-                                  ),
-                                )
-                                    :
-                                value.isLoading?
-                                  ListView.builder(
-                                      itemCount: 7,
-                                      shrinkWrap: true,
-                                      controller: _scrollController,
-                                      itemBuilder: (context,index){
-                                        return const CustomCardSkeletal();
-                                      }
-                                      ):
-
-                                ListView.builder(
-                                  itemCount: value.nearby.length,
-                                  shrinkWrap: true,
-                                  controller: _scrollController,
-                                  itemBuilder: (context,index){
-
-                                    final req = value.nearby[index];
-                                    return isDetail == true?
-                                    MechanicsProfile(mechanicProfile: req, getFunc: openCloseDetail)
-                                    :
-                                    Card(
-                                      elevation: 1,
-                                      child: Column(
-                                        children: [
-                                          ListTile(
-                                            leading: const CircleAvatar(
-                                              radius: 25,
-                                              backgroundColor: Colors.greenAccent,
-                                              child: CircleAvatar(
-                                                backgroundImage: AssetImage('lib/assets/profile_placeholder.png'),
-                                                radius: 24,
+                    color: Colors.black54,
+                    onPressed: () {
+                      isDetail ? closeDetail() : widget.getFunc();
+                    },
+                  ),
+                  Text(
+                    isDetail ? "Best Mechanics Ever" : "Browse",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 24),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: customSearchTextField(
+                        searchController, "Search", context, searchMechanic),
+                  ),
+                  Consumer<NearByProvider>(builder: (context, value, child) {
+                    return value.nearby.isEmpty && value.isLoaded
+                        ? const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Center(
+                                child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child:
+                                  Center(child: Text('no Nearby technicians')),
+                            )),
+                          )
+                        : value.isLoading
+                            ? ListView.builder(
+                                itemCount: 7,
+                                shrinkWrap: true,
+                                controller: _scrollController,
+                                itemBuilder: (context, index) {
+                                  return const CustomCardSkeletal();
+                                })
+                            : ListView.builder(
+                                itemCount: value.nearby.length,
+                                shrinkWrap: true,
+                                controller: _scrollController,
+                                itemBuilder: (context, index) {
+                                  final req = value.nearby[index];
+                                  return isDetail == true
+                                      ? MechanicsProfile(
+                                          mechanicProfile: req,
+                                          getFunc: openCloseDetail)
+                                      : Card(
+                                          elevation: 1,
+                                          child: Column(
+                                            children: [
+                                              ListTile(
+                                                leading: const CircleAvatar(
+                                                  radius: 25,
+                                                  backgroundColor:
+                                                      Colors.greenAccent,
+                                                  child: CircleAvatar(
+                                                    backgroundImage: AssetImage(
+                                                        'assets/profile_placeholder.png'),
+                                                    radius: 24,
+                                                  ),
+                                                ),
+                                                title: Text(req.technicianDetail
+                                                        ?.fullName ??
+                                                    ""),
+                                                subtitle: Text(
+                                                    req.technicianDetail?.id ??
+                                                        ""),
+                                                trailing: const Icon(
+                                                  Icons.chevron_right,
+                                                  size: 50,
+                                                ),
+                                                onTap: () {
+                                                  openCloseDetail(req.id);
+                                                },
                                               ),
-                                            ),
-                                            title:  Text(req.technicianDetail?.fullName ?? ""),
-                                            subtitle: Text(req.technicianDetail?.id ?? ""),
-                                            trailing: const Icon(
-                                              Icons.chevron_right,
-                                              size: 50,
-                                            ),
-                                            onTap: () {
-                                              openCloseDetail(req.id);
-                                            },
-                                          ),
-
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children:  [
-                                              customRating(3, 1)
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [customRating(3, 1)],
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
                                             ],
                                           ),
-
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-
-                                        ],
-                                      ),
-                                    );
-
-                                  },
-                                );
-                              }
-                          ),
-                    ],
-                  ),
-              ],
-            ),
+                                        );
+                                },
+                              );
+                  }),
+                ],
+              ),
+            ],
+          ),
         ),
-        ),
+      ),
     );
   }
 }

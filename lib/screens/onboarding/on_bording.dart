@@ -26,7 +26,7 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
                     height: 90,
                   ),
                   Center(
-                    child: Image.asset("lib/assets/logo.png"),
+                    child: Image.asset("assets/logo.png"),
                   ),
                   const SizedBox(
                     height: 140,

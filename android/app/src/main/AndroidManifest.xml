@@ -8,7 +8,7 @@
         android:label="Pand Customer"
         android:name="${applicationName}"
         android:allowBackup="false"
-        android:icon="@mipmap/launch_image">
+        android:icon="@mipmap/launcher_icon">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyARSavX41peF5pMjh-Mc20iXufTiukgD0s"/>
 

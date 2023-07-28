@@ -306,7 +306,7 @@ class _AuthState extends State<Auth> {
                           Visibility(
                             visible: !signUp,
                             child: Center(
-                              child: Image.asset("lib/assets/logo.png"),
+                              child: Image.asset("assets/logo.png"),
                             ),
                           ),
                         const SizedBox(height: 10),

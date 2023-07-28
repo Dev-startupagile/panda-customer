@@ -37,14 +37,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   void submitData() {
     _formKey.currentState!.save();
     if (emailController.text.isNotEmpty) {
-      if(emailValidator(emailController.text) != null){
-        displayErrorSnackBar(context, emailValidator(emailController.text) ?? "");
-      }else{
+      if (emailValidator(emailController.text) != null) {
+        displayErrorSnackBar(
+            context, emailValidator(emailController.text) ?? "");
+      } else {
         Provider.of<AuthProvider>(context, listen: false)
             .sendOtp(context, emailController.text, true);
       }
-
-    }else{
+    } else {
       displayErrorSnackBar(context, "Please fill out the above form");
     }
   }
@@ -59,51 +59,64 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(30.0),
-          child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, children: [
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             if (!isKeyboard)
-                Center(
-                  child: Image.asset("lib/assets/logo.png"),
-                ),
+              Center(
+                child: Image.asset("assets/logo.png"),
+              ),
             Column(
-                children: [
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 20),
-                        CustomAuthTextField(isNumber: false, icon:  Icons.person_outline, nameController: emailController, hintText: "Email", submitData: submitData, isEmail: true, isCity: false, isZipCode: false, isStreet: false, isPassword: false, isConfirmPassword: false, isTag: false,isState: false,),
-                        const SizedBox(height: 20),
-                        MaterialButton(
-                          onPressed: () {
-                            submitData();
-                          },
-                          height: height * 0.06,
-                          minWidth: double.infinity,
-                          color: kPrimaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child:  Text("Reset", style: KAuthTextStyle),
+              children: [
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      CustomAuthTextField(
+                        isNumber: false,
+                        icon: Icons.person_outline,
+                        nameController: emailController,
+                        hintText: "Email",
+                        submitData: submitData,
+                        isEmail: true,
+                        isCity: false,
+                        isZipCode: false,
+                        isStreet: false,
+                        isPassword: false,
+                        isConfirmPassword: false,
+                        isTag: false,
+                        isState: false,
+                      ),
+                      const SizedBox(height: 20),
+                      MaterialButton(
+                        onPressed: () {
+                          submitData();
+                        },
+                        height: height * 0.06,
+                        minWidth: double.infinity,
+                        color: kPrimaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        SizedBox(height: height * 0.05),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, "/login");
-                            },
-                            child:  Text(
-                              "Back to Login screen",
-                              style: KNativeTextStyle,
-                            )),
-                      ],
-                    ),
-                  )
-                ],
+                        child: Text("Reset", style: KAuthTextStyle),
+                      ),
+                      SizedBox(height: height * 0.05),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, "/login");
+                          },
+                          child: Text(
+                            "Back to Login screen",
+                            style: KNativeTextStyle,
+                          )),
+                    ],
+                  ),
+                )
+              ],
             )
           ]),
-       ),
+        ),
       ),
-        )
-    );
+    ));
   }
 }

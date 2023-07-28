@@ -40,8 +40,7 @@ class _AddPaymentMethodState extends State<AddPaymentMethod> {
           expiryDate: expiryDate,
           cvc: cvvCode,
           image: "",
-          type: cardHolderName == ''? "Card Holder Name":cardHolderName
-      );
+          type: cardHolderName == '' ? "Card Holder Name" : cardHolderName);
       context.read<ProfileProvider>().addCard(context, addCardModel);
     } else {
       print('invalid!');
@@ -57,6 +56,7 @@ class _AddPaymentMethodState extends State<AddPaymentMethod> {
       isCvvFocused = creditCardModel.isCvvFocused;
     });
   }
+
   @override
   void initState() {
     border = OutlineInputBorder(
@@ -94,31 +94,29 @@ class _AddPaymentMethodState extends State<AddPaymentMethod> {
           ),
           CreditCardWidget(
             glassmorphismConfig:
-            useGlassMorphism ? Glassmorphism.defaultConfig() : null,
+                useGlassMorphism ? Glassmorphism.defaultConfig() : null,
             cardNumber: cardNumber,
             expiryDate: expiryDate,
             cardHolderName: cardHolderName,
             cvvCode: cvvCode,
             bankName: '',
             frontCardBorder:
-            !useGlassMorphism ? Border.all(color: Colors.grey) : null,
+                !useGlassMorphism ? Border.all(color: Colors.grey) : null,
             backCardBorder:
-            !useGlassMorphism ? Border.all(color: Colors.grey) : null,
+                !useGlassMorphism ? Border.all(color: Colors.grey) : null,
             showBackView: isCvvFocused,
             obscureCardNumber: true,
             obscureCardCvv: true,
             isHolderNameVisible: true,
             cardBgColor: AppColors.cardBgColor,
-            backgroundImage:
-            useBackgroundImage ? 'lib/assets/card_bg.png' : null,
+            backgroundImage: useBackgroundImage ? 'assets/card_bg.png' : null,
             isSwipeGestureEnabled: true,
-            onCreditCardWidgetChange:
-                (CreditCardBrand creditCardBrand) {},
+            onCreditCardWidgetChange: (CreditCardBrand creditCardBrand) {},
             customCardTypeIcons: <CustomCardTypeIcon>[
               CustomCardTypeIcon(
                 cardType: CardType.mastercard,
                 cardImage: Image.asset(
-                  'lib/assets/mastercard.png',
+                  'assets/mastercard.png',
                   height: 48,
                   width: 48,
                 ),

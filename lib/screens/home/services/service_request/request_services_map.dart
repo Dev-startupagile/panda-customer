@@ -17,11 +17,10 @@ import 'request_bottomsheet_widget.dart';
 
 class RequestServicesMap extends StatefulWidget {
   int title;
-  RequestServicesMap({super.key, required this.title });
+  RequestServicesMap({super.key, required this.title});
 
   @override
-  State<RequestServicesMap> createState() =>
-      _RequestServicesMapState();
+  State<RequestServicesMap> createState() => _RequestServicesMapState();
 }
 
 class _RequestServicesMapState extends State<RequestServicesMap> {
@@ -40,7 +39,6 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
   static LatLng _mainLocation = const LatLng(0.0, 0.0);
   static LatLng _desLocation = const LatLng(39.0, 8.0);
 
-
   final List<String> titles = <String>[
     serviceRequest,
     // assistance,
@@ -58,7 +56,6 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
 
     bool serviceEnabled;
     LocationPermission permission;
-
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
@@ -83,7 +80,8 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
 
     if (permission == LocationPermission.deniedForever) {
       setState(() {
-        mapState = "Location permissions are permanently denied, we cannot request permissions.";
+        mapState =
+            "Location permissions are permanently denied, we cannot request permissions.";
       });
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
@@ -102,56 +100,49 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
 
     myMarker();
 
-
     setState(() {
       lat = position.latitude;
       long = position.longitude;
       currentPosition = position.toString();
     });
 
-
-
     return await Geolocator.getCurrentPosition();
   }
-
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => {
-        _determinePosition()
-     }
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) => {_determinePosition()});
   }
 
-
-
-  void onClickNextButton(String val){
+  void onClickNextButton(String val) {
     setState(() {
-      if(widget.title > titles.length -2){
+      if (widget.title > titles.length - 2) {
         widget.title = -1;
-      }else{
-        widget.title ++;
+      } else {
+        widget.title++;
       }
     });
   }
+
   final sharedPrefs = SharedPrefs();
 
-  void onClickBackButton(String val){
+  void onClickBackButton(String val) {
     setState(() {
-      if(widget.title > titles.length -2){
+      if (widget.title > titles.length - 2) {
         widget.title = -1;
-      } else{
-        widget.title --;
+      } else {
+        widget.title--;
       }
     });
   }
 
-  void onClickClose(){
+  void onClickClose() {
     setState(() {
       widget.title = -1;
     });
   }
+
   @override
   void deactivate() {
     super.deactivate();
@@ -162,7 +153,7 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
     super.dispose();
   }
 
-  void openCloseBrowse(){
+  void openCloseBrowse() {
     setState(() {
       isBrowse = !isBrowse;
     });
@@ -171,168 +162,161 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  widget.title != -1? null:AppBar(
-        leading: Stack(
-
-          children: <Widget>[
-
-            Positioned(
-              width: 10,
-              height: 10,
-              right: 6,
-              bottom: 22,
-              child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(1),
-                decoration: BoxDecoration(
-                  color:    Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-
-
-          ],
-        ),
-
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: const Text("Panda Customer",style: KAppBodyTextStyle,),
-      ),
-      body: Stack(
-          children: <Widget>[
-
-            GoogleMap(
-                mapToolbarEnabled: true,
-                buildingsEnabled: true,
-                initialCameraPosition: CameraPosition(
-                  target: _mainLocation,
-                  zoom: 14.5,
-                ),
-                polylines: const {
-                },
-                markers: //myMarker(),
-                {
-                  Marker(
-                    markerId: const MarkerId("source"),
-                    position: _mainLocation
-                  ),
-
-                },
-                mapType: MapType.normal,
-                onMapCreated: (controller) {
-                  // _controller.complete(controller);
-                  setState(() {
-                    _mapController = controller;
-                  });
-                },
-              onTap: (val){
-                  onClickClose();
-              },
-                // ),
-              ),
-
-
-            Visibility(
-              visible: currentPosition == null,
-              child: Positioned(
-                  child: Center(
-                    child: EmptyWidget(
-                      image: "lib/assets/logo.png",
-                      title: mapState,
-                      titleTextStyle: const TextStyle(
-                        fontSize: 22,
-                        color: Color(0xff9da9c7),
-                        fontWeight: FontWeight.w500,
-                      ),
-                      subtitleTextStyle: const TextStyle(
-                        fontSize: 14,
-                        color: Color(0xffabb8d6),
+      appBar: widget.title != -1
+          ? null
+          : AppBar(
+              leading: Stack(
+                children: <Widget>[
+                  Positioned(
+                    width: 10,
+                    height: 10,
+                    right: 6,
+                    bottom: 22,
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(1),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                  )
+                  ),
+                ],
+              ),
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              title: const Text(
+                "Panda Customer",
+                style: KAppBodyTextStyle,
               ),
             ),
-
-            Positioned(
-              bottom: 0,
-              child: Card(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.all(15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width - 100,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if(currentPosition == null){
-                              displayInfoSnackBar(context, "we are finding your location please wait");
-                            }else{
+      body: Stack(
+        children: <Widget>[
+          GoogleMap(
+            mapToolbarEnabled: true,
+            buildingsEnabled: true,
+            initialCameraPosition: CameraPosition(
+              target: _mainLocation,
+              zoom: 14.5,
+            ),
+            polylines: const {},
+            markers: //myMarker(),
+                {
+              Marker(
+                  markerId: const MarkerId("source"), position: _mainLocation),
+            },
+            mapType: MapType.normal,
+            onMapCreated: (controller) {
+              // _controller.complete(controller);
+              setState(() {
+                _mapController = controller;
+              });
+            },
+            onTap: (val) {
+              onClickClose();
+            },
+            // ),
+          ),
+          Visibility(
+            visible: currentPosition == null,
+            child: Positioned(
+                child: Center(
+              child: EmptyWidget(
+                image: "assets/logo.png",
+                title: mapState,
+                titleTextStyle: const TextStyle(
+                  fontSize: 22,
+                  color: Color(0xff9da9c7),
+                  fontWeight: FontWeight.w500,
+                ),
+                subtitleTextStyle: const TextStyle(
+                  fontSize: 14,
+                  color: Color(0xffabb8d6),
+                ),
+              ),
+            )),
+          ),
+          Positioned(
+            bottom: 0,
+            child: Card(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.all(15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width - 100,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (currentPosition == null) {
+                            displayInfoSnackBar(context,
+                                "we are finding your location please wait");
+                          } else {
+                            setState(() {
+                              widget.title = 0;
+                            });
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: kPrimaryColor,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 65, vertical: 20),
+                        ),
+                        child: const Text(
+                          'REQUEST SERVICE',
+                        ),
+                      ),
+                    ),
+                    CircleAvatar(
+                      backgroundColor: Colors.black,
+                      radius: 30,
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: const Icon(
+                          Icons.view_list,
+                          size: 40,
+                        ),
+                        color: Colors.white,
+                        onPressed: () {
+                          setState(() {
+                            if (currentPosition == null) {
+                              displayInfoSnackBar(context,
+                                  "we are finding your location please wait");
+                            } else {
                               setState(() {
                                 widget.title = 0;
                               });
                             }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: kPrimaryColor,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 65, vertical: 20),
-                          ),
-                          child: const Text(
-                            'REQUEST SERVICE',
-                          ),
-                        ),
+                          });
+                          // openCloseBrowse();
+                        },
                       ),
-                      CircleAvatar(
-                        backgroundColor: Colors.black,
-                        radius: 30,
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          icon: const Icon(
-                            Icons.view_list,
-                            size: 40,
-                          ),
-                          color: Colors.white,
-                          onPressed: () {
-                            setState(() {
-                              if(currentPosition == null){
-                                displayInfoSnackBar(context, "we are finding your location please wait");
-                              }else{
-                                setState(() {
-                                  widget.title = 0;
-                                });
-                              }
-                            });
-                            // openCloseBrowse();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
-      bottomSheet: isBrowse?
-          Browse( latitude: lat,longitude: long, getFunc: openCloseBrowse):
-          widget.title != -1 ?  RequestBottomSheetWidget(
-              latitude: lat,
-              longtude: long,
-              currentPosition:currentPosition,
-              title:titles[widget.title],
-              onClickNext:(String value){
-                onClickNextButton(value);
-              },
-              onClickBack:(String value){
-                onClickBackButton(value);
-              },
-              onClickClose:onClickClose
-          ):  null,
-
+          ),
+        ],
+      ),
+      bottomSheet: isBrowse
+          ? Browse(latitude: lat, longitude: long, getFunc: openCloseBrowse)
+          : widget.title != -1
+              ? RequestBottomSheetWidget(
+                  latitude: lat,
+                  longtude: long,
+                  currentPosition: currentPosition,
+                  title: titles[widget.title],
+                  onClickNext: (String value) {
+                    onClickNextButton(value);
+                  },
+                  onClickBack: (String value) {
+                    onClickBackButton(value);
+                  },
+                  onClickClose: onClickClose)
+              : null,
     );
   }
 

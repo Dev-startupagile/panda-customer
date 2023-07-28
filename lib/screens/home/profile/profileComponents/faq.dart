@@ -41,7 +41,7 @@ class Faq extends StatelessWidget {
               //     children: [
               //       SizedBox(
               //         child: Image.asset(
-              //           "lib/assets/logo.png",
+              //           "assets/logo.png",
               //           height: 200,
               //           fit: BoxFit.contain,
               //         ),
