@@ -47,7 +47,8 @@ String? emailValidator(value) {
     return ("Please Enter Your Email");
   }
   // reg expression for email validation
-  if (!RegExp(r'^(?!_)\w+([\.-]?\w+)*@(?!_)\w+([\.-]?\w+)*(\.\w{2,3})+$')
+  if (!RegExp(
+          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
       .hasMatch(value.trim())) {
     return ("Please Enter a valid email");
   }
