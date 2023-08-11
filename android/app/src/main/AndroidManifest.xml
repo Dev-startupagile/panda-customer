@@ -5,7 +5,7 @@
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:label="Pand Customer"
+        android:label="Panda Customer"
         android:name="${applicationName}"
         android:allowBackup="false"
         android:icon="@mipmap/launcher_icon">
