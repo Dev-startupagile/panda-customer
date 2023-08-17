@@ -32,10 +32,5 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:435901864099:ios:e6c05b6fbb319bbf3bc716</string>
-    <key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSAllowsLocalNetworking</key>
-        <true/>
-    </dict>
 </dict>
 </plist>
