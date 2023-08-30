@@ -11,38 +11,28 @@ import '../function/shared_prefs.dart';
 import '../models/nearby_model.dart';
 import '../util/api.dart';
 
-
-
 class NearByProvider extends ChangeNotifier {
-
   bool isLoading = false;
   bool isLoaded = false;
   final sharedPrefs = SharedPrefs();
   List<Datum> nearby = [];
 
-  Future<http.Response?> nearBy(context,lat,lng,backToHome,isRefreshed) async {
+  Future<http.Response?> nearBy(
+      context, lat, lng, backToHome, isRefreshed) async {
     http.Response? response;
     await sharedPrefs.getToken();
 
-    if(true){
+    if (true) {
       isLoading = true;
       notifyListeners();
       try {
         notifyListeners();
-        response =
-        await http.post(
-            Uri.parse('$apiUrl/users/technician/nearby'),
+        response = await http.post(Uri.parse('$apiUrl/users/technician/nearby'),
             headers: {
               HttpHeaders.contentTypeHeader: "application/json",
-              HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+              HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
             },
-            body:jsonEncode(
-                {
-                  "latitude": lat,
-                  "longitude": lng
-                }
-            )
-        );
+            body: jsonEncode({"latitude": lat, "longitude": lng}));
 
         if (response.statusCode == 200) {
           isLoading = false;
@@ -50,23 +40,22 @@ class NearByProvider extends ChangeNotifier {
           final result = nearByModelFromJson(response.body);
           nearby = result.data;
 
-          if(nearby.isEmpty){
+          if (nearby.isEmpty) {
             backToHome();
             Navigator.pushNamed(context, "/from_nearby");
           }
           notifyListeners();
-
-        }else{
+        } else {
           isLoading = false;
-          displayErrorSnackBar(context, "Something went wrong");
+          displayErrorSnackBar(context, "Something went wrong nearby");
           notifyListeners();
         }
-
-      }  on SocketException catch (e) {
+      } on SocketException catch (e) {
         isLoading = false;
-        displayErrorSnackBar(context, "please check your internet and try again");
+        displayErrorSnackBar(
+            context, "please check your internet and try again");
         notifyListeners();
-      } catch(e){
+      } catch (e) {
         isLoading = false;
         displayErrorSnackBar(context, e.toString());
         notifyListeners();
@@ -76,5 +65,4 @@ class NearByProvider extends ChangeNotifier {
       return response;
     }
   }
-
 }

@@ -12,10 +12,7 @@ import '../models/customer_profile_model.dart';
 import '../util/api.dart';
 import '../function/shared_prefs.dart';
 
-
-
 class ProfileProvider extends ChangeNotifier {
-
   bool isLoading = false;
   bool isLoaded = false;
   final sharedPrefs = SharedPrefs();
@@ -30,40 +27,37 @@ class ProfileProvider extends ChangeNotifier {
     await sharedPrefs.getToken();
     try {
       notifyListeners();
-      response =
-      await http.get(
-          Uri.parse('$apiUrl/auth/profile'),
-          headers: {
-            HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
-          },
+      response = await http.get(
+        Uri.parse('$apiUrl/auth/profile'),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
+        },
       );
-
       if (response.statusCode == 200) {
         isLoading = false;
         isLoaded = true;
         final result = customerProfileModelFromJson(response.body);
         customerprofile = result.data;
-        userId = result.data.personalInformation.userId;
+        userId = result.data.personalInformation.id;
         notifyListeners();
-
-      }else if(response.statusCode == 403){
+      } else if (response.statusCode == 403) {
         isLoading = false;
         Navigator.pushNamed(context, "/login");
         displayErrorSnackBar(context, "account not verified!");
         notifyListeners();
-      }else{
+      } else {
         isLoading = false;
         Navigator.pushNamed(context, "/login");
-        displayErrorSnackBar(context, "Something went wrong");
+        displayErrorSnackBar(
+            context, "Something went wrong, customer provider");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       isLoading = false;
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       isLoading = false;
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
@@ -73,7 +67,8 @@ class ProfileProvider extends ChangeNotifier {
     return response;
   }
 
-  Future<http.Response?> editPassword(context,email,currentPassword,newPassword) async {
+  Future<http.Response?> editPassword(
+      context, email, currentPassword, newPassword) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
     notifyListeners();
@@ -81,43 +76,35 @@ class ProfileProvider extends ChangeNotifier {
 
     try {
       notifyListeners();
-      response =
-      await http.patch(
-        Uri.parse('$apiUrl/auth/changePassword'),
-        headers: {
-          HttpHeaders.contentTypeHeader: "application/json",
-          HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
-        },
-        body: jsonEncode(
-          {
-            "email":email,
-            "currentPassword":currentPassword,
-            "newPassword":newPassword
-          }
-        )
-      );
+      response = await http.patch(Uri.parse('$apiUrl/auth/changePassword'),
+          headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
+          },
+          body: jsonEncode({
+            "email": email,
+            "currentPassword": currentPassword,
+            "newPassword": newPassword
+          }));
 
       if (response.statusCode == 200) {
         dialog.closeLoadingDialog(context);
         Navigator.pop(context);
         notifyListeners();
-
-      } else if(response.statusCode == 400){
+      } else if (response.statusCode == 400) {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Verification fail");
         notifyListeners();
-      }
-      else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
@@ -127,8 +114,7 @@ class ProfileProvider extends ChangeNotifier {
     return response;
   }
 
-
-  Future<http.Response?> editProfileInformation(context,email, data) async {
+  Future<http.Response?> editProfileInformation(context, email, data) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
     notifyListeners();
@@ -136,17 +122,12 @@ class ProfileProvider extends ChangeNotifier {
 
     try {
       notifyListeners();
-      response =
-      await http.patch(
-          Uri.parse('$apiUrl/users/$email'),
+      response = await http.patch(Uri.parse('$apiUrl/users/$email'),
           headers: {
             HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
           },
-          body: jsonEncode(
-              data
-          )
-      );
+          body: jsonEncode(data));
 
       if (response.statusCode == 200) {
         dialog.closeLoadingDialog(context);
@@ -154,17 +135,16 @@ class ProfileProvider extends ChangeNotifier {
         customerprofile = result.data;
         Navigator.pop(context);
         notifyListeners();
-      } else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
@@ -181,29 +161,29 @@ class ProfileProvider extends ChangeNotifier {
 
     try {
       notifyListeners();
-      response =
-      await http.post(
-          Uri.parse('$apiUrl/auth/removeUser/$userId'),
-          headers: {
-            HttpHeaders.contentTypeHeader: "application/json",
-          },
+      response = await http.delete(
+        Uri.parse('$apiUrl/auth/removeUser/$userId'),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
+        },
       );
 
       if (response.statusCode == 200) {
         dialog.closeLoadingDialog(context);
         Navigator.of(context).pushNamed('/login');
+        sharedPrefs.removeFromPrefs();
         notifyListeners();
-      } else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
@@ -213,26 +193,19 @@ class ProfileProvider extends ChangeNotifier {
     return response;
   }
 
-
-
-  Future<http.Response?> addCard(context,AddCardModel data) async {
+  Future<http.Response?> addCard(context, AddCardModel data) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
     notifyListeners();
     await sharedPrefs.getToken();
     try {
       notifyListeners();
-      response =
-      await http.post(
-          Uri.parse('$apiUrl/account/addCard'),
+      response = await http.post(Uri.parse('$apiUrl/account/addCard'),
           headers: {
             HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
           },
-          body:jsonEncode(
-              data.toJson()
-          )
-      );
+          body: jsonEncode(data.toJson()));
 
       if (response.statusCode == 201) {
         dialog.closeLoadingDialog(context);
@@ -241,18 +214,16 @@ class ProfileProvider extends ChangeNotifier {
 
         Navigator.pop(context);
         notifyListeners();
-
-      }else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
@@ -261,8 +232,6 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
     return response;
   }
-
-
 
   Future<http.Response?> removeCard(context, id) async {
     http.Response? response;
@@ -271,37 +240,33 @@ class ProfileProvider extends ChangeNotifier {
     await sharedPrefs.getToken();
     try {
       notifyListeners();
-      response =
-      await http.delete(
-          Uri.parse('$apiUrl/account/card/$id'),
-          headers: {
-            HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
-          },
-
+      response = await http.delete(
+        Uri.parse('$apiUrl/account/card/$id'),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
+        },
       );
 
       if (response.statusCode == 200) {
         dialog.closeLoadingDialog(context);
 
-        customerprofile?.payments.items.removeWhere((PaymentsItem element){
+        customerprofile?.payments.items.removeWhere((PaymentsItem element) {
           return element.id == id;
         });
 
         Navigator.pop(context);
         notifyListeners();
-
-      }else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       notifyListeners();
     }
@@ -310,24 +275,19 @@ class ProfileProvider extends ChangeNotifier {
     return response;
   }
 
-  Future<http.Response?> addVehicle(context,AddVehicleModel data) async {
+  Future<http.Response?> addVehicle(context, AddVehicleModel data) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
     notifyListeners();
     await sharedPrefs.getToken();
     try {
       notifyListeners();
-      response =
-      await http.post(
-          Uri.parse('$apiUrl/vehicle/add'),
+      response = await http.post(Uri.parse('$apiUrl/vehicle/add'),
           headers: {
             HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
           },
-          body:jsonEncode(
-              data.toJson()
-          )
-      );
+          body: jsonEncode(data.toJson()));
 
       if (response.statusCode == 201) {
         dialog.closeLoadingDialog(context);
@@ -336,17 +296,16 @@ class ProfileProvider extends ChangeNotifier {
 
         Navigator.pop(context);
         notifyListeners();
-      }else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
@@ -356,20 +315,18 @@ class ProfileProvider extends ChangeNotifier {
     return response;
   }
 
-
-  Future<http.Response?> removeVehicle(context,id) async {
+  Future<http.Response?> removeVehicle(context, id) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
     notifyListeners();
     await sharedPrefs.getToken();
     try {
       notifyListeners();
-      response =
-      await http.delete(
+      response = await http.delete(
         Uri.parse('$apiUrl/vehicle/$id'),
         headers: {
           HttpHeaders.contentTypeHeader: "application/json",
-          HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+          HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
         },
       );
 
@@ -378,17 +335,16 @@ class ProfileProvider extends ChangeNotifier {
         final result = customerProfileModelFromJson(response.body);
         customerprofile = result.data;
         notifyListeners();
-      }else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();

@@ -9,10 +9,7 @@ import '../models/estimate_model.dart';
 import '../util/api.dart';
 import '../function/shared_prefs.dart';
 
-
-
 class EstimateProvider extends ChangeNotifier {
-
   bool isLoading = false;
   bool isLoaded = false;
   final sharedPrefs = SharedPrefs();
@@ -25,17 +22,16 @@ class EstimateProvider extends ChangeNotifier {
     http.Response? response;
     await sharedPrefs.getToken();
 
-    if(true){
+    if (true) {
       isLoading = true;
       notifyListeners();
       try {
         notifyListeners();
-        response =
-        await http.get(
+        response = await http.get(
           Uri.parse('$apiUrl/offerEstimation/customer'),
           headers: {
             HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
           },
         );
 
@@ -45,18 +41,17 @@ class EstimateProvider extends ChangeNotifier {
           final result = estimateModelFromJson(response.body);
           estimates = result.data;
           notifyListeners();
-
-        }else{
+        } else {
           isLoading = false;
           displayErrorSnackBar(context, "Something went wrong");
           notifyListeners();
         }
-
-      }  on SocketException catch (e) {
+      } on SocketException catch (e) {
         isLoading = false;
-        displayErrorSnackBar(context, "please check your internet and try again");
+        displayErrorSnackBar(
+            context, "please check your internet and try again");
         notifyListeners();
-      } catch(e){
+      } catch (e) {
         isLoading = false;
         displayErrorSnackBar(context, e.toString());
         notifyListeners();
@@ -67,24 +62,22 @@ class EstimateProvider extends ChangeNotifier {
     return response;
   }
 
-
-  Future<http.Response?> getEstimateById(context,requestId) async {
+  Future<http.Response?> getEstimateById(context, requestId) async {
     http.Response? response;
     await sharedPrefs.getToken();
 
     print("Your request Id is $requestId");
 
-    if(true){
+    if (true) {
       isLoading = true;
       notifyListeners();
       try {
         notifyListeners();
-        response =
-        await http.get(
+        response = await http.get(
           Uri.parse('$apiUrl/offerEstimation/byRquest/$requestId'),
           headers: {
             HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
           },
         );
 
@@ -96,18 +89,17 @@ class EstimateProvider extends ChangeNotifier {
           final result = estimateModelFromJson(response.body);
           estimateDetail = result.data;
           notifyListeners();
-
-        }else{
+        } else {
           isLoading = true;
           displayErrorSnackBar(context, "Something went wrong");
           notifyListeners();
         }
-
-      }  on SocketException catch (e) {
+      } on SocketException catch (e) {
         isLoading = true;
-        displayErrorSnackBar(context, "please check your internet and try again");
+        displayErrorSnackBar(
+            context, "please check your internet and try again");
         notifyListeners();
-      } catch(e){
+      } catch (e) {
         isLoading = true;
         print(e.toString());
         displayErrorSnackBar(context, e.toString());
@@ -119,19 +111,18 @@ class EstimateProvider extends ChangeNotifier {
     return response;
   }
 
-  Future<http.Response?> approveEstimate(context,id) async {
+  Future<http.Response?> approveEstimate(context, id) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
     notifyListeners();
     await sharedPrefs.getToken();
     try {
       notifyListeners();
-      response =
-      await http.patch(
+      response = await http.patch(
         Uri.parse('$apiUrl/offerEstimation/approve/$id'),
         headers: {
           HttpHeaders.contentTypeHeader: "application/json",
-          HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+          HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
         },
       );
       print(response.body);
@@ -139,18 +130,16 @@ class EstimateProvider extends ChangeNotifier {
         dialog.closeLoadingDialog(context);
         displaySuccessSnackBar(context, "You  Accepted Estimate Successfully");
         notifyListeners();
-
-      }else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
@@ -160,19 +149,18 @@ class EstimateProvider extends ChangeNotifier {
     return response;
   }
 
-  Future<http.Response?> declineEstimate(context,id) async {
+  Future<http.Response?> declineEstimate(context, id) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
     notifyListeners();
     await sharedPrefs.getToken();
     try {
       notifyListeners();
-      response =
-      await http.patch(
+      response = await http.patch(
         Uri.parse('$apiUrl/offerEstimation/reject/$id'),
         headers: {
           HttpHeaders.contentTypeHeader: "application/json",
-          HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+          HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
         },
       );
 
@@ -181,18 +169,16 @@ class EstimateProvider extends ChangeNotifier {
         dialog.closeLoadingDialog(context);
         displaySuccessSnackBar(context, "You  Declined Estimate Successfully");
         notifyListeners();
-
-      }else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
