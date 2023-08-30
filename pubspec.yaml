@@ -17,12 +17,12 @@ dependencies:
   shared_preferences: ^2.2.0
   google_maps_flutter: ^2.3.1
   geolocator: ^9.0.2
-  http: ^1.1.0 
+  http: ^1.1.0
   flutter_easyloading: ^3.0.5
   carousel_slider: ^4.2.1
-  smooth_page_indicator: ^1.1.0 
+  smooth_page_indicator: ^1.1.0
   flutter_dotenv: ^5.1.0
-  flutter_rating_bar: ^4.0.1 
+  flutter_rating_bar: ^4.0.1
   flex_color_picker: ^3.2.2
   image_picker: ^1.0.0
   jwt_decode: ^0.3.1
@@ -74,13 +74,11 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/logo.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
-  
 
 dependency_overrides:
   http: ^1.1.0
 
-flutter_native_splash:
-   color:"#ffcccc"
+flutter_native_splash: color:"#ffcccc"
 # The following section is specific to Flutter packages.
 flutter:
   uses-material-design: true
