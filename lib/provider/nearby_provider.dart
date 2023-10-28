@@ -27,6 +27,7 @@ class NearByProvider extends ChangeNotifier {
       notifyListeners();
       try {
         notifyListeners();
+        //TODO: stay http rest call for now
         response = await http.post(Uri.parse('$apiUrl/users/technician/nearby'),
             headers: {
               HttpHeaders.contentTypeHeader: "application/json",

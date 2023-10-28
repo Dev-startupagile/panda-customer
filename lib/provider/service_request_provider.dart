@@ -17,10 +17,7 @@ import '../models/request_status_model.dart';
 import '../models/send_request_response_model.dart' as sendrequest;
 import '../util/api.dart';
 
-
-
 class ServiceRequestProvider extends ChangeNotifier {
-
   bool isLoading = false;
   bool isLoaded = false;
   bool isPendingLoaded = false;
@@ -39,11 +36,11 @@ class ServiceRequestProvider extends ChangeNotifier {
   // List<Datum> completedRequests = [];
   // List<Datum> completedAllRequests = [];
 
-
   final dialog = DialogHandler();
   String? userId;
-
-  Future<http.Response?> sendServiceRequest(context,AddServiceRequestModel data, attachments,vehicleId) async {
+  //TODO: call grapghql mutation
+  Future<http.Response?> sendServiceRequest(
+      context, AddServiceRequestModel data, attachments, vehicleId) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
     notifyListeners();
@@ -51,60 +48,51 @@ class ServiceRequestProvider extends ChangeNotifier {
 
     try {
       notifyListeners();
-      response =
-      await http.post(
-          Uri.parse('$apiUrl/request/send'),
+      response = await http.post(Uri.parse('$apiUrl/request/send'),
           headers: {
             HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
           },
-          body: jsonEncode(
-              {
-                "serviceId": data.serviceId,
-                "vehicleId": [vehicleId],
-                "paymentId":data.paymentId,
-                "serviceLocation": {
-                  "longitude": data.longitude,
-                  "latitude": data.latitude,
-                  "name": data.name
-                },
-                "schedule": {
-                  "date": data.date,
-                  "time": data.time
-                },
-                "description": {
-                  "note": data.note,
-                  "attachments": attachments,
-                  "title": data.title
-                }
-              }
-          )
-      );
+          body: jsonEncode({
+            "serviceId": data.serviceId,
+            "vehicleId": [vehicleId],
+            "paymentId": data.paymentId,
+            "serviceLocation": {
+              "longitude": data.longitude,
+              "latitude": data.latitude,
+              "name": data.name
+            },
+            "schedule": {"date": data.date, "time": data.time},
+            "description": {
+              "note": data.note,
+              "attachments": attachments,
+              "title": data.title
+            }
+          }));
 
       print(response.body);
       if (response.statusCode == 201) {
         dialog.closeLoadingDialog(context);
-        final result = sendrequest.sendRequestresponseModelFromJson(response.body);
+        final result =
+            sendrequest.sendRequestresponseModelFromJson(response.body);
         requestId = result.data.id;
         print("calma calmaaa ${result.data.id}");
         notifyListeners();
         displaySuccessSnackBar(context, "you requested service succesfuly");
-      } else if(response.statusCode == 400){
+      } else if (response.statusCode == 400) {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Verification fail");
         notifyListeners();
-      }
-      else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
@@ -114,8 +102,8 @@ class ServiceRequestProvider extends ChangeNotifier {
     return response;
   }
 
-
-  Future<http.Response?> reRequestService(context,requestId,date,time) async {
+  Future<http.Response?> reRequestService(
+      context, requestId, date, time) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
 
@@ -123,40 +111,31 @@ class ServiceRequestProvider extends ChangeNotifier {
     await sharedPrefs.getToken();
     try {
       notifyListeners();
-      response =
-      await http.patch(
-          Uri.parse('$apiUrl/request/$requestId'),
+      response = await http.patch(Uri.parse('$apiUrl/request/$requestId'),
           headers: {
             HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
           },
-          body: jsonEncode(
-              {
-                "requestStatus": "PENDING",
-                "isScheduled": true,
-                "schedule": {
-                  "date": date,
-                  "time": time
-                }
-              }
-          )
-      );
+          body: jsonEncode({
+            "requestStatus": "PENDING",
+            "isScheduled": true,
+            "schedule": {"date": date, "time": time}
+          }));
 
       if (response.statusCode == 200) {
         dialog.closeLoadingDialog(context);
         notifyListeners();
         displaySuccessSnackBar(context, "you re-requested service successfuly");
-      } else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
@@ -166,103 +145,96 @@ class ServiceRequestProvider extends ChangeNotifier {
     return response;
   }
 
-
-  Future<http.Response?> getRequestById(context,requestId) async {
+  Future<http.Response?> getRequestById(context, requestId) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
-    isLoading  = true;
+    isLoading = true;
     notifyListeners();
     await sharedPrefs.getToken();
     try {
       notifyListeners();
-      response =
-      await http.get(
-          Uri.parse('$apiUrl/request/$requestId'),
-          headers: {
-            HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
-          },
+      response = await http.get(
+        Uri.parse('$apiUrl/request/$requestId'),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
+        },
       );
 
       if (response.statusCode == 200) {
         final result = reqDetail.requestDetailModelFromJson(response.body);
         requestDetail = result.data;
-        isLoading  = false;
+        isLoading = false;
 
         dialog.closeLoadingDialog(context);
         notifyListeners();
-      } else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
-        isLoading  = false;
+        isLoading = false;
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
-      isLoading  = false;
+      isLoading = false;
 
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
-      isLoading  = false;
+      isLoading = false;
 
       notifyListeners();
     }
 
-    isLoading  = false;
+    isLoading = false;
     notifyListeners();
     return response;
   }
 
-
-  Future<http.Response?> reRequestCanceledService(context,Datum requestDetail,requestId) async {
+  Future<http.Response?> reRequestCanceledService(
+      context, Datum requestDetail, requestId) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
     notifyListeners();
     await sharedPrefs.getToken();
     try {
       notifyListeners();
-      response =
-      await http.patch(
-          Uri.parse('$apiUrl/request/$requestId'),
+      response = await http.patch(Uri.parse('$apiUrl/request/$requestId'),
           headers: {
             HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
           },
-          body: jsonEncode(
-              {
-                "requestStatus": "PENDING",
-              }
-          )
-      );
+          body: jsonEncode({
+            "requestStatus": "PENDING",
+          }));
 
       if (response.statusCode == 200) {
         dialog.closeLoadingDialog(context);
-        requests.removeWhere((Datum element){
+        requests.removeWhere((Datum element) {
           return element.id == requestId;
         });
         Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => NearByTechnician(latitude:requestDetail.serviceLocation?.latitude ?? 0.0 , longitude: requestDetail.serviceLocation?.longitude ?? 0.0)
-        ));
+            context,
+            MaterialPageRoute(
+                builder: (context) => NearByTechnician(
+                    latitude: requestDetail.serviceLocation?.latitude ?? 0.0,
+                    longitude:
+                        requestDetail.serviceLocation?.longitude ?? 0.0)));
 
         notifyListeners();
         displaySuccessSnackBar(context, "you re-requested service successfuly");
-      } else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
@@ -272,56 +244,54 @@ class ServiceRequestProvider extends ChangeNotifier {
     return response;
   }
 
-  Future<http.Response?> getServiceRequestByStatus(context,status) async {
+  Future<http.Response?> getServiceRequestByStatus(context, status) async {
     http.Response? response;
     await sharedPrefs.getToken();
-     isLoaded = false;
-     isLoading = true;
-     notifyListeners();
-     try {
-       notifyListeners();
-       response =
-       await http.get(
-         Uri.parse('$apiUrl/request/byStatus/$status'),
-         headers: {
-           HttpHeaders.contentTypeHeader: "application/json",
-           HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
-         },
-       );
+    isLoaded = false;
+    isLoading = true;
+    notifyListeners();
+    try {
+      notifyListeners();
+      response = await http.get(
+        Uri.parse('$apiUrl/request/byStatus/$status'),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
+        },
+      );
 
-       print(status);
-       if (response.statusCode == 200) {
-         final result = requestStatusModelFromJson(response.body);
+      print(status);
+      if (response.statusCode == 200) {
+        final result = requestStatusModelFromJson(response.body);
 
-         requests = result.data;
-         isLoaded = true;
+        requests = result.data;
+        isLoaded = true;
 
+        isLoading = false;
+        notifyListeners();
+      } else {
+        displayErrorSnackBar(context, "Something went wrong");
+        isLoading = false;
+        notifyListeners();
+      }
+    } on SocketException catch (e) {
+      isLoading = false;
+      displayErrorSnackBar(context, "please check your internet and try again");
+      notifyListeners();
+    } catch (e) {
+      isLoading = false;
 
-         isLoading = false;
-         notifyListeners();
-       } else{
-         displayErrorSnackBar(context, "Something went wrong");
-         isLoading = false;
-         notifyListeners();
-       }
-
-     }  on SocketException catch (e) {
-       isLoading = false;
-       displayErrorSnackBar(context, "please check your internet and try again");
-       notifyListeners();
-     } catch(e){
-       isLoading = false;
-
-       print(e.toString());
-       displayErrorSnackBar(context, e.toString());
-       notifyListeners();
-     }
+      print(e.toString());
+      displayErrorSnackBar(context, e.toString());
+      notifyListeners();
+    }
     notifyListeners();
     return response;
   }
 
-
-  Future<http.Response?> updateServiceRequestByStatus(context,technicianId) async {
+  //TODO: change with grapghql mustation
+  Future<http.Response?> updateServiceRequestByStatus(
+      context, technicianId) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
     notifyListeners();
@@ -329,32 +299,26 @@ class ServiceRequestProvider extends ChangeNotifier {
 
     try {
       notifyListeners();
-      response =
-      await http.patch(
-        Uri.parse('$apiUrl/request/$requestId'),
-        headers: {
-          HttpHeaders.contentTypeHeader: "application/json",
-          HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
-        },
-        body: jsonEncode({
-          "technicianId":technicianId
-        })
-      );
+      response = await http.patch(Uri.parse('$apiUrl/request/$requestId'),
+          headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
+          },
+          body: jsonEncode({"technicianId": technicianId}));
 
       if (response.statusCode == 200) {
         dialog.closeLoadingDialog(context);
         notifyListeners();
-      } else{
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
@@ -371,42 +335,36 @@ class ServiceRequestProvider extends ChangeNotifier {
     await sharedPrefs.getToken();
     try {
       notifyListeners();
-      response =
-      await http.patch(
-          Uri.parse('$apiUrl/request/$id'),
+      response = await http.patch(Uri.parse('$apiUrl/request/$id'),
           headers: {
             HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
           },
-        body: jsonEncode(
-            {
-              "requestStatus": "CANCELED",
-            }
-        )
-      );
+          body: jsonEncode({
+            "requestStatus": "CANCELED",
+          }));
 
       print("hollaa ${response.body}");
 
       if (response.statusCode == 200) {
         dialog.closeLoadingDialog(context);
 
-        requests.removeWhere((Datum element){
+        requests.removeWhere((Datum element) {
           return element.id == id;
         });
 
-        displaySuccessSnackBar(context, "you canceled service request successfully");
-
-      } else{
+        displaySuccessSnackBar(
+            context, "you canceled service request successfully");
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
@@ -423,37 +381,30 @@ class ServiceRequestProvider extends ChangeNotifier {
     await sharedPrefs.getToken();
     try {
       notifyListeners();
-      response =
-      await http.patch(
-          Uri.parse('$apiUrl/request/$id'),
+      response = await http.patch(Uri.parse('$apiUrl/request/$id'),
           headers: {
             HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
           },
-          body: jsonEncode(
-              {
-                "requestStatus": "ACCEPTED",
-              }
-          )
-      );
+          body: jsonEncode({
+            "requestStatus": "ACCEPTED",
+          }));
 
       if (response.statusCode == 200) {
         dialog.closeLoadingDialog(context);
 
-
-        displaySuccessSnackBar(context, "you canceled service request successfully");
-
-      } else{
+        displaySuccessSnackBar(
+            context, "you canceled service request successfully");
+      } else {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "Something went wrong");
         notifyListeners();
       }
-
-    }  on SocketException catch (e) {
+    } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-    } catch(e){
+    } catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
