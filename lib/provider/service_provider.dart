@@ -8,32 +8,27 @@ import '../models/service_model.dart';
 import '../util/api.dart';
 import '../function/shared_prefs.dart';
 
-
-
 class ServiceProvider extends ChangeNotifier {
-
   bool isLoading = false;
   bool isLoaded = false;
   final sharedPrefs = SharedPrefs();
   List<Datum> services = [];
 
-  Future<http.Response?> getAllServices(context,isRefreshed) async {
+  Future<http.Response?> getAllServices(context, isRefreshed) async {
     http.Response? response;
     await sharedPrefs.getToken();
 
-    if( services.isEmpty || isRefreshed ){
+    if (services.isEmpty || isRefreshed) {
       isLoading = true;
       notifyListeners();
       try {
         notifyListeners();
-        response =
-        await http.get(
+        response = await http.get(
           Uri.parse('$apiUrl/service/all'),
           headers: {
             HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:"Bearer ${sharedPrefs.token}"
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
           },
-
         );
 
         if (response.statusCode == 200) {
@@ -42,18 +37,17 @@ class ServiceProvider extends ChangeNotifier {
           final result = serviceModelFromJson(response.body);
           services = result.data;
           notifyListeners();
-
-        }else{
+        } else {
           isLoading = false;
           displayErrorSnackBar(context, "Something went wrong");
           notifyListeners();
         }
-
-      }  on SocketException catch (e) {
+      } on SocketException catch (e) {
         isLoading = false;
-        displayErrorSnackBar(context, "please check your internet and try again");
+        displayErrorSnackBar(
+            context, "please check your internet and try again");
         notifyListeners();
-      } catch(e){
+      } catch (e) {
         isLoading = false;
         displayErrorSnackBar(context, e.toString());
         notifyListeners();
@@ -62,6 +56,5 @@ class ServiceProvider extends ChangeNotifier {
       notifyListeners();
       return response;
     }
-    }
-
+  }
 }

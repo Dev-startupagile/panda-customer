@@ -28,7 +28,7 @@ import 'componets/assigned_technician.dart';
 class RequestBottomSheetWidget extends StatefulWidget {
   final String title;
   final String? currentPosition;
-  final Function(String value) onClickNext;
+  final Function() onClickNext;
   final Function(String value) onClickBack;
   final Function onClickClose;
   double latitude;
@@ -120,34 +120,34 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
 
   void onClickNext() {
     if (widget.title == whereAreYou) {
-      if (true) {
-        FocusScope.of(context).unfocus();
-        if (vehicleId.isEmpty) {
-          displayInfoSnackBar(context, "please select vehicle first");
+      FocusScope.of(context).unfocus();
+      if (vehicleId.isEmpty) {
+        displayInfoSnackBar(context, "please select vehicle first");
+      } else {
+        if (locationController.text.isEmpty) {
+          displayInfoSnackBar(context, "please enter your location");
+        } else if (dropdownValue == null) {
+          displayInfoSnackBar(context, "please select service type");
         } else {
-          if (locationController.text.isEmpty) {
-            displayInfoSnackBar(context, "please enter your location");
-          } else if (dropdownValue == null) {
-            displayInfoSnackBar(context, "please select service type");
+          if (context.read<UploaderProvider>().uploadedFileList.length !=
+              images.length) {
+            displayInfoSnackBar(
+                context, "please wait until your attachments uploaded ");
           } else {
-            if (context.read<UploaderProvider>().uploadedFileList.length !=
-                images.length) {
-              displayInfoSnackBar(
-                  context, "please wait until your attachments uploaded ");
-            } else {
-              widget.onClickNext(serviceType);
-            }
+            widget.onClickNext();
           }
         }
       }
     } else if (widget.title == selectPaymentMethod) {
+      //TODO: skip for now
+      paymentId = "5";
       if (paymentId == "") {
         displayInfoSnackBar(context, "please select payment method first");
       } else {
         requestService();
       }
     } else {
-      widget.onClickNext(serviceType);
+      widget.onClickNext();
     }
   }
 
@@ -179,7 +179,7 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
         addServiceRequestModel,
         context.read<UploaderProvider>().uploadedFileList,
         vehicleId);
-    widget.onClickNext(serviceType);
+    widget.onClickNext();
   }
 
   void onClickBack() {
@@ -208,7 +208,7 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
     setState(() {
       serviceType = val;
     });
-    widget.onClickNext(serviceType);
+    widget.onClickNext();
   }
 
   void setServiceId(String val) {
@@ -252,7 +252,7 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
     await context
         .read<ServiceRequestProvider>()
         .updateServiceRequestByStatus(context, id);
-    widget.onClickNext(serviceType);
+    widget.onClickNext();
     Timer(const Duration(seconds: 3), assignTechnicianShower);
   }
 

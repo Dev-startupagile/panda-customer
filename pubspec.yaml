@@ -62,6 +62,10 @@ dependencies:
     git: https://github.com/ba5liel/time_picker_widget.git
   pinput: ^2.2.31
   flutter_credit_card: ^3.0.7
+  # flutter_screenutil: ^5.9.0
+  # hive: ^2.2.3
+  # hive_flutter: ^1.1.0
+  # amplify_flutter: ^1.4.1
 
 dev_dependencies:
   flutter_test:

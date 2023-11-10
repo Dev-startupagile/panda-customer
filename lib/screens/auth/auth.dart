@@ -75,8 +75,10 @@ class _AuthState extends State<Auth> {
 
     firstnameController = TextEditingController();
     lastnameController = TextEditingController();
-    emailController = TextEditingController();
-    passwordController = TextEditingController();
+    //TODO: DOn't fortget to remove
+    emailController =
+        TextEditingController(text: "baslielselamu2018+pc@gmail.com");
+    passwordController = TextEditingController(text: "LionKing!23");
     confirmPasswordController = TextEditingController();
     phoneController = TextEditingController();
     stateController = TextEditingController();

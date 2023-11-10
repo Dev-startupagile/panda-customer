@@ -279,20 +279,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
   }
 
+  List<Widget> get widgetOptions => <Widget>[
+        RequestServicesMap(
+          currentFormStep: title,
+        ),
+        const EstimatePage(),
+        HistoryPage(
+          isFromNearBy: isFromNearBy,
+        ),
+        const ProfilePage(),
+      ];
+
   DateTime timeBackPresed = DateTime.now();
   @override
   Widget build(BuildContext context) {
-    List<Widget> _widgetOptions = <Widget>[
-      RequestServicesMap(
-        title: title,
-      ),
-      const EstimatePage(),
-      HistoryPage(
-        isFromNearBy: isFromNearBy,
-      ),
-      const ProfilePage(),
-    ];
-
     return SafeArea(
       top: false,
       bottom: true,
@@ -309,7 +309,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         },
         child: Scaffold(
           body: Center(
-            child: _widgetOptions.elementAt(_selectedIndex),
+            child: widgetOptions.elementAt(_selectedIndex),
           ),
           bottomSheet: context.watch<RatingProvider>().isRatingActive
               ? RatingScreen(

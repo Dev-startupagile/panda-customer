@@ -6,18 +6,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:panda/function/global_snackbar.dart';
 import 'package:panda/util/ui_constant.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../commonComponents/loading_dialog.dart';
 import '../../../../function/shared_prefs.dart';
-import '../../../../provider/notification_provider.dart';
 import '../../../../util/constants.dart';
 import '../browse/browse_bottomsheet_widget.dart';
 import 'request_bottomsheet_widget.dart';
 
 class RequestServicesMap extends StatefulWidget {
-  int title;
-  RequestServicesMap({super.key, required this.title});
+  int currentFormStep;
+  RequestServicesMap({super.key, required this.currentFormStep});
 
   @override
   State<RequestServicesMap> createState() => _RequestServicesMapState();
@@ -34,12 +32,12 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
   String? currentPosition;
   final dialog = DialogHandler();
 
-  final Set<Marker> _markers = Set();
+  final Set<Marker> _markers = {};
 
   static LatLng _mainLocation = const LatLng(0.0, 0.0);
   static LatLng _desLocation = const LatLng(39.0, 8.0);
 
-  final List<String> titles = <String>[
+  final List<String> formSteps = <String>[
     serviceRequest,
     // assistance,
     whereAreYou,
@@ -112,15 +110,15 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => {_determinePosition()});
+    WidgetsBinding.instance.addPostFrameCallback((_) => _determinePosition());
   }
 
-  void onClickNextButton(String val) {
+  void onClickNextButton() {
     setState(() {
-      if (widget.title > titles.length - 2) {
-        widget.title = -1;
+      if (widget.currentFormStep > formSteps.length - 2) {
+        widget.currentFormStep = -1;
       } else {
-        widget.title++;
+        widget.currentFormStep++;
       }
     });
   }
@@ -129,28 +127,18 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
 
   void onClickBackButton(String val) {
     setState(() {
-      if (widget.title > titles.length - 2) {
-        widget.title = -1;
+      if (widget.currentFormStep > formSteps.length - 2) {
+        widget.currentFormStep = -1;
       } else {
-        widget.title--;
+        widget.currentFormStep--;
       }
     });
   }
 
   void onClickClose() {
     setState(() {
-      widget.title = -1;
+      widget.currentFormStep = -1;
     });
-  }
-
-  @override
-  void deactivate() {
-    super.deactivate();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   void openCloseBrowse() {
@@ -162,7 +150,7 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.title != -1
+      appBar: widget.currentFormStep != -1
           ? null
           : AppBar(
               leading: Stack(
@@ -255,7 +243,7 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
                                 "we are finding your location please wait");
                           } else {
                             setState(() {
-                              widget.title = 0;
+                              widget.currentFormStep = 0;
                             });
                           }
                         },
@@ -286,7 +274,7 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
                                   "we are finding your location please wait");
                             } else {
                               setState(() {
-                                widget.title = 0;
+                                widget.currentFormStep = 0;
                               });
                             }
                           });
@@ -303,15 +291,13 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
       ),
       bottomSheet: isBrowse
           ? Browse(latitude: lat, longitude: long, getFunc: openCloseBrowse)
-          : widget.title != -1
+          : widget.currentFormStep != -1
               ? RequestBottomSheetWidget(
                   latitude: lat,
                   longtude: long,
                   currentPosition: currentPosition,
-                  title: titles[widget.title],
-                  onClickNext: (String value) {
-                    onClickNextButton(value);
-                  },
+                  title: formSteps[widget.currentFormStep],
+                  onClickNext: onClickNextButton,
                   onClickBack: (String value) {
                     onClickBackButton(value);
                   },
