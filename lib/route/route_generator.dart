@@ -18,10 +18,16 @@ class RouteGenerator {
     final args = settings.arguments;
     switch (settings.name) {
       case '/home':
-        return  MaterialPageRoute(builder: (_) =>  HomePage(isFromNoNearByTech: false,));
+        return MaterialPageRoute(
+            builder: (_) => HomePage(
+                  isFromNoNearByTech: false,
+                ));
 
       case '/from_nearby':
-        return MaterialPageRoute(builder: (_) =>  HomePage(isFromNoNearByTech: true,));
+        return MaterialPageRoute(
+            builder: (_) => HomePage(
+                  isFromNoNearByTech: true,
+                ));
       case '/login':
         return MaterialPageRoute(builder: (_) => const Auth());
       case '/term_of_services':
@@ -31,21 +37,21 @@ class RouteGenerator {
       case '/help':
         return MaterialPageRoute(builder: (_) => const Help());
       case '/add_vehicle':
-          return MaterialPageRoute(builder: (_) => AddVehicle());
+        return MaterialPageRoute(builder: (_) => AddVehicle());
       case '/faq':
         return MaterialPageRoute(builder: (_) => const Faq());
       case "/forget":
-        return MaterialPageRoute(builder: (_) =>  ForgotPassword() );
+        return MaterialPageRoute(builder: (_) => ForgotPassword());
       case "/edit_profile":
-        return MaterialPageRoute(builder: (_) =>  const EditProfile() );
+        return MaterialPageRoute(builder: (_) => const EditProfile());
       case "/add_payment":
-        return MaterialPageRoute(builder: (_) =>   AddPaymentMethod() );
+        return MaterialPageRoute(builder: (_) => const AddPaymentMethod());
       case "/contact_us":
-        return MaterialPageRoute(builder: (_) =>   ContactUs() );
+        return MaterialPageRoute(builder: (_) => ContactUs());
       case "/estimate":
-        return MaterialPageRoute(builder: (_) =>   const EstimatePage() );
+        return MaterialPageRoute(builder: (_) => const EstimatePage());
       case "/settings":
-        return MaterialPageRoute(builder: (_) =>   const Settings() );
+        return MaterialPageRoute(builder: (_) => const Settings());
 
       default:
         return MaterialPageRoute(builder: (_) => const Auth());

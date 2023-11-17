@@ -141,7 +141,7 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
       }
     } else if (widget.title == selectPaymentMethod) {
       //TODO: skip for now
-      paymentId = "5";
+      // paymentId = "5";
       if (paymentId == "") {
         displayInfoSnackBar(context, "please select payment method first");
       } else {

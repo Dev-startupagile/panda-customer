@@ -1,4 +1,4 @@
-class AddCardModel{
+class AddCardModel {
   String cardNumber;
   String expiryDate;
   String cvc;
@@ -12,7 +12,7 @@ class AddCardModel{
     required this.type,
   });
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["cardNumber"] = cardNumber;
     data["expiryDate"] = expiryDate;
@@ -21,5 +21,13 @@ class AddCardModel{
     data["type"] = type;
 
     return data;
+  }
+
+  String getLastFour() {
+    if (cardNumber.length <= 4) {
+      return cardNumber;
+    } else {
+      return cardNumber.substring(cardNumber.length - 4);
+    }
   }
 }

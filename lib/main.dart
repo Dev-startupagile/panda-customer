@@ -22,11 +22,12 @@ import 'package:panda/provider/user_detail_provider.dart';
 import 'package:panda/route/route_generator.dart';
 import 'package:panda/screens/auth/auth.dart';
 import 'package:panda/screens/home/home_page.dart';
-import 'package:panda/screens/home/services/service_request/componets/finding_ur_technician.dart';
 import 'package:panda/screens/onboarding/on_bording.dart';
+import 'package:panda/util/api.dart';
 import 'package:panda/util/constants.dart';
 import 'package:panda/util/ui_constant.dart';
 import 'package:provider/provider.dart';
+import 'package:stripe_payment/stripe_payment.dart';
 import 'commonComponents/loading.dart';
 import 'function/auth.dart';
 import 'function/shared_prefs.dart';
@@ -102,6 +103,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
+  StripePayment.setOptions(
+    StripeOptions(
+      publishableKey:
+          pUBLISHABLEKEY, // Replace with your Stripe publishable key
+      merchantId: mERCHANTID, // Replace with your Merchant ID
+      androidPayMode:
+          'test', // Change to 'production' when running in production
+    ),
+  );
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
