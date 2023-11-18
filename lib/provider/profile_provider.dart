@@ -214,6 +214,8 @@ class ProfileProvider extends ChangeNotifier {
         throw AppFuncException("Getting Tokenized Card failed");
       }
       var tokenizedCard = TokenizedCard(
+        id: '',
+        email: '',
         tokenId: token.tokenId!,
         length: data.cardNumber.length,
         lastFour: data.getLastFour(),
@@ -272,7 +274,7 @@ class ProfileProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         dialog.closeLoadingDialog(context);
 
-        customerprofile?.payments.items.removeWhere((PaymentsItem element) {
+        customerprofile?.payments.items.removeWhere((TokenizedCard element) {
           return element.id == id;
         });
 

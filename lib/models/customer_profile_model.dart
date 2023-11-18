@@ -1,9 +1,12 @@
-
 import 'dart:convert';
 
-CustomerProfileModel customerProfileModelFromJson(String str) => CustomerProfileModel.fromJson(json.decode(str));
+import 'package:panda/models/tokenized_card.dart';
 
-String customerProfileModelToJson(CustomerProfileModel data) => json.encode(data.toJson());
+CustomerProfileModel customerProfileModelFromJson(String str) =>
+    CustomerProfileModel.fromJson(json.decode(str));
+
+String customerProfileModelToJson(CustomerProfileModel data) =>
+    json.encode(data.toJson());
 
 class CustomerProfileModel {
   CustomerProfileModel({
@@ -14,15 +17,16 @@ class CustomerProfileModel {
   bool status;
   Data data;
 
-  factory CustomerProfileModel.fromJson(Map<String, dynamic> json) => CustomerProfileModel(
-    status: json["status"],
-    data: Data.fromJson(json["data"]),
-  );
+  factory CustomerProfileModel.fromJson(Map<String, dynamic> json) =>
+      CustomerProfileModel(
+        status: json["status"],
+        data: Data.fromJson(json["data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "data": data.toJson(),
-  };
+        "status": status,
+        "data": data.toJson(),
+      };
 }
 
 class Data {
@@ -37,16 +41,17 @@ class Data {
   Payments payments;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    personalInformation: PersonalInformation.fromJson(json["personalInformation"]),
-    vehicles: Vehicles.fromJson(json["vehicles"]),
-    payments: Payments.fromJson(json["payments"]),
-  );
+        personalInformation:
+            PersonalInformation.fromJson(json["personalInformation"]),
+        vehicles: Vehicles.fromJson(json["vehicles"]),
+        payments: Payments.fromJson(json["payments"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "personalInformation": personalInformation.toJson(),
-    "vehicles": vehicles.toJson(),
-    "payments": payments.toJson(),
-  };
+        "personalInformation": personalInformation.toJson(),
+        "vehicles": vehicles.toJson(),
+        "payments": payments.toJson(),
+      };
 }
 
 class Payments {
@@ -58,23 +63,24 @@ class Payments {
   });
 
   int code;
-  List<PaymentsItem> items;
+  List<TokenizedCard> items;
   int count;
   int scannedCount;
 
   factory Payments.fromJson(Map<String, dynamic> json) => Payments(
-    code: json["code"],
-    items: List<PaymentsItem>.from(json["Items"].map((x) => PaymentsItem.fromJson(x))),
-    count: json["Count"],
-    scannedCount: json["ScannedCount"],
-  );
+        code: json["code"],
+        items: List<TokenizedCard>.from(
+            json["Items"].map((x) => TokenizedCard.fromMap(x))),
+        count: json["Count"],
+        scannedCount: json["ScannedCount"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "code": code,
-    "Items": List<dynamic>.from(items.map((x) => x.toJson())),
-    "Count": count,
-    "ScannedCount": scannedCount,
-  };
+        "code": code,
+        "Items": List<dynamic>.from(items.map((x) => x.toJson())),
+        "Count": count,
+        "ScannedCount": scannedCount,
+      };
 }
 
 class PaymentsItem {
@@ -101,28 +107,28 @@ class PaymentsItem {
   String? type;
 
   factory PaymentsItem.fromJson(Map<String, dynamic> json) => PaymentsItem(
-    isActive: json["isActive"],
-    expiryDate: json["expiryDate"],
-    image: json["image"],
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    createdAt: DateTime.parse(json["createdAt"]),
-    email: json["email"],
-    id: json["id"],
-    cvc: json["cvc"],
-    type: json["type"],
-  );
+        isActive: json["isActive"],
+        expiryDate: json["expiryDate"],
+        image: json["image"],
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        createdAt: DateTime.parse(json["createdAt"]),
+        email: json["email"],
+        id: json["id"],
+        cvc: json["cvc"],
+        type: json["type"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "isActive": isActive,
-    "expiryDate": expiryDate,
-    "image": image,
-    "updatedAt": updatedAt?.toIso8601String(),
-    "createdAt": createdAt?.toIso8601String(),
-    "email": email,
-    "id": id,
-    "cvc": cvc,
-    "type": type,
-  };
+        "isActive": isActive,
+        "expiryDate": expiryDate,
+        "image": image,
+        "updatedAt": updatedAt?.toIso8601String(),
+        "createdAt": createdAt?.toIso8601String(),
+        "email": email,
+        "id": id,
+        "cvc": cvc,
+        "type": type,
+      };
 }
 
 class PersonalInformation {
@@ -158,39 +164,40 @@ class PersonalInformation {
   int? zipCode;
   String? street;
 
-  factory PersonalInformation.fromJson(Map<String, dynamic> json) => PersonalInformation(
-    phoneNumber: json["phoneNumber"],
-    userRole: json["userRole"],
-    subscription: json["subscription"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    fullName: json["fullName"],
-    state: json["state"],
-    city: json["city"],
-    isActive: json["isActive"],
-    userId: json["userID"],
-    profilePicture: json["profilePicture"],
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    id: json["id"],
-    zipCode: json["zipCode"],
-    street: json["street"],
-  );
+  factory PersonalInformation.fromJson(Map<String, dynamic> json) =>
+      PersonalInformation(
+        phoneNumber: json["phoneNumber"],
+        userRole: json["userRole"],
+        subscription: json["subscription"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        fullName: json["fullName"],
+        state: json["state"],
+        city: json["city"],
+        isActive: json["isActive"],
+        userId: json["userID"],
+        profilePicture: json["profilePicture"],
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        id: json["id"],
+        zipCode: json["zipCode"],
+        street: json["street"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "phoneNumber": phoneNumber,
-    "userRole": userRole,
-    "subscription": subscription,
-    "createdAt": createdAt?.toIso8601String(),
-    "fullName": fullName,
-    "state": state,
-    "city": city,
-    "isActive": isActive,
-    "userID": userId,
-    "profilePicture": profilePicture,
-    "updatedAt": updatedAt?.toIso8601String(),
-    "id": id,
-    "zipCode": zipCode,
-    "street": street,
-  };
+        "phoneNumber": phoneNumber,
+        "userRole": userRole,
+        "subscription": subscription,
+        "createdAt": createdAt?.toIso8601String(),
+        "fullName": fullName,
+        "state": state,
+        "city": city,
+        "isActive": isActive,
+        "userID": userId,
+        "profilePicture": profilePicture,
+        "updatedAt": updatedAt?.toIso8601String(),
+        "id": id,
+        "zipCode": zipCode,
+        "street": street,
+      };
 }
 
 class Vehicles {
@@ -207,18 +214,19 @@ class Vehicles {
   int scannedCount;
 
   factory Vehicles.fromJson(Map<String, dynamic> json) => Vehicles(
-    code: json["code"],
-    items: List<VehiclesItem>.from(json["Items"].map((x) => VehiclesItem.fromJson(x))),
-    count: json["Count"],
-    scannedCount: json["ScannedCount"],
-  );
+        code: json["code"],
+        items: List<VehiclesItem>.from(
+            json["Items"].map((x) => VehiclesItem.fromJson(x))),
+        count: json["Count"],
+        scannedCount: json["ScannedCount"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "code": code,
-    "Items": List<dynamic>.from(items.map((x) => x.toJson())),
-    "Count": count,
-    "ScannedCount": scannedCount,
-  };
+        "code": code,
+        "Items": List<dynamic>.from(items.map((x) => x.toJson())),
+        "Count": count,
+        "ScannedCount": scannedCount,
+      };
 }
 
 class VehiclesItem {
@@ -226,11 +234,11 @@ class VehiclesItem {
     required this.model,
     required this.createdAt,
     required this.brand,
-    required  this.email,
-    required  this.make,
+    required this.email,
+    required this.make,
     required this.image,
     required this.updatedAt,
-     this.isFavorite,
+    this.isFavorite,
     required this.plateNumber,
     required this.description,
     required this.id,
@@ -253,34 +261,34 @@ class VehiclesItem {
   String transmission;
 
   factory VehiclesItem.fromJson(Map<String, dynamic> json) => VehiclesItem(
-    model: json["model"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    brand: json["brand"],
-    email: json["email"],
-    make: json["make"],
-    image: json["image"],
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    isFavorite: json["isFavorite"],
-    plateNumber: json["plateNumber"],
-    description: json["description"],
-    id: json["id"],
-    color: json["color"],
-    transmission: json["transmission"],
-  );
+        model: json["model"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        brand: json["brand"],
+        email: json["email"],
+        make: json["make"],
+        image: json["image"],
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        isFavorite: json["isFavorite"],
+        plateNumber: json["plateNumber"],
+        description: json["description"],
+        id: json["id"],
+        color: json["color"],
+        transmission: json["transmission"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "model": model,
-    "createdAt": createdAt.toIso8601String(),
-    "brand": brand,
-    "email": email,
-    "make": make,
-    "image": image,
-    "updatedAt": updatedAt.toIso8601String(),
-    "isFavorite": isFavorite,
-    "plateNumber": plateNumber,
-    "description": description,
-    "id": id,
-    "color": color,
-    "transmission": transmission,
-  };
+        "model": model,
+        "createdAt": createdAt.toIso8601String(),
+        "brand": brand,
+        "email": email,
+        "make": make,
+        "image": image,
+        "updatedAt": updatedAt.toIso8601String(),
+        "isFavorite": isFavorite,
+        "plateNumber": plateNumber,
+        "description": description,
+        "id": id,
+        "color": color,
+        "transmission": transmission,
+      };
 }

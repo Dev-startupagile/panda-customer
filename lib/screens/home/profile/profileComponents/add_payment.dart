@@ -29,7 +29,7 @@ class _AddPaymentMethodState extends State<AddPaymentMethod> {
   OutlineInputBorder? border;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  void _onValidate() {
+  void _onValidate() async {
     if (formKey.currentState!.validate()) {
       print(cardNumber);
       print(expiryDate);
@@ -41,7 +41,7 @@ class _AddPaymentMethodState extends State<AddPaymentMethod> {
           cvc: cvvCode,
           image: "",
           type: cardHolderName == '' ? "Card Holder Name" : cardHolderName);
-      context.read<ProfileProvider>().addCard(context, addCardModel);
+      await context.read<ProfileProvider>().addCard(context, addCardModel);
     } else {
       print('invalid!');
     }

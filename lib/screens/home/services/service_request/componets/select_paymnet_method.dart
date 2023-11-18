@@ -3,7 +3,6 @@ import 'package:panda/screens/home/services/service_request/componets/payment_li
 import 'package:provider/provider.dart';
 
 import '../../../../../commonComponents/skeletal/custom_profile_skeletal.dart';
-import '../../../../../function/substring.dart';
 import '../../../../../provider/profile_provider.dart';
 import '../../../../../util/ui_constant.dart';
 import '../../../profile/profileComponents/payment_detail.dart';
@@ -25,7 +24,8 @@ class SelectPaymentMethod extends StatelessWidget {
     void cardDetail(req) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => PaymentDetail(req: req)),
+        MaterialPageRoute(
+            builder: (context) => PaymentDetail(tokenizedCard: req)),
       );
     }
 
@@ -79,7 +79,8 @@ class SelectPaymentMethod extends StatelessWidget {
                                       : null,
                                   child: customListTile(
                                       Icons.credit_card_rounded,
-                                      "WF Card **** ${newString(value.customerprofile?.payments.items[index].id ?? "", 4)}",
+                                      value.customerprofile?.payments
+                                          .items[index].hiddenCN,
                                       Icons.arrow_forward_ios_sharp,
                                       cardDetail,
                                       value.customerprofile?.payments

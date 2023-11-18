@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:panda/models/rejection_by_tech.dart';
 import 'package:panda/provider/auth_provider.dart';
 import 'package:panda/provider/auto_complete_provider.dart';
 import 'package:panda/provider/contactus_provider.dart';
