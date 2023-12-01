@@ -2,10 +2,12 @@ import 'dart:convert';
 
 class RejectionByTech {
   final String technicianName;
+  final String technicianId;
   final String requestId;
   final String serviceId;
   RejectionByTech({
     required this.technicianName,
+    required this.technicianId,
     required this.requestId,
     required this.serviceId,
   });
@@ -20,6 +22,7 @@ class RejectionByTech {
 
   factory RejectionByTech.fromMap(Map<String, dynamic> map) {
     return RejectionByTech(
+      technicianId: map['technicianId'] ?? '',
       technicianName: map['technicianName'] ?? '',
       requestId: map['requestId'] ?? '',
       serviceId: map['serviceId'] ?? '',

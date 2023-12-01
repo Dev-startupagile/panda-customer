@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:panda/commonComponents/popup_dialog.dart';
 import 'package:panda/function/global_snackbar.dart';
 import 'package:panda/models/rejection_by_tech.dart';
 import 'package:panda/util/ui_constant.dart';
@@ -151,6 +152,11 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
               );
             },
           );
+        }
+        if (notification.title == completedN) {
+          var data = RejectionByTech.fromJson(notification.body!);
+          showReviewPopup(context, data.technicianName, data.requestId,
+              data.technicianId, (_) {});
         }
       }
     });

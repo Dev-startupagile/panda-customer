@@ -18,7 +18,7 @@ Widget profileAvatar(
           ? Image.file(image!, fit: BoxFit.fitWidth)
           : CachedNetworkImage(
               imageUrl: profileUrl ?? "",
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
               placeholder: (context, url) => const Padding(
                 padding: EdgeInsets.all(18.0),
                 child: CircularProgressIndicator(

@@ -49,3 +49,5 @@ const String canceledConst = "Canceled";
 const String completedConst = "Completed";
 const String completedDiagnosticConst = "Completed/${true}";
 const String completedAllConst = "Completed/${false}";
+
+const String kDefaultPassword = "Pand\$aDefaultP@ssmord123";

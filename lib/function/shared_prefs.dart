@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../util/constants.dart';
 
-
 class SharedPrefs {
   String value = "token";
   String isFirstLogin = "isFirstLogin";
@@ -48,12 +47,13 @@ class SharedPrefs {
     prefs ??= await SharedPreferences.getInstance();
   }
 
-  saveToPrefs(k) async {
+  Future<void> saveToPrefs(k) async {
     await initPrefs();
     prefs!.setString(value, k);
+    token = k;
   }
 
-  saveIsFirstLogin() async {
+  Future<void> saveIsFirstLogin() async {
     await initPrefs();
     prefs!.setBool(isFirstLogin, true);
   }
@@ -63,7 +63,7 @@ class SharedPrefs {
     prefs!.setBool(allTabClicked, true);
   }
 
-  saveBadge(int num,badgeName) async {
+  saveBadge(int num, badgeName) async {
     await initPrefs();
     prefs!.setInt(badgeName, num);
   }
@@ -79,12 +79,12 @@ class SharedPrefs {
     isFromImagePicker = prefs?.getBool("isFromImagePicker") ?? false;
   }
 
-  saveBool(bool num,badgeName) async {
+  saveBool(bool num, badgeName) async {
     await initPrefs();
     prefs!.setBool(badgeName, num);
   }
 
-  saveString(String num,badgeName) async {
+  saveString(String num, badgeName) async {
     await initPrefs();
     prefs!.setString(badgeName, num);
   }
@@ -99,7 +99,6 @@ class SharedPrefs {
   //   await initPrefs();
   //   estimateBadgeNumber = prefs?.getInt(badgeName);
   // }
-
 
   getPendingBadge(badgeName) async {
     await initPrefs();
@@ -117,8 +116,8 @@ class SharedPrefs {
   getRatingOffer() async {
     await initPrefs();
     await prefs?.reload();
-    isRatingActive = prefs?.getBool( isRatingName ) ?? false;
-    ratingRequestId = prefs?.getString( isRatingRequestId ) ?? "";
+    isRatingActive = prefs?.getBool(isRatingName) ?? false;
+    ratingRequestId = prefs?.getString(isRatingRequestId) ?? "";
   }
 
   getRequestOffer() async {
@@ -164,8 +163,8 @@ class SharedPrefs {
 
   removeRating() async {
     await initPrefs();
-    prefs!.setBool( isRatingName , false);
-    prefs!.setString( isRatingRequestId, "");
+    prefs!.setBool(isRatingName, false);
+    prefs!.setString(isRatingRequestId, "");
   }
 
   removeRequestOffer() async {
@@ -178,14 +177,17 @@ class SharedPrefs {
     await initPrefs();
     prefs!.setInt(badgeName, 0);
   }
+
   removeCanceledBadge(badgeName) async {
     await initPrefs();
     prefs!.setInt(badgeName, 0);
   }
+
   removeCompletedBadge(badgeName) async {
     await initPrefs();
     prefs!.setInt(badgeName, 0);
   }
+
   getIsFirstLogin() async {
     await initPrefs();
     isFirstTimeLogin = prefs?.getBool(isFirstLogin);
@@ -196,69 +198,66 @@ class SharedPrefs {
     isAllTabClicked = prefs?.getBool(allTabClicked);
   }
 
-
-  getToken() async {
+  Future<void> getToken() async {
     await initPrefs();
     token = prefs?.getString(value);
   }
 
-  removeFromPrefs() async{
+  removeFromPrefs() async {
     await initPrefs();
     prefs!.remove(value);
   }
 
-
   badgeIncrementer() async {
     await prefs?.reload();
-    badge = prefs?.getInt(estimateBadgeName) ?? 0 ;
-    await saveBadge(badge + 1,estimateBadgeName);
+    badge = prefs?.getInt(estimateBadgeName) ?? 0;
+    await saveBadge(badge + 1, estimateBadgeName);
   }
 
-  counterOfferSetter(id) async{
+  counterOfferSetter(id) async {
     await prefs?.reload();
     isCounterOffer = true;
     requestId = id;
-    await saveBool(isCounterOffer,counterOfferBadgeName);
-    await saveString(requestId,counterRequestIdBadgeName);
+    await saveBool(isCounterOffer, counterOfferBadgeName);
+    await saveString(requestId, counterRequestIdBadgeName);
   }
 
-  ratingSetter(id) async{
+  ratingSetter(id) async {
     await prefs?.reload();
     isRatingActive = true;
     ratingRequestId = id;
-    await saveBool( isRatingActive,isRatingName );
-    await saveString( ratingRequestId ,isRatingRequestId);
+    await saveBool(isRatingActive, isRatingName);
+    await saveString(ratingRequestId, isRatingRequestId);
   }
 
-  requestOfferSetter(id) async{
+  requestOfferSetter(id) async {
     await prefs?.reload();
     isRequestScheduled = true;
     scheduleRequestId = id;
-    await saveBool(isRequestScheduled,isRequestScheduledName);
-    await saveString(scheduleRequestId,scheduleRequestIdName);
+    await saveBool(isRequestScheduled, isRequestScheduledName);
+    await saveString(scheduleRequestId, scheduleRequestIdName);
   }
 
   pendingBadgeIncrementer() async {
     await prefs?.reload();
-    pendingBadge =  prefs?.getInt(pendingConst) ?? 0;
-    await saveBadge(pendingBadge + 1,pendingConst);
+    pendingBadge = prefs?.getInt(pendingConst) ?? 0;
+    await saveBadge(pendingBadge + 1, pendingConst);
   }
 
   acceptedBadgeIncrementer() async {
     await prefs?.reload();
-    acceptedBadge = prefs?.getInt(acceptedConst) ?? 0 ;
+    acceptedBadge = prefs?.getInt(acceptedConst) ?? 0;
     await saveBadge(acceptedBadge + 1, acceptedConst);
   }
 
   canceledBadgeIncrementer() async {
     await prefs?.reload();
     cancelBadge = prefs?.getInt(canceledConst) ?? 0;
-    await saveBadge(cancelBadge + 1,canceledConst);
+    await saveBadge(cancelBadge + 1, canceledConst);
   }
 
   completedBadgeIncrementer() async {
     completedBadge = prefs?.getInt(completedConst) ?? 0;
     await saveBadge(completedBadge + 1, completedConst);
   }
-
 }

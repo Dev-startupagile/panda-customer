@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-RequestDetailModel requestDetailModelFromJson(String str) => RequestDetailModel.fromJson(json.decode(str));
+RequestDetailModel requestDetailModelFromJson(String str) =>
+    RequestDetailModel.fromJson(json.decode(str));
 
-String requestDetailModelToJson(RequestDetailModel data) => json.encode(data.toJson());
+String requestDetailModelToJson(RequestDetailModel data) =>
+    json.encode(data.toJson());
 
 class RequestDetailModel {
   RequestDetailModel({
@@ -19,17 +21,18 @@ class RequestDetailModel {
   int code;
   Data data;
 
-  factory RequestDetailModel.fromJson(Map<String, dynamic> json) => RequestDetailModel(
-    success: json["success"],
-    code: json["code"],
-    data: Data.fromJson(json["data"]),
-  );
+  factory RequestDetailModel.fromJson(Map<String, dynamic> json) =>
+      RequestDetailModel(
+        success: json["success"],
+        code: json["code"],
+        data: Data.fromJson(json["data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "success": success,
-    "code": code,
-    "data": data.toJson(),
-  };
+        "success": success,
+        "code": code,
+        "data": data.toJson(),
+      };
 }
 
 class Data {
@@ -72,44 +75,44 @@ class Data {
   TechnicianInfo technicianInfo;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    paymentId: json["paymentId"],
-    vehicleId: List<String>.from(json["vehicleId"].map((x) => x)),
-    technicianId: json["technicianId"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    schedule: Schedule.fromJson(json["schedule"]),
-    serviceLocation: ServiceLocation.fromJson(json["serviceLocation"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    serviceId: json["serviceId"],
-    description: Description.fromJson(json["description"]),
-    isDiagnosed: json["isDiagnosed"],
-    price: Price.fromJson(json["price"]),
-    id: json["id"],
-    requestStatus: json["requestStatus"],
-    customerId: json["customerId"],
-    serviceDetail: ServiceDetail.fromJson(json["serviceDetail"]),
-    customerInfo: CustomerInfo.fromJson(json["customerInfo"]),
-    technicianInfo: TechnicianInfo.fromJson(json["technicianInfo"]),
-  );
+        paymentId: json["paymentId"],
+        vehicleId: List<String>.from(json["vehicleId"].map((x) => x)),
+        technicianId: json["technicianId"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        schedule: Schedule.fromJson(json["schedule"]),
+        serviceLocation: ServiceLocation.fromJson(json["serviceLocation"]),
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        serviceId: json["serviceId"],
+        description: Description.fromJson(json["description"]),
+        isDiagnosed: json["isDiagnosed"],
+        price: Price.fromJson(json["price"]),
+        id: json["id"],
+        requestStatus: json["requestStatus"],
+        customerId: json["customerId"],
+        serviceDetail: ServiceDetail.fromJson(json["serviceDetail"]),
+        customerInfo: CustomerInfo.fromJson(json["customerInfo"]),
+        technicianInfo: TechnicianInfo.fromJson(json["technicianInfo"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "paymentId": paymentId,
-    "vehicleId": List<dynamic>.from(vehicleId.map((x) => x)),
-    "technicianId": technicianId,
-    "createdAt": createdAt.toIso8601String(),
-    "schedule": schedule.toJson(),
-    "serviceLocation": serviceLocation.toJson(),
-    "updatedAt": updatedAt.toIso8601String(),
-    "serviceId": serviceId,
-    "description": description.toJson(),
-    "isDiagnosed": isDiagnosed,
-    "price": price.toJson(),
-    "id": id,
-    "requestStatus": requestStatus,
-    "customerId": customerId,
-    "serviceDetail": serviceDetail.toJson(),
-    "customerInfo": customerInfo.toJson(),
-    "technicianInfo": technicianInfo.toJson(),
-  };
+        "paymentId": paymentId,
+        "vehicleId": List<dynamic>.from(vehicleId.map((x) => x)),
+        "technicianId": technicianId,
+        "createdAt": createdAt.toIso8601String(),
+        "schedule": schedule.toJson(),
+        "serviceLocation": serviceLocation.toJson(),
+        "updatedAt": updatedAt.toIso8601String(),
+        "serviceId": serviceId,
+        "description": description.toJson(),
+        "isDiagnosed": isDiagnosed,
+        "price": price.toJson(),
+        "id": id,
+        "requestStatus": requestStatus,
+        "customerId": customerId,
+        "serviceDetail": serviceDetail.toJson(),
+        "customerInfo": customerInfo.toJson(),
+        "technicianInfo": technicianInfo.toJson(),
+      };
 }
 
 class CustomerInfo {
@@ -122,13 +125,15 @@ class CustomerInfo {
     required this.state,
     required this.city,
     required this.isActive,
-     this.fcmToken,
+    this.fcmToken,
     required this.userId,
     required this.profilePicture,
     required this.updatedAt,
     required this.id,
     required this.zipCode,
     required this.street,
+    required this.rating,
+    required this.reviewCount,
   });
 
   String phoneNumber;
@@ -146,42 +151,48 @@ class CustomerInfo {
   String id;
   int zipCode;
   String street;
+  double rating;
+  int reviewCount;
 
   factory CustomerInfo.fromJson(Map<String, dynamic> json) => CustomerInfo(
-    phoneNumber: json["phoneNumber"],
-    userRole: json["userRole"],
-    subscription: json["subscription"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    fullName: json["fullName"],
-    state: json["state"],
-    city: json["city"],
-    isActive: json["isActive"],
-    fcmToken: json["fcm_token"],
-    userId: json["userID"],
-    profilePicture: json["profilePicture"],
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    id: json["id"],
-    zipCode: json["zipCode"],
-    street: json["street"],
-  );
+        phoneNumber: json["phoneNumber"],
+        userRole: json["userRole"],
+        subscription: json["subscription"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        fullName: json["fullName"],
+        state: json["state"],
+        city: json["city"],
+        isActive: json["isActive"],
+        fcmToken: json["fcm_token"],
+        userId: json["userID"],
+        profilePicture: json["profilePicture"],
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        id: json["id"],
+        zipCode: json["zipCode"],
+        street: json["street"],
+        rating: json["rating"] / 1,
+        reviewCount: json["reviewCount"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "phoneNumber": phoneNumber,
-    "userRole": userRole,
-    "subscription": subscription,
-    "createdAt": createdAt.toIso8601String(),
-    "fullName": fullName,
-    "state": state,
-    "city": city,
-    "isActive": isActive,
-    "fcm_token": fcmToken,
-    "userID": userId,
-    "profilePicture": profilePicture,
-    "updatedAt": updatedAt.toIso8601String(),
-    "id": id,
-    "zipCode": zipCode,
-    "street": street,
-  };
+        "phoneNumber": phoneNumber,
+        "userRole": userRole,
+        "subscription": subscription,
+        "createdAt": createdAt.toIso8601String(),
+        "fullName": fullName,
+        "state": state,
+        "city": city,
+        "isActive": isActive,
+        "fcm_token": fcmToken,
+        "userID": userId,
+        "profilePicture": profilePicture,
+        "updatedAt": updatedAt.toIso8601String(),
+        "id": id,
+        "zipCode": zipCode,
+        "street": street,
+        "rating": rating,
+        "reviewCount": reviewCount,
+      };
 }
 
 class Description {
@@ -196,16 +207,16 @@ class Description {
   List<dynamic> attachments;
 
   factory Description.fromJson(Map<String, dynamic> json) => Description(
-    title: json["title"],
-    note: json["note"],
-    attachments: List<dynamic>.from(json["attachments"].map((x) => x)),
-  );
+        title: json["title"],
+        note: json["note"],
+        attachments: List<dynamic>.from(json["attachments"].map((x) => x)),
+      );
 
   Map<String, dynamic> toJson() => {
-    "title": title,
-    "note": note,
-    "attachments": List<dynamic>.from(attachments.map((x) => x)),
-  };
+        "title": title,
+        "note": note,
+        "attachments": List<dynamic>.from(attachments.map((x) => x)),
+      };
 }
 
 class Price {
@@ -218,14 +229,14 @@ class Price {
   int hourlyFee;
 
   factory Price.fromJson(Map<String, dynamic> json) => Price(
-    diagnosticFee: json["diagnosticFee"],
-    hourlyFee: json["hourlyFee"],
-  );
+        diagnosticFee: json["diagnosticFee"],
+        hourlyFee: json["hourlyFee"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "diagnosticFee": diagnosticFee,
-    "hourlyFee": hourlyFee,
-  };
+        "diagnosticFee": diagnosticFee,
+        "hourlyFee": hourlyFee,
+      };
 }
 
 class Schedule {
@@ -238,14 +249,14 @@ class Schedule {
   DateTime time;
 
   factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
-    date: DateTime.parse(json["date"]),
-    time: DateTime.parse(json["time"]),
-  );
+        date: DateTime.parse(json["date"]),
+        time: DateTime.parse(json["time"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "date": date.toIso8601String(),
-    "time": time.toIso8601String(),
-  };
+        "date": date.toIso8601String(),
+        "time": time.toIso8601String(),
+      };
 }
 
 class ServiceDetail {
@@ -264,20 +275,20 @@ class ServiceDetail {
   String title;
 
   factory ServiceDetail.fromJson(Map<String, dynamic> json) => ServiceDetail(
-    createdAt: DateTime.parse(json["createdAt"]),
-    description: json["description"],
-    id: json["id"],
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    title: json["title"],
-  );
+        createdAt: DateTime.parse(json["createdAt"]),
+        description: json["description"],
+        id: json["id"],
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        title: json["title"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "createdAt": createdAt.toIso8601String(),
-    "description": description,
-    "id": id,
-    "updatedAt": updatedAt.toIso8601String(),
-    "title": title,
-  };
+        "createdAt": createdAt.toIso8601String(),
+        "description": description,
+        "id": id,
+        "updatedAt": updatedAt.toIso8601String(),
+        "title": title,
+      };
 }
 
 class ServiceLocation {
@@ -291,17 +302,18 @@ class ServiceLocation {
   int longitude;
   double latitude;
 
-  factory ServiceLocation.fromJson(Map<String, dynamic> json) => ServiceLocation(
-    name: json["name"],
-    longitude: json["longitude"],
-    latitude: json["latitude"]?.toDouble(),
-  );
+  factory ServiceLocation.fromJson(Map<String, dynamic> json) =>
+      ServiceLocation(
+        name: json["name"],
+        longitude: json["longitude"],
+        latitude: json["latitude"]?.toDouble(),
+      );
 
   Map<String, dynamic> toJson() => {
-    "name": name,
-    "longitude": longitude,
-    "latitude": latitude,
-  };
+        "name": name,
+        "longitude": longitude,
+        "latitude": latitude,
+      };
 }
 
 class TechnicianInfo {
@@ -352,50 +364,50 @@ class TechnicianInfo {
   double latitude;
 
   factory TechnicianInfo.fromJson(Map<String, dynamic> json) => TechnicianInfo(
-    phoneNumber: json["phoneNumber"],
-    userRole: json["userRole"],
-    subscription: json["subscription"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    fullName: json["fullName"],
-    state: json["state"],
-    city: json["city"],
-    isActive: json["isActive"],
-    fcmToken: json["fcm_token"],
-    userId: json["userID"],
-    profilePicture: json["profilePicture"],
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    id: json["id"],
-    zipCode: json["zipCode"],
-    street: json["street"],
-    hourlyFee: json["hourlyFee"],
-    diagnosticFee: json["diagnosticFee"],
-    isOnline: json["isOnline"],
-    companyName: json["companyName"],
-    longitude: json["longitude"]?.toDouble(),
-    latitude: json["latitude"]?.toDouble(),
-  );
+        phoneNumber: json["phoneNumber"],
+        userRole: json["userRole"],
+        subscription: json["subscription"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        fullName: json["fullName"],
+        state: json["state"],
+        city: json["city"],
+        isActive: json["isActive"],
+        fcmToken: json["fcm_token"],
+        userId: json["userID"],
+        profilePicture: json["profilePicture"],
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        id: json["id"],
+        zipCode: json["zipCode"],
+        street: json["street"],
+        hourlyFee: json["hourlyFee"],
+        diagnosticFee: json["diagnosticFee"],
+        isOnline: json["isOnline"],
+        companyName: json["companyName"],
+        longitude: json["longitude"]?.toDouble(),
+        latitude: json["latitude"]?.toDouble(),
+      );
 
   Map<String, dynamic> toJson() => {
-    "phoneNumber": phoneNumber,
-    "userRole": userRole,
-    "subscription": subscription,
-    "createdAt": createdAt.toIso8601String(),
-    "fullName": fullName,
-    "state": state,
-    "city": city,
-    "isActive": isActive,
-    "fcm_token": fcmToken,
-    "userID": userId,
-    "profilePicture": profilePicture,
-    "updatedAt": updatedAt.toIso8601String(),
-    "id": id,
-    "zipCode": zipCode,
-    "street": street,
-    "hourlyFee": hourlyFee,
-    "diagnosticFee": diagnosticFee,
-    "isOnline": isOnline,
-    "companyName": companyName,
-    "longitude": longitude,
-    "latitude": latitude,
-  };
+        "phoneNumber": phoneNumber,
+        "userRole": userRole,
+        "subscription": subscription,
+        "createdAt": createdAt.toIso8601String(),
+        "fullName": fullName,
+        "state": state,
+        "city": city,
+        "isActive": isActive,
+        "fcm_token": fcmToken,
+        "userID": userId,
+        "profilePicture": profilePicture,
+        "updatedAt": updatedAt.toIso8601String(),
+        "id": id,
+        "zipCode": zipCode,
+        "street": street,
+        "hourlyFee": hourlyFee,
+        "diagnosticFee": diagnosticFee,
+        "isOnline": isOnline,
+        "companyName": companyName,
+        "longitude": longitude,
+        "latitude": latitude,
+      };
 }

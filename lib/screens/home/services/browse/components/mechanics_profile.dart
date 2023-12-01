@@ -45,7 +45,11 @@ class MechanicsProfile extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: customRating(3, 1),
+                child: customRating(
+                    context,
+                    mechanicProfile!.technicianDetail!.rating,
+                    mechanicProfile!.technicianDetail!.reviewCount,
+                    mechanicProfile!),
               ),
               Text(
                 mechanicProfile!.distance![0] == "0"

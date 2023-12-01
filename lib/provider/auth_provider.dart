@@ -45,10 +45,13 @@ class AuthProvider extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final token = signInModelFromJson(response.body);
+        await sharedPrefs.saveIsFirstLogin();
+        await sharedPrefs.saveToPrefs(token.token);
+        await sharedPrefs.getToken();
+
         dialog.closeLoadingDialog(context);
-        sharedPrefs.saveIsFirstLogin();
         Navigator.of(context).pushNamed('/home');
-        sharedPrefs.saveToPrefs(token.token);
+
         notifyListeners();
       } else if (response.statusCode == 400) {
         dialog.closeLoadingDialog(context);
@@ -56,7 +59,7 @@ class AuthProvider extends ChangeNotifier {
         notifyListeners();
       } else if (response.statusCode == 404) {
         dialog.closeLoadingDialog(context);
-        displayErrorSnackBar(context, "User Not Found");
+        displayErrorSnackBar(context, "User Not Found!");
         notifyListeners();
       } else {
         print(response.body);

@@ -1,19 +1,20 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-pandacustomersmaster-dev-144920-authRole",
-      "UnauthRoleArn": "arn:aws:iam::327537917845:role/amplify-pandacustomersmaster-dev-144920-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::327537917845:role/amplify-pandacustomersmaster-dev-144920-authRole",
+      "AuthRoleName": "amplify-pandacustomersmaster-dev-134635-authRole",
+      "UnauthRoleArn": "arn:aws:iam::327537917845:role/amplify-pandacustomersmaster-dev-134635-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::327537917845:role/amplify-pandacustomersmaster-dev-134635-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-pandacustomersmaster-dev-144920-deployment",
-      "UnauthRoleName": "amplify-pandacustomersmaster-dev-144920-unauthRole",
-      "StackName": "amplify-pandacustomersmaster-dev-144920",
-      "StackId": "arn:aws:cloudformation:us-east-1:327537917845:stack/amplify-pandacustomersmaster-dev-144920/e1c39f80-7007-11ee-9eec-0ec275e4dbf7",
-      "AmplifyAppId": "d22o0sczkfrig7"
+      "DeploymentBucketName": "amplify-pandacustomersmaster-dev-134635-deployment",
+      "UnauthRoleName": "amplify-pandacustomersmaster-dev-134635-unauthRole",
+      "StackName": "amplify-pandacustomersmaster-dev-134635",
+      "StackId": "arn:aws:cloudformation:us-east-1:327537917845:stack/amplify-pandacustomersmaster-dev-134635/ea064150-8b7f-11ee-a2ad-0abb5ddc74d7",
+      "AmplifyAppId": "d14jw92j5eaa2q"
     },
     "categories": {
-      "api": {
-        "pandacustomersmaster": {}
+      "auth": {
+        "pandacustomersmaster7675a86c": {},
+        "userPoolGroups": {}
       }
     }
   }
