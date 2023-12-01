@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:panda/commonComponents/loading_dialog.dart';
 import 'package:panda/commonComponents/popup_dialog.dart';
 import 'package:panda/commonComponents/profile_avatar.dart';
+import 'package:panda/function/global_snackbar.dart';
 import 'package:panda/screens/home/history/historyComponent/history_list_tile.dart';
-import 'package:provider/provider.dart';
+import 'dart:core';
+
 import '../../../../commonComponents/buttons/main_button.dart';
 import '../../../../util/ui_constant.dart';
 import '../../../models/estimate_model.dart';
@@ -23,37 +26,74 @@ class EstimateDetail extends StatelessWidget {
       required this.estimateDetail,
       Key? key})
       : super(key: key);
+  final dialog = DialogHandler();
 
-  @override
-  Widget build(BuildContext context) {
+  void _payAndAccept(BuildContext context) async {
+    dialog.openLoadingDialog(context);
+
+    await EstimateProvider()
+        .approveEstimate(estimateDetail.id, (msg) => _callback(context, msg));
+    hideDetail();
+    refreshPage();
+  }
+
+  void _callback(BuildContext context, String msg) {
+    Navigator.of(context).pop();
+
+    displaySuccessSnackBar(context, msg);
+    // notifyListeners();
+  }
+
+  void decline(context) async {
+    await context
+        .read<EstimateProvider>()
+        .declineEstimate(context, estimateDetail.id);
+    hideDetail();
+    refreshPage();
+  }
+
+  void accept(context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context2) {
+        return AlertDialog(
+          title: const Text("Payment Confiramtion"),
+          content: Text(
+              "You're about to pay ${estimateDetail.totalEstimation} USD to ${estimateDetail.sender}"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                // Close the dialog first
+                Navigator.of(context).pop();
+                _payAndAccept(context);
+              },
+            ),
+            TextButton(
+                child: const Text("Cancle"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }),
+          ],
+        );
+      },
+    );
+  }
+
+  void rerequest() {
+    estimationSetter(estimateDetail);
+    refreshPage();
+  }
+
+  void showNoteDetail(String text, context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    void decline() async {
-      await context
-          .read<EstimateProvider>()
-          .declineEstimate(context, estimateDetail.id);
-      hideDetail();
-      refreshPage();
-    }
+    showPopupDetailDialog(context, height, width, text);
+  }
 
-    void accept() async {
-      await context
-          .read<EstimateProvider>()
-          .approveEstimate(context, estimateDetail.id);
-      hideDetail();
-      refreshPage();
-    }
-
-    void rerequest() {
-      estimationSetter(estimateDetail);
-      refreshPage();
-    }
-
-    void showNoteDetail(String text) {
-      showPopupDetailDialog(context, height, width, text);
-    }
-
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(0.0),
       child: Card(
@@ -99,7 +139,7 @@ class EstimateDetail extends StatelessWidget {
                       style: KHintTextStyle)),
               TextButton(
                   onPressed: () {
-                    showNoteDetail(estimateDetail.note);
+                    showNoteDetail(estimateDetail.note, context);
                   },
                   child: const Text("More"))
             ],
@@ -146,9 +186,9 @@ class EstimateDetail extends StatelessWidget {
               height: 35,
               decoration: BoxDecoration(color: Colors.grey[500]),
               width: MediaQuery.of(context).size.width,
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Padding(
                     padding: EdgeInsets.all(5),
                     child: Text(
@@ -226,14 +266,16 @@ class EstimateDetail extends StatelessWidget {
               Visibility(
                   visible: !(estimateDetail.isApproved) &&
                       !(estimateDetail.isRejected),
-                  child: mainButton("ACCEPT", accept, kPrimaryColor)),
+                  child: mainButton(
+                      "ACCEPT", () => accept(context), kPrimaryColor)),
               const SizedBox(
                 width: 15,
               ),
               Visibility(
                   visible: !(estimateDetail.isApproved) &&
                       !(estimateDetail.isRejected),
-                  child: mainButton("DECLINE", decline, kErrorColor)),
+                  child: mainButton(
+                      "DECLINE", () => decline(context), kErrorColor)),
               const SizedBox(
                 width: 15,
               ),

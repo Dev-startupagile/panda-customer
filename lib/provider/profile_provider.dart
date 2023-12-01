@@ -3,8 +3,11 @@ import 'dart:core';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:panda/core/exceptions/app_http_exceptions.dart';
 import 'package:panda/function/global_snackbar.dart';
 import 'package:http/http.dart' as http;
+import 'package:panda/models/tokenized_card.dart';
+import 'package:stripe_payment/stripe_payment.dart';
 import '../commonComponents/loading_dialog.dart';
 import '../models/add_card_model.dart';
 import '../models/add_vehicle_form_model.dart';
@@ -200,12 +203,32 @@ class ProfileProvider extends ChangeNotifier {
     await sharedPrefs.getToken();
     try {
       notifyListeners();
+      List<int> expiryDate =
+          data.expiryDate.split("/").map((e) => int.parse(e)).toList();
+      Token token = await StripePayment.createTokenWithCard(CreditCard(
+          number: data.cardNumber,
+          cvc: data.cvc,
+          expMonth: expiryDate[0],
+          expYear: expiryDate[1]));
+      if (token.tokenId == null) {
+        throw AppFuncException("Getting Tokenized Card failed");
+      }
+      var tokenizedCard = TokenizedCard(
+        id: '',
+        email: '',
+        tokenId: token.tokenId!,
+        length: data.cardNumber.length,
+        lastFour: data.getLastFour(),
+        customerName: data.type,
+        isActive: true,
+      );
+
       response = await http.post(Uri.parse('$apiUrl/account/addCard'),
           headers: {
             HttpHeaders.contentTypeHeader: "application/json",
             HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
           },
-          body: jsonEncode(data.toJson()));
+          body: tokenizedCard.toJson());
 
       if (response.statusCode == 201) {
         dialog.closeLoadingDialog(context);
@@ -251,7 +274,7 @@ class ProfileProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         dialog.closeLoadingDialog(context);
 
-        customerprofile?.payments.items.removeWhere((PaymentsItem element) {
+        customerprofile?.payments.items.removeWhere((TokenizedCard element) {
           return element.id == id;
         });
 

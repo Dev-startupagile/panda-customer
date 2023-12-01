@@ -2,9 +2,9 @@ import 'dart:core';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:panda/commonComponents/loading_dialog.dart';
 import 'package:panda/function/global_snackbar.dart';
 import 'package:http/http.dart' as http;
-import '../commonComponents/loading_dialog.dart';
 import '../models/estimate_model.dart';
 import '../util/api.dart';
 import '../function/shared_prefs.dart';
@@ -111,13 +111,11 @@ class EstimateProvider extends ChangeNotifier {
     return response;
   }
 
-  Future<http.Response?> approveEstimate(context, id) async {
+  Future<http.Response?> approveEstimate(id, Function(String) callback) async {
     http.Response? response;
-    dialog.openLoadingDialog(context);
-    notifyListeners();
+
     await sharedPrefs.getToken();
     try {
-      notifyListeners();
       response = await http.patch(
         Uri.parse('$apiUrl/offerEstimation/approve/$id'),
         headers: {
@@ -127,25 +125,16 @@ class EstimateProvider extends ChangeNotifier {
       );
       print(response.body);
       if (response.statusCode == 200) {
-        dialog.closeLoadingDialog(context);
-        displaySuccessSnackBar(context, "You  Accepted Estimate Successfully");
-        notifyListeners();
+        callback("You  Accepted Estimate Successfully");
       } else {
-        dialog.closeLoadingDialog(context);
-        displayErrorSnackBar(context, "Something went wrong");
-        notifyListeners();
+        callback("Something went wrong");
       }
     } on SocketException catch (e) {
-      dialog.closeLoadingDialog(context);
-      displayErrorSnackBar(context, "please check your internet and try again");
-      notifyListeners();
+      callback(e.toString());
     } catch (e) {
-      dialog.closeLoadingDialog(context);
-      displayErrorSnackBar(context, e.toString());
-      notifyListeners();
+      callback(e.toString());
     }
 
-    notifyListeners();
     return response;
   }
 

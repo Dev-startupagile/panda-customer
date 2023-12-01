@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:panda/models/rejection_by_tech.dart';
 import 'package:panda/provider/auth_provider.dart';
 import 'package:panda/provider/auto_complete_provider.dart';
 import 'package:panda/provider/contactus_provider.dart';
@@ -22,11 +20,12 @@ import 'package:panda/provider/user_detail_provider.dart';
 import 'package:panda/route/route_generator.dart';
 import 'package:panda/screens/auth/auth.dart';
 import 'package:panda/screens/home/home_page.dart';
-import 'package:panda/screens/home/services/service_request/componets/finding_ur_technician.dart';
 import 'package:panda/screens/onboarding/on_bording.dart';
+import 'package:panda/util/api.dart';
 import 'package:panda/util/constants.dart';
 import 'package:panda/util/ui_constant.dart';
 import 'package:provider/provider.dart';
+import 'package:stripe_payment/stripe_payment.dart';
 import 'commonComponents/loading.dart';
 import 'function/auth.dart';
 import 'function/shared_prefs.dart';
@@ -102,6 +101,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
+  StripePayment.setOptions(
+    StripeOptions(
+      publishableKey:
+          pUBLISHABLEKEY, // Replace with your Stripe publishable key
+      merchantId: mERCHANTID, // Replace with your Merchant ID
+      androidPayMode:
+          'test', // Change to 'production' when running in production
+    ),
+  );
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
