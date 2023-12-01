@@ -348,7 +348,7 @@ class _WhereAreYouState extends State<WhereAreYou> {
                                                             child: Padding(
                                                               padding:
                                                                   const EdgeInsets
-                                                                      .all(
+                                                                          .all(
                                                                       10.0),
                                                               child: Column(
                                                                 crossAxisAlignment:
