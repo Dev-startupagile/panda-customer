@@ -3,7 +3,7 @@ import 'package:flutter_dialogs/flutter_dialogs.dart';
 
 import '../util/ui_constant.dart';
 
-Future showPopupDialog(context,text, height,width,yesCancel) {
+Future showPopupDialog(context, text, height, width, yesCancel) {
   return showPlatformDialog(
     context: context,
     builder: (_) => BasicDialogAlert(
@@ -12,9 +12,12 @@ Future showPopupDialog(context,text, height,width,yesCancel) {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(text, style: KLatoTextStyle,),
+            Text(
+              text,
+              style: KLatoTextStyle,
+            ),
             SizedBox(height: height * 0.02),
-             Text('Are you sure you want to continue?',
+            Text('Are you sure you want to continue?',
                 style: KLatoRegularTextStyle),
             SizedBox(height: height * 0.02),
             Column(
@@ -26,32 +29,30 @@ Future showPopupDialog(context,text, height,width,yesCancel) {
                   },
                   style: ButtonStyle(
                     backgroundColor:
-                    MaterialStateProperty.all<Color>(kPrimaryColor),
+                        MaterialStateProperty.all<Color>(kPrimaryColor),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(
                         vertical: width * 0.04, horizontal: width * 0.06),
-                    child:  Text(
+                    child: Text(
                       'Yes, $text',
                       style: KOnBoardGetStartedTextStyle,
                     ),
                   ),
                 ),
-
                 SizedBox(height: height * 0.02),
-
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                   style: ButtonStyle(
                     backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.white),
+                        MaterialStateProperty.all<Color>(Colors.white),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(
                         vertical: width * 0.04, horizontal: width * 0.06),
-                    child:  Text(
+                    child: Text(
                       'No, close window',
                       style: KNativeTextStyle,
                     ),
@@ -66,7 +67,7 @@ Future showPopupDialog(context,text, height,width,yesCancel) {
   );
 }
 
-Future showPopupDetailDialog(context, height,width,text) {
+Future showPopupDetailDialog(context, height, width, text) {
   return showPlatformDialog(
     context: context,
     builder: (_) => BasicDialogAlert(
@@ -77,23 +78,26 @@ Future showPopupDetailDialog(context, height,width,text) {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
-
               children: [
                 IconButton(
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    icon: const Icon(Icons.close,color: Colors.red,)
-                )
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.red,
+                    ))
               ],
             ),
 
-            Text("Note Detail", style: KLatoTextStyle,),
+            Text(
+              "Note Detail",
+              style: KLatoTextStyle,
+            ),
 
             SizedBox(height: height * 0.02),
 
-            Text(text,
-                style: KLatoRegularTextStyle),
+            Text(text, style: KLatoRegularTextStyle),
 
             SizedBox(height: height * 0.02),
 

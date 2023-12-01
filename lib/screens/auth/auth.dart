@@ -15,7 +15,6 @@ import '../../commonComponents/profile_avatar.dart';
 import '../../commonComponents/skeletal/custom_auto_complete_skeletal.dart';
 import '../../commonComponents/term_of_use.dart';
 import '../../function/image_cropper.dart';
-import '../../function/phone_number_formatter.dart';
 import '../../function/substring.dart';
 import '../../function/validation/validationService.dart';
 import '../../provider/auto_complete_provider.dart';
@@ -42,12 +41,12 @@ class _AuthState extends State<Auth> {
   bool ishintPassowrdShow = false;
   bool signUp = false;
   bool isPasswordNotVisible = true;
-  bool SecondPage = false;
+  bool secondPage = false;
   bool isChecked = false;
   String countryCode = '';
   String? placeQuery;
   String phoneNumber = '';
-  String fcm_token = '';
+  String fcmToken = '';
 
   late FirebaseMessaging messaging;
   late TextEditingController firstnameController;
@@ -67,18 +66,19 @@ class _AuthState extends State<Auth> {
     messaging = FirebaseMessaging.instance;
     messaging.getToken().then((value) {
       setState(() {
-        fcm_token = value!;
+        fcmToken = value!;
       });
-
-      print("fcmTokenn $value");
     });
 
     firstnameController = TextEditingController();
     lastnameController = TextEditingController();
     //TODO: DOn't fortget to remove
-    emailController =
-        TextEditingController(text: "baslielselamu2018+pc@gmail.com");
-    passwordController = TextEditingController(text: "LionKing!23");
+    // emailController =
+    //     TextEditingController(text: "baslielselamu2018+pc@gmail.com");
+    emailController = TextEditingController();
+    // passwordController = TextEditingController(text: "Ap2334\$56");
+    passwordController = TextEditingController();
+
     confirmPasswordController = TextEditingController();
     phoneController = TextEditingController();
     stateController = TextEditingController();
@@ -178,7 +178,7 @@ class _AuthState extends State<Auth> {
               zipCode: int.parse(zipcodeController.text),
               userRole: "customer",
               street: streetController.text,
-              fcm_token: fcm_token);
+              fcm_token: fcmToken);
           context.read<AuthProvider>().signUp(context, signupmodel);
         } else {
           displayInfoSnackBar(
@@ -222,7 +222,7 @@ class _AuthState extends State<Auth> {
                     context, passwordValidator(passwordController.text) ?? "");
               } else {
                 setState(() {
-                  SecondPage = true;
+                  secondPage = true;
                 });
               }
             } else {
@@ -245,7 +245,7 @@ class _AuthState extends State<Auth> {
                 context, passwordValidator(passwordController.text) ?? "");
           } else {
             context.read<AuthProvider>().signIn(context, emailController.text,
-                passwordController.text, fcm_token);
+                passwordController.text, fcmToken);
           }
         } else {
           displayErrorSnackBar(context, "Please fill out the above form ");
@@ -281,9 +281,9 @@ class _AuthState extends State<Auth> {
                   leading: BackButton(
                     onPressed: () {
                       setState(() {
-                        if (SecondPage) {
+                        if (secondPage) {
                           setState(() {
-                            SecondPage = false;
+                            secondPage = false;
                           });
                         } else {
                           setState(() {
@@ -317,7 +317,7 @@ class _AuthState extends State<Auth> {
                             Column(
                               children: [
                                 Visibility(
-                                  visible: signUp && !SecondPage,
+                                  visible: signUp && !secondPage,
                                   child: Stack(children: [
                                     InkWell(
                                       onTap: () {
@@ -360,11 +360,11 @@ class _AuthState extends State<Auth> {
                                 ),
                                 const SizedBox(height: 20),
                                 Visibility(
-                                  visible: !SecondPage,
+                                  visible: !secondPage,
                                   child: Column(
                                     children: [
                                       Visibility(
-                                          visible: signUp && !SecondPage,
+                                          visible: signUp && !secondPage,
                                           child: CustomAuthTextField(
                                             isTag: false,
                                             isState: false,
@@ -381,7 +381,7 @@ class _AuthState extends State<Auth> {
                                             isConfirmPassword: false,
                                           )),
                                       Visibility(
-                                          visible: signUp && !SecondPage,
+                                          visible: signUp && !secondPage,
                                           child: CustomAuthTextField(
                                             isTag: false,
                                             isState: false,
@@ -398,7 +398,7 @@ class _AuthState extends State<Auth> {
                                             isConfirmPassword: false,
                                           )),
                                       Visibility(
-                                        visible: !SecondPage,
+                                        visible: !secondPage,
                                         child: CustomAuthTextField(
                                           isTag: false,
                                           isState: false,
@@ -416,7 +416,7 @@ class _AuthState extends State<Auth> {
                                         ),
                                       ),
                                       Visibility(
-                                        visible: !SecondPage,
+                                        visible: !secondPage,
                                         child: CustomAuthTextField(
                                           isTag: false,
                                           isState: false,
@@ -440,7 +440,7 @@ class _AuthState extends State<Auth> {
                                       ),
                                       Visibility(
                                           visible: signUp &&
-                                              !SecondPage &&
+                                              !secondPage &&
                                               ishintPassowrdShow,
                                           child: Padding(
                                               padding:
@@ -471,7 +471,7 @@ class _AuthState extends State<Auth> {
                                                   isPassword: false,
                                                   isConfirmPassword: true)),
                                       Visibility(
-                                          visible: signUp && !SecondPage,
+                                          visible: signUp && !secondPage,
                                           child: CustomPhoneTextField(
                                               phoneValidation: phoneValidation,
                                               phoneValidationSetter:
@@ -485,7 +485,7 @@ class _AuthState extends State<Auth> {
                                 ),
                                 const SizedBox(height: 10),
                                 Visibility(
-                                    visible: SecondPage,
+                                    visible: secondPage,
                                     child: Column(
                                       children: [
                                         CustomAuthTextField(
@@ -606,7 +606,7 @@ class _AuthState extends State<Auth> {
                                         ),
                                         SizedBox(height: height * 0.03),
                                         Visibility(
-                                          visible: SecondPage && signUp,
+                                          visible: secondPage && signUp,
                                           child: Row(
                                             children: [
                                               Checkbox(
@@ -638,7 +638,7 @@ class _AuthState extends State<Auth> {
                                 SizedBox(height: height * 0.02),
                                 MaterialButton(
                                   onPressed: () {
-                                    SecondPage ? submitAllData() : submitData();
+                                    secondPage ? submitAllData() : submitData();
                                   },
                                   height: 48,
                                   minWidth: double.infinity,
@@ -647,7 +647,7 @@ class _AuthState extends State<Auth> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: signUp
-                                      ? Text(SecondPage ? "SIGN UP" : "NEXT",
+                                      ? Text(secondPage ? "SIGN UP" : "NEXT",
                                           style: KAuthTextStyle)
                                       : Text("LOGIN", style: KAuthTextStyle),
                                 ),
@@ -664,7 +664,7 @@ class _AuthState extends State<Auth> {
                                     },
                                     child: signUp
                                         ? Visibility(
-                                            visible: !SecondPage,
+                                            visible: !secondPage,
                                             child: RichText(
                                               text: TextSpan(
                                                 children: [

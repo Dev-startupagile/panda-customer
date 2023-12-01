@@ -25,7 +25,7 @@ class AuthProvider extends ChangeNotifier {
     Navigator.pushNamed(context, "/login");
   }
 
-  Future<http.Response?> signIn(context, email, password, fcm_token) async {
+  Future<http.Response?> signIn(context, email, password, fcmToken) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
     notifyListeners();
@@ -40,7 +40,7 @@ class AuthProvider extends ChangeNotifier {
             "email": email,
             "password": password,
             "userRole": "customer",
-            "fcm_token": fcm_token
+            "fcm_token": fcmToken
           }));
 
       if (response.statusCode == 200) {

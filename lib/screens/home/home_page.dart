@@ -1,10 +1,15 @@
 // ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers, avoid_unnecessary_containers, must_be_immutable
 
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:panda/models/rejection_by_tech.dart';
 import 'package:panda/provider/rating_provider.dart';
+import 'package:panda/provider/service_request_provider.dart';
 import 'package:panda/screens/home/services/counter_offer.dart';
 import 'package:panda/screens/home/services/rating.dart';
 import 'package:panda/screens/home/services/request_offer.dart';
+import 'package:panda/screens/home/services/service_request/componets/finding_ur_technician.dart';
+import 'package:panda/util/constants.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
@@ -41,6 +46,36 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   bool isAllTabClicked = true;
 
   final authfunc = AuthFunc();
+
+  void cancelServiceRequest(RejectionByTech data) {
+    context
+        .read<ServiceRequestProvider>()
+        .cancelServiceRequest(context, data.serviceId);
+  }
+
+  void sendServiceRequest(String id) async {
+    await context
+        .read<ServiceRequestProvider>()
+        .updateServiceRequestByStatus(context, id);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("New Technician Assigned"),
+          content: const Text("Successfully Assigned New Technician!"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                // Close the dialog first
+                Navigator.pushNamed(context, "/home");
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -103,10 +138,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         TargetContent(
             align: ContentAlign.right,
             child: Container(
-              child: Column(
+              child: const Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
                     "Home",
                     style: TextStyle(
@@ -134,10 +169,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       contents: [
         TargetContent(
             align: ContentAlign.right,
-            child: Column(
+            child: const Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const <Widget>[
+              children: <Widget>[
                 Text(
                   "Estimate",
                   style: TextStyle(
@@ -165,10 +200,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         TargetContent(
             align: ContentAlign.left,
             child: Container(
-              child: Column(
+              child: const Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
                     "History",
                     style: TextStyle(
@@ -197,10 +232,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         TargetContent(
             align: ContentAlign.left,
             child: Container(
-              child: Column(
+              child: const Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
                     "profile",
                     style: TextStyle(

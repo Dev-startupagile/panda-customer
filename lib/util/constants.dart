@@ -1,9 +1,8 @@
-
 const String serviceRequest = 'Service Request';
 const String assistance = 'Assistance';
 const String whereAreYou = 'Where are you';
 const String estimatedCost = 'Estimated cost';
-const String assignedTechnician = ' Technician Assigned';
+const String assignedTechnician = 'Technician Assigned';
 const String reSchedule = 'Schedule a Repair';
 
 const String estimateN = "Estimate";
@@ -20,6 +19,7 @@ const String canceledN = "Cancele d";
 const String completedN = "Completed";
 const String counterOfferN = "Counter Offer";
 
+const String rejectedByTechN = "REJECTED_BY_TECH";
 
 const String findingYourTechnician = 'Finding Your Technician';
 const String mobileTechnician = "Mobile Technician";

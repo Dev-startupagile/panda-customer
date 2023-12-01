@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:empty_widget/empty_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:panda/function/global_snackbar.dart';
+import 'package:panda/models/rejection_by_tech.dart';
 import 'package:panda/util/ui_constant.dart';
 
 import '../../../../commonComponents/loading_dialog.dart';
@@ -111,6 +113,47 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _determinePosition());
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null) {
+        if (notification.title == rejectedByTechN) {
+          var data = RejectionByTech.fromJson(notification.body!);
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return MaterialApp(
+                home: AlertDialog(
+                  title: const Text("Alert"),
+                  content: Text(
+                      "Sorry! ${data.technicianName} rejected the job. Do you want to select another technician?"),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text("OK"),
+                      onPressed: () {
+                        // Close the dialog first
+                        Navigator.pop(context);
+                        setState(() {
+                          widget.currentFormStep = 3;
+                        });
+                      },
+                    ),
+                    TextButton(
+                      child: const Text("No thanks"),
+                      onPressed: () {
+                        // Close the dialog first
+                        Navigator.pushNamed(context, "/home");
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        }
+      }
+    });
   }
 
   void onClickNextButton() {

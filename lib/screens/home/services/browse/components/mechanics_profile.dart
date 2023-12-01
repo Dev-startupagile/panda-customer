@@ -9,70 +9,66 @@ import '../../../../../models/nearby_model.dart';
 
 class MechanicsProfile extends StatelessWidget {
   final dynamic getFunc;
-  Datum? mechanicProfile;
+  final Datum? mechanicProfile;
   final dynamic sendServiceRequest;
-  MechanicsProfile({required this.mechanicProfile, this.sendServiceRequest,this.getFunc,Key? key}) : super(key: key);
+  const MechanicsProfile(
+      {required this.mechanicProfile,
+      this.sendServiceRequest,
+      this.getFunc,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    void assignTechnician() {
+      sendServiceRequest(mechanicProfile?.id);
+    }
 
-   void assignTechnician(){
-     sendServiceRequest(mechanicProfile?.id);
-   }
-
-    return   Card(
+    return Card(
       elevation: 1,
       child: Column(
         children: [
           ListTile(
-            leading: profileAvatar(mechanicProfile?.technicianDetail?.profilePicture, null, true),
-            title:  Text(mechanicProfile?.technicianDetail?.fullName ?? ""),
-            subtitle: Text(mechanicProfile?.technicianDetail?.id ?? ""),
-            trailing: IconButton(
-                onPressed: (){
-                  launchPhone(mechanicProfile?.technicianDetail?.phoneNumber);
-                },
-                icon: const Icon(Icons.phone)
-            )
-
-          ),
-
+              leading: profileAvatar(
+                  mechanicProfile?.technicianDetail?.profilePicture,
+                  null,
+                  true),
+              title: Text(mechanicProfile?.technicianDetail?.fullName ?? ""),
+              subtitle: Text(mechanicProfile?.technicianDetail?.id ?? ""),
+              trailing: IconButton(
+                  onPressed: () {
+                    launchPhone(mechanicProfile?.technicianDetail?.phoneNumber);
+                  },
+                  icon: const Icon(Icons.phone))),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children:  [
-
+            children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: customRating(3, 1),
               ),
-
               Text(
-                mechanicProfile!.distance![0] == "0"? "O Mile":
-                '${mechanicProfile!.distance!.substring(0, 4)} Mile' ,style: KLatoRegularTextStyle,),
-
+                mechanicProfile!.distance![0] == "0"
+                    ? "O Mile"
+                    : '${mechanicProfile!.distance!.substring(0, 4)} Mile',
+                style: KLatoRegularTextStyle,
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: IconButton(
-                    onPressed: (){
+                    onPressed: () {
                       launchSms(mechanicProfile?.technicianDetail?.phoneNumber);
                     },
-                    icon: const Icon(Icons.message,color: Colors.grey)
-                ),
+                    icon: const Icon(Icons.message, color: Colors.grey)),
               ),
-
             ],
           ),
-
           mainButton("Assign Technician", assignTechnician, kPrimaryColor),
-
           const SizedBox(
             height: 10,
           ),
-
         ],
       ),
     );
-
-
   }
 }

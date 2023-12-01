@@ -53,7 +53,7 @@ class RequestBottomSheetWidget extends StatefulWidget {
 class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
   final _formKey = GlobalKey<FormState>();
   final ScrollController _scrollController = ScrollController();
-  final LocatitonGeocoder geocoder = LocatitonGeocoder(googleAPIkey);
+  final LocatitonGeocoder geocoder = LocatitonGeocoder(googleApi);
   String serviceType = "";
   String serviceId = "";
   bool isScrolled = false;
@@ -72,6 +72,7 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
   late TextEditingController destinationController;
   late TextEditingController noteController;
 
+  bool isScheduled = false;
   final ImagePicker imagePicker = ImagePicker();
   List<XFile> images = [];
   final RefreshController _refreshController =
@@ -156,8 +157,8 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
       final address =
           await geocoder.findAddressesFromQuery(locationController.text);
       setState(() {
-        requestLat = address.first.coordinates.longitude ?? 0.0;
-        requestLong = address.first.coordinates.latitude ?? 0.0;
+        requestLat = 39.0; //address.first.coordinates.longitude ?? 0.0;
+        requestLong = 8.0; //address.first.coordinates.latitude ?? 0.0;
       });
     } else {
       requestLat = widget.latitude;
@@ -170,6 +171,7 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
         name: locationController.text,
         date: dateTime.toIso8601String(),
         time: dateTime.toIso8601String(),
+        isScheduled: isScheduled,
         note: noteController.text,
         title: dropdownValue ?? "",
         paymentId: paymentId);
@@ -253,17 +255,14 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
         .read<ServiceRequestProvider>()
         .updateServiceRequestByStatus(context, id);
     widget.onClickNext();
-    Timer(const Duration(seconds: 3), assignTechnicianShower);
+    //TODO why close
+    // Timer(const Duration(seconds: 3), assignTechnicianShower);
   }
 
   void imageInit() {
     setState(() {
       images = [];
     });
-  }
-
-  void noNearBy() async {
-    widget.onClickClose();
   }
 
   @override
@@ -297,7 +296,7 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
   }
 
   void backToHome() {
-    noNearBy();
+    context.read<ServiceRequestProvider>().noNearBy(context);
   }
 
   void refreshNearByTech() {
@@ -331,7 +330,7 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
         child: SmartRefresher(
           enablePullDown: true,
           enablePullUp: false,
-          header: WaterDropHeader(),
+          header: const WaterDropHeader(),
           footer: CustomFooter(
             builder: (BuildContext context, LoadStatus? mode) {
               Widget body;
@@ -346,7 +345,7 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
               } else {
                 body = const Text("No more Data");
               }
-              return Container(
+              return SizedBox(
                 height: 55.0,
                 child: Center(child: body),
               );
@@ -369,9 +368,7 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
                                 ? false
                                 : widget.title == estimatedCost
                                     ? false
-                                    : widget.title == findingYourTechnician
-                                        ? false
-                                        : true,
+                                    : !(widget.title == findingYourTechnician),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -413,6 +410,9 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
                         child: Form(
                             key: _formKey,
                             child: WhereAreYou(
+                              onScheduled: (value) {
+                                isScheduled = value;
+                              },
                               removeVehicleId: removeVehicleId,
                               currentLocationSetter: currentLocationSetter,
                               dateTime: dateTime,
@@ -435,7 +435,8 @@ class _RequestBottomSheetWidgetState extends State<RequestBottomSheetWidget> {
                     Visibility(
                         visible: widget.title == findingYourTechnician,
                         child: FindingYourTechnician(
-                            noNearBy: noNearBy,
+                            noNearBy:
+                                context.read<ServiceRequestProvider>().noNearBy,
                             sendServiceRequest: sendServiceRequest,
                             cancelServiceRequest: cancelServiceRequest,
                             longitude: widget.longtude,

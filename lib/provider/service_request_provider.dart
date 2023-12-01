@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:panda/function/global_snackbar.dart';
@@ -62,6 +61,7 @@ class ServiceRequestProvider extends ChangeNotifier {
               "latitude": data.latitude,
               "name": data.name
             },
+            "isScheduled": data.isScheduled,
             "schedule": {"date": data.date, "time": data.time},
             "description": {
               "note": data.note,
@@ -260,7 +260,6 @@ class ServiceRequestProvider extends ChangeNotifier {
         },
       );
 
-      print(status);
       if (response.statusCode == 200) {
         final result = requestStatusModelFromJson(response.body);
 
@@ -280,8 +279,6 @@ class ServiceRequestProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       isLoading = false;
-
-      print(e.toString());
       displayErrorSnackBar(context, e.toString());
       notifyListeners();
     }
@@ -412,5 +409,27 @@ class ServiceRequestProvider extends ChangeNotifier {
 
     notifyListeners();
     return response;
+  }
+
+  void noNearBy(context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Alert"),
+          content: const Text(
+              "No Technician available at this time. Please come back later."),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                // Close the dialog first
+                Navigator.pushNamed(context, "/home");
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

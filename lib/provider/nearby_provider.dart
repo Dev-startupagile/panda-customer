@@ -43,7 +43,7 @@ class NearByProvider extends ChangeNotifier {
 
           if (nearby.isEmpty) {
             backToHome();
-            Navigator.pushNamed(context, "/from_nearby");
+            // Navigator.pushNamed(context, "/from_nearby");
           }
           notifyListeners();
         } else {
