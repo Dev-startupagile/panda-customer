@@ -697,7 +697,10 @@ class _AuthState extends State<Auth> {
                                           icon: AppIcons.appleIcon,
                                           textColor: Colors.black,
                                           isSignIn: !signUp,
-                                          onTap: () => {},
+                                          onTap: () => signInWithSocial(
+                                              context,
+                                              !signUp,
+                                              AvaliableSocialLogin.apple),
                                           name: "Apple"),
                                       SocialLoginBtn(
                                           fillColor: const Color(0xff1877f2),
