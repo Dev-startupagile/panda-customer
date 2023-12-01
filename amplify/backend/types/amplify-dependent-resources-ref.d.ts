@@ -1,9 +1,18 @@
 export type AmplifyDependentResourcesAttributes = {
-  "api": {
-    "pandacustomersmaster": {
-      "GraphQLAPIEndpointOutput": "string",
-      "GraphQLAPIIdOutput": "string",
-      "GraphQLAPIKeyOutput": "string"
+  "auth": {
+    "pandacustomersmaster7675a86c": {
+      "AppClientID": "string",
+      "AppClientIDWeb": "string",
+      "HostedUIDomain": "string",
+      "IdentityPoolId": "string",
+      "IdentityPoolName": "string",
+      "OAuthMetadata": "string",
+      "UserPoolArn": "string",
+      "UserPoolId": "string",
+      "UserPoolName": "string"
+    },
+    "userPoolGroups": {
+      "pandausersGroupRole": "string"
     }
   }
 }

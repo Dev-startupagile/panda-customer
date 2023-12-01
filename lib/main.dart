@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart' as ac;
+import 'package:amplify_flutter/amplify_flutter.dart' as af;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:panda/amplifyconfiguration.dart';
 import 'package:panda/provider/auth_provider.dart';
 import 'package:panda/provider/auto_complete_provider.dart';
 import 'package:panda/provider/contactus_provider.dart';
@@ -29,6 +32,9 @@ import 'package:stripe_payment/stripe_payment.dart';
 import 'commonComponents/loading.dart';
 import 'function/auth.dart';
 import 'function/shared_prefs.dart';
+
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
@@ -99,6 +105,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
+void _configureAmplify() async {
+  await af.Amplify.addPlugin(ac.AmplifyAuthCognito());
+  try {
+    await af.Amplify.configure(
+        amplifyconfig); // 'amplifyconfig' is the configuration you get from the Amplify CLI
+  } catch (e) {
+    print("An error occurred setting up Amplify: $e");
+  }
+}
+
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
   StripePayment.setOptions(
@@ -132,6 +148,8 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
+  _configureAmplify();
+  await initializeDateFormatting();
   runApp(
     MultiProvider(
       providers: [

@@ -19,7 +19,6 @@ bool? namValidator(value) {
   }
   if (!regex.hasMatch(value)) {
     return true;
-    ("Enter Valid name(Min. 2 Character)");
   }
   return null;
 }

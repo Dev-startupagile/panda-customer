@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart' as ac;
+import 'package:amplify_flutter/amplify_flutter.dart' as af;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +8,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:panda/function/validation/auth_validation.dart';
 import 'package:panda/models/signup_form_model.dart';
 import 'package:panda/function/global_snackbar.dart';
+import 'package:panda/screens/auth/social_login_widget.dart';
+import 'package:panda/util/app_icons.dart';
+import 'package:panda/util/constants.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:provider/provider.dart';
 import '../../../provider/auth_provider.dart';
@@ -22,6 +27,8 @@ import '../../provider/uploader_provider.dart';
 import 'authComponent/auth_textfield.dart';
 
 import 'authComponent/password_hint.dart';
+
+enum AvaliableSocialLogin { google, facebook, apple }
 
 class Auth extends StatefulWidget {
   const Auth({Key? key}) : super(key: key);
@@ -41,6 +48,7 @@ class _AuthState extends State<Auth> {
   bool ishintPassowrdShow = false;
   bool signUp = false;
   bool isPasswordNotVisible = true;
+  bool firstPage = true;
   bool secondPage = false;
   bool isChecked = false;
   String countryCode = '';
@@ -195,41 +203,51 @@ class _AuthState extends State<Auth> {
 
     if (true) {
       if (signUp) {
-        if (firstnameController.text.isNotEmpty &&
-            lastnameController.text.isNotEmpty &&
-            emailController.text.isNotEmpty &&
-            phoneNumber != '' &&
-            passwordController.text.isNotEmpty) {
-          if (is8Char(passwordController.text) &&
-              containsNumb(passwordController.text) &&
-              containsLowerCase(passwordController.text) &&
-              containsUpperCase(passwordController.text) &&
-              containsSymbols(passwordController.text)) {
-            if (_image != null) {
-              if (nameValidator(firstnameController.text) != null) {
-                displayErrorSnackBar(
-                    context, nameValidator(firstnameController.text) ?? "");
-              } else if (nameValidator(lastnameController.text) != null) {
-                displayErrorSnackBar(
-                    context, nameValidator(lastnameController.text) ?? "");
-              } else if (emailValidator(emailController.text) != null) {
+        if (firstPage) {
+          if (emailController.text.isNotEmpty &&
+              passwordController.text.isNotEmpty) {
+            if (is8Char(passwordController.text) &&
+                containsNumb(passwordController.text) &&
+                containsLowerCase(passwordController.text) &&
+                containsUpperCase(passwordController.text) &&
+                containsSymbols(passwordController.text)) {
+              if (emailValidator(emailController.text) != null) {
                 displayErrorSnackBar(
                     context, emailValidator(emailController.text) ?? "");
-              } else if (phoneValidation != null) {
-                displayErrorSnackBar(context, phoneValidation ?? "");
-              } else if (passwordValidator(passwordController.text) != null) {
-                displayErrorSnackBar(
-                    context, passwordValidator(passwordController.text) ?? "");
               } else {
                 setState(() {
-                  secondPage = true;
+                  firstPage = false;
                 });
               }
             } else {
-              displayErrorSnackBar(context, "please upload profile picture ");
+              displayErrorSnackBar(context, "please enter valid password ");
+            }
+          }
+          return;
+        }
+        if (!firstPage &&
+            firstnameController.text.isNotEmpty &&
+            lastnameController.text.isNotEmpty &&
+            phoneNumber != '') {
+          if (_image != null) {
+            if (nameValidator(firstnameController.text) != null) {
+              displayErrorSnackBar(
+                  context, nameValidator(firstnameController.text) ?? "");
+            } else if (nameValidator(lastnameController.text) != null) {
+              displayErrorSnackBar(
+                  context, nameValidator(lastnameController.text) ?? "");
+            } else if (phoneValidation != null) {
+              displayErrorSnackBar(context, phoneValidation ?? "");
+            } else if (passwordValidator(passwordController.text) != null) {
+              displayErrorSnackBar(
+                  context, passwordValidator(passwordController.text) ?? "");
+            } else {
+              setState(() {
+                secondPage = true;
+              });
             }
           } else {
-            displayErrorSnackBar(context, "please enter valid password ");
+            displayErrorSnackBar(context, "please upload profile picture ");
           }
         } else {
           displayErrorSnackBar(context, "Please fill out the above form");
@@ -317,7 +335,7 @@ class _AuthState extends State<Auth> {
                             Column(
                               children: [
                                 Visibility(
-                                  visible: signUp && !secondPage,
+                                  visible: signUp && !firstPage && !secondPage,
                                   child: Stack(children: [
                                     InkWell(
                                       onTap: () {
@@ -364,7 +382,9 @@ class _AuthState extends State<Auth> {
                                   child: Column(
                                     children: [
                                       Visibility(
-                                          visible: signUp && !secondPage,
+                                          visible: signUp &&
+                                              !firstPage &&
+                                              !secondPage,
                                           child: CustomAuthTextField(
                                             isTag: false,
                                             isState: false,
@@ -381,7 +401,9 @@ class _AuthState extends State<Auth> {
                                             isConfirmPassword: false,
                                           )),
                                       Visibility(
-                                          visible: signUp && !secondPage,
+                                          visible: signUp &&
+                                              !firstPage &&
+                                              !secondPage,
                                           child: CustomAuthTextField(
                                             isTag: false,
                                             isState: false,
@@ -398,7 +420,7 @@ class _AuthState extends State<Auth> {
                                             isConfirmPassword: false,
                                           )),
                                       Visibility(
-                                        visible: !secondPage,
+                                        visible: firstPage,
                                         child: CustomAuthTextField(
                                           isTag: false,
                                           isState: false,
@@ -416,7 +438,7 @@ class _AuthState extends State<Auth> {
                                         ),
                                       ),
                                       Visibility(
-                                        visible: !secondPage,
+                                        visible: firstPage,
                                         child: CustomAuthTextField(
                                           isTag: false,
                                           isState: false,
@@ -440,7 +462,7 @@ class _AuthState extends State<Auth> {
                                       ),
                                       Visibility(
                                           visible: signUp &&
-                                              !secondPage &&
+                                              firstPage &&
                                               ishintPassowrdShow,
                                           child: Padding(
                                               padding:
@@ -448,7 +470,7 @@ class _AuthState extends State<Auth> {
                                               child: passwordHint(
                                                   passwordController.text))),
                                       Visibility(
-                                          visible: signUp,
+                                          visible: signUp && firstPage,
                                           child:
                                               // CustomConfirmPasswordAuthTextField(nameController: confirmPasswordController, submitData: submitData)
                                               CustomAuthTextField(
@@ -471,7 +493,9 @@ class _AuthState extends State<Auth> {
                                                   isPassword: false,
                                                   isConfirmPassword: true)),
                                       Visibility(
-                                          visible: signUp && !secondPage,
+                                          visible: signUp &&
+                                              !firstPage &&
+                                              !secondPage,
                                           child: CustomPhoneTextField(
                                               phoneValidation: phoneValidation,
                                               phoneValidationSetter:
@@ -635,6 +659,59 @@ class _AuthState extends State<Auth> {
                                         style: KNativeTextStyle,
                                       )),
                                 ),
+                                Visibility(
+                                  visible: firstPage && !secondPage,
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                              child: Container(
+                                                  height: 1,
+                                                  color: const Color.fromARGB(
+                                                      255, 79, 78, 78))),
+                                          const SizedBox(width: 5),
+                                          const Text("OR"),
+                                          const SizedBox(width: 5),
+                                          Expanded(
+                                              child: Container(
+                                                  height: 1,
+                                                  color: const Color.fromARGB(
+                                                      255, 79, 78, 78))),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      SocialLoginBtn(
+                                          fillColor: Colors.white,
+                                          icon: AppIcons.googleIcon,
+                                          textColor: Colors.black,
+                                          isSignIn: !signUp,
+                                          onTap: () => signInWithSocial(
+                                              context,
+                                              !signUp,
+                                              AvaliableSocialLogin.google),
+                                          name: "Google"),
+                                      SocialLoginBtn(
+                                          fillColor: Colors.white,
+                                          icon: AppIcons.appleIcon,
+                                          textColor: Colors.black,
+                                          isSignIn: !signUp,
+                                          onTap: () => {},
+                                          name: "Apple"),
+                                      SocialLoginBtn(
+                                          fillColor: const Color(0xff1877f2),
+                                          icon: AppIcons.facebookIcon,
+                                          textColor: Colors.white,
+                                          isSignIn: !signUp,
+                                          onTap: () => signInWithSocial(
+                                              context,
+                                              !signUp,
+                                              AvaliableSocialLogin.facebook),
+                                          name: "Facebook"),
+                                    ],
+                                  ),
+                                ),
                                 SizedBox(height: height * 0.02),
                                 MaterialButton(
                                   onPressed: () {
@@ -720,7 +797,7 @@ class _AuthState extends State<Auth> {
         _uploadProfilePic(context);
         Navigator.of(context).pop();
       });
-    } on PlatformException catch (e) {
+    } on PlatformException catch (_) {
       Navigator.of(context).pop();
     }
   }
@@ -728,6 +805,60 @@ class _AuthState extends State<Auth> {
   Future _uploadProfilePic(BuildContext context) async {
     if (_image != null) {
       context.read<UploaderProvider>().imageUploader(context, _image!);
+    }
+  }
+
+  Future<void> signInWithSocial(BuildContext context, bool signIn,
+      AvaliableSocialLogin socialLogin) async {
+    try {
+      context.read<AuthProvider>().dialog.openLoadingDialog(context);
+      ac.AuthProvider authProvider = socialLogin == AvaliableSocialLogin.google
+          ? ac.AuthProvider.google
+          : socialLogin == AvaliableSocialLogin.facebook
+              ? ac.AuthProvider.facebook
+              : ac.AuthProvider.apple;
+      print("Signed in with $socialLogin");
+      ac.SignInResult res =
+          await af.Amplify.Auth.signInWithWebUI(provider: authProvider);
+      print("Sign in result ${res.isSignedIn}");
+      if (res.isSignedIn) {
+        try {
+          List<ac.AuthUserAttribute> listOfAttr =
+              await af.Amplify.Auth.fetchUserAttributes();
+          String email = listOfAttr
+              .firstWhere((element) => element.userAttributeKey.key == "email")
+              .value;
+          // ac.AuthSession session = await af.Amplify.Auth.fetchAuthSession();
+          // ac.JsonWebToken token = (session as ac.CognitoAuthSession)
+          //     .userPoolTokensResult
+          //     .value
+          //     .accessToken;
+          // print("JWT Token: $token");
+          print("User's email: $email");
+          // Send email and JWT token to backend
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+          if (signIn) {
+            context
+                .read<AuthProvider>()
+                .signIn(context, email, kDefaultPassword, fcmToken);
+          } else {
+            emailController.text = email;
+            passwordController.text = kDefaultPassword;
+            confirmPasswordController.text = kDefaultPassword;
+            setState(() {
+              firstPage = false;
+            });
+          }
+        } catch (e) {
+          print("Error getting user data: $e");
+        }
+      } else {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      }
+    } on ac.AuthException catch (e) {
+      print(e.message);
     }
   }
 }

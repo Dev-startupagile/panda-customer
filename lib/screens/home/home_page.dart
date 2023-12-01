@@ -1,15 +1,12 @@
 // ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers, avoid_unnecessary_containers, must_be_immutable
 
 import 'dart:io';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:panda/models/rejection_by_tech.dart';
 import 'package:panda/provider/rating_provider.dart';
 import 'package:panda/provider/service_request_provider.dart';
 import 'package:panda/screens/home/services/counter_offer.dart';
 import 'package:panda/screens/home/services/rating.dart';
 import 'package:panda/screens/home/services/request_offer.dart';
-import 'package:panda/screens/home/services/service_request/componets/finding_ur_technician.dart';
-import 'package:panda/util/constants.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
@@ -347,8 +344,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             child: widgetOptions.elementAt(_selectedIndex),
           ),
           bottomSheet: context.watch<RatingProvider>().isRatingActive
-              ? RatingScreen(
+              ? RatingWidget(
+                  to: "",
                   requestId: context.read<RatingProvider>().ratingRequestId,
+                  callback: (_) {},
                 )
               : context.watch<NotificationProvider>().isRequestScheduled
                   ? RequestOffer(

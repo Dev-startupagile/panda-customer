@@ -9,10 +9,10 @@ import 'components/mechanics_profile.dart';
 
 class Browse extends StatefulWidget {
   final dynamic getFunc;
-  double longitude;
-  double latitude;
+  final double longitude;
+  final double latitude;
 
-  Browse(
+  const Browse(
       {required this.latitude, required this.longitude, this.getFunc, Key? key})
       : super(key: key);
 
@@ -156,7 +156,15 @@ class _BrowseState extends State<Browse> {
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.start,
-                                                children: [customRating(3, 1)],
+                                                children: [
+                                                  customRating(
+                                                      context,
+                                                      req.technicianDetail!
+                                                          .rating,
+                                                      req.technicianDetail!
+                                                          .reviewCount,
+                                                      req)
+                                                ],
                                               ),
                                               const SizedBox(
                                                 height: 10,
