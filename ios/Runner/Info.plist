@@ -19,7 +19,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2</string>
+	<string>1.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -28,6 +28,10 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string></string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We need to access your location for Panda to work accurately</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library for uploading and managing images</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Your location is required for xyz benefits for you</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
