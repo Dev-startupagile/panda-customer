@@ -14,19 +14,12 @@ Widget profileAvatar(
     child: CircleAvatar(
       maxRadius: isHomeScreen ? 30.0 : 60.0,
       backgroundColor: kPrimaryColor,
-      child: image != null
-          ? Image.file(image!, fit: BoxFit.fitWidth)
-          : CachedNetworkImage(
-              imageUrl: profileUrl ?? "",
-              fit: BoxFit.cover,
-              placeholder: (context, url) => const Padding(
-                padding: EdgeInsets.all(18.0),
-                child: CircularProgressIndicator(
-                    strokeWidth: 1, color: kPrimaryColor),
-              ),
-              errorWidget: (context, url, error) =>
-                  Image.asset("assets/avater.png"),
-            ),
+      backgroundImage: const AssetImage("assets/avater.png"),
+      foregroundImage: image != null
+          ? FileImage(image!)
+          : CachedNetworkImageProvider(
+              profileUrl ?? "",
+            ) as ImageProvider,
     ),
   );
 }

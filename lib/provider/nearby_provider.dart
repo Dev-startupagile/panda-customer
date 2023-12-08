@@ -22,48 +22,44 @@ class NearByProvider extends ChangeNotifier {
     http.Response? response;
     await sharedPrefs.getToken();
 
-    if (true) {
-      isLoading = true;
-      notifyListeners();
-      try {
-        notifyListeners();
-        //TODO: stay http rest call for now
-        response = await http.post(Uri.parse('$apiUrl/users/technician/nearby'),
-            headers: {
-              HttpHeaders.contentTypeHeader: "application/json",
-              HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
-            },
-            body: jsonEncode({"latitude": lat, "longitude": lng}));
+    isLoading = true;
+    notifyListeners();
+    try {
+      //TODO: stay http rest call for now
+      response = await http.post(Uri.parse('$apiUrl/users/technician/nearby'),
+          headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
+          },
+          body: jsonEncode({"latitude": lat, "longitude": lng}));
 
-        if (response.statusCode == 200) {
-          isLoading = false;
-          isLoaded = true;
-          final result = nearByModelFromJson(response.body);
-          nearby = result.data;
+      if (response.statusCode == 200) {
+        isLoading = false;
+        isLoaded = true;
+        final result = nearByModelFromJson(response.body);
+        nearby = result.data;
 
-          if (nearby.isEmpty) {
-            backToHome();
-            // Navigator.pushNamed(context, "/from_nearby");
-          }
-          notifyListeners();
-        } else {
-          isLoading = false;
-          displayErrorSnackBar(context, "Something went wrong nearby");
-          notifyListeners();
+        if (nearby.isEmpty) {
+          backToHome();
+          // Navigator.pushNamed(context, "/from_nearby");
         }
-      } on SocketException catch (e) {
-        isLoading = false;
-        displayErrorSnackBar(
-            context, "please check your internet and try again");
         notifyListeners();
-      } catch (e) {
+      } else {
         isLoading = false;
-        displayErrorSnackBar(context, e.toString());
+        displayErrorSnackBar(context, "Something went wrong nearby");
         notifyListeners();
       }
-
+    } on SocketException catch (e) {
+      isLoading = false;
+      displayErrorSnackBar(context, "please check your internet and try again");
       notifyListeners();
-      return response;
+    } catch (e) {
+      isLoading = false;
+      displayErrorSnackBar(context, e.toString());
+      notifyListeners();
     }
+
+    notifyListeners();
+    return response;
   }
 }

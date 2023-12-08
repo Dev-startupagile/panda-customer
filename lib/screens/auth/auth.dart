@@ -84,7 +84,7 @@ class _AuthState extends State<Auth> {
     emailController =
         // TextEditingController(text: "baslielselamu2018+pc@gmail.com");
         emailController = TextEditingController();
-    // passwordController = TextEditingController(text: "Ap2334\$56");
+    // passwordController = TextEditingController(text: "Ap2334$56");
     passwordController = TextEditingController();
 
     confirmPasswordController = TextEditingController();
@@ -862,6 +862,10 @@ class _AuthState extends State<Auth> {
       }
     } on ac.AuthException catch (e) {
       print(e.message);
+      Navigator.pop(context);
+    } catch (e) {
+      print("Error getting user data: $e");
+      Navigator.pop(context);
     }
   }
 }

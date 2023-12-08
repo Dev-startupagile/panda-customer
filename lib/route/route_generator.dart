@@ -18,16 +18,7 @@ class RouteGenerator {
     final args = settings.arguments;
     switch (settings.name) {
       case '/home':
-        return MaterialPageRoute(
-            builder: (_) => HomePage(
-                  isFromNoNearByTech: false,
-                ));
-
-      case '/from_nearby':
-        return MaterialPageRoute(
-            builder: (_) => HomePage(
-                  isFromNoNearByTech: true,
-                ));
+        return MaterialPageRoute(builder: (_) => HomePage(argument: args));
       case '/login':
         return MaterialPageRoute(builder: (_) => const Auth());
       case '/term_of_services':

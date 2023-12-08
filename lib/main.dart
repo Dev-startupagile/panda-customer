@@ -33,7 +33,6 @@ import 'commonComponents/loading.dart';
 import 'function/auth.dart';
 import 'function/shared_prefs.dart';
 
-import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -275,7 +274,7 @@ class _MyAppState extends State<MyApp> {
       home: isLoading
           ? const Loading()
           : (isAuth)
-              ? HomePage(isFromNoNearByTech: false)
+              ? HomePage()
               : (!isAuth && isFirstTime)
                   ? const Auth()
                   : const OnboardingSlider(),
