@@ -229,9 +229,9 @@ class _VerificationState extends State<Verification> {
                   ),
                 ),
                 SizedBox(height: width * 0.04),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [CountdownTimerDemo()],
+                  children: [CountdownTimerDemo()],
                 ),
                 SizedBox(height: width * 0.04),
                 Visibility(
@@ -280,8 +280,8 @@ class _VerificationState extends State<Verification> {
                         isPassword: false,
                         isConfirmPassword: true)),
                 SizedBox(height: width * 0.04),
-                Row(
-                  children: const [
+                const Row(
+                  children: [
                     Text(
                       "Didn't you get your OTP code? ",
                       style: KAppBodyTextStyle,

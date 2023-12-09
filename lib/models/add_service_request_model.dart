@@ -1,29 +1,34 @@
 class AddServiceRequestModel {
-  String serviceId;
-  double longitude;
-  double latitude;
-  String name;
-  String date;
-  String time;
-  String note;
-  String title;
-  String paymentId;
-  bool isScheduled;
+  String? serviceId;
+  String? serviceType;
+  double? longitude;
+  double? latitude;
+  String? name;
+  String? date;
+  String? time;
+  String? note;
+  String? title;
+  String? paymentId;
+  String? vehicleId;
+  bool? isScheduled;
   AddServiceRequestModel(
-      {required this.serviceId,
-      required this.longitude,
-      required this.latitude,
-      required this.name,
-      required this.date,
-      required this.time,
-      required this.note,
-      required this.title,
-      required this.paymentId,
-      required this.isScheduled});
+      {this.serviceId,
+      this.serviceType,
+      this.longitude,
+      this.latitude,
+      this.name,
+      this.date,
+      this.time,
+      this.note,
+      this.title,
+      this.paymentId,
+      this.vehicleId,
+      this.isScheduled});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["serviceId"] = serviceId;
+    data["serviceType"] = serviceType;
     data["longitude"] = longitude;
     data["latitude"] = latitude;
     data["name"] = name;

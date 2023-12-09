@@ -7,18 +7,17 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:panda/commonComponents/popup_dialog.dart';
 import 'package:panda/function/global_snackbar.dart';
+import 'package:panda/models/add_service_request_model.dart';
 import 'package:panda/models/rejection_by_tech.dart';
+import 'package:panda/screens/home/services/service_request/componets/service_request_form.dart';
 import 'package:panda/util/ui_constant.dart';
 
 import '../../../../commonComponents/loading_dialog.dart';
 import '../../../../function/shared_prefs.dart';
 import '../../../../util/constants.dart';
-import '../browse/browse_bottomsheet_widget.dart';
-import 'request_bottomsheet_widget.dart';
 
 class RequestServicesMap extends StatefulWidget {
-  int currentFormStep;
-  RequestServicesMap({super.key, required this.currentFormStep});
+  const RequestServicesMap({super.key});
 
   @override
   State<RequestServicesMap> createState() => _RequestServicesMapState();
@@ -38,7 +37,6 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
   final Set<Marker> _markers = {};
 
   static LatLng _mainLocation = const LatLng(0.0, 0.0);
-  static LatLng _desLocation = const LatLng(39.0, 8.0);
 
   final List<String> formSteps = <String>[
     serviceRequest,
@@ -135,9 +133,13 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
                       onPressed: () {
                         // Close the dialog first
                         Navigator.pop(context);
-                        setState(() {
-                          widget.currentFormStep = 3;
-                        });
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ServiceRequestFormPage(
+                                    addServiceRequestModel:
+                                        AddServiceRequestModel(
+                                            latitude: lat, longitude: long))));
                       },
                     ),
                     TextButton(
@@ -162,33 +164,7 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
     });
   }
 
-  void onClickNextButton() {
-    setState(() {
-      if (widget.currentFormStep > formSteps.length - 2) {
-        widget.currentFormStep = -1;
-      } else {
-        widget.currentFormStep++;
-      }
-    });
-  }
-
   final sharedPrefs = SharedPrefs();
-
-  void onClickBackButton(String val) {
-    setState(() {
-      if (widget.currentFormStep > formSteps.length - 2) {
-        widget.currentFormStep = -1;
-      } else {
-        widget.currentFormStep--;
-      }
-    });
-  }
-
-  void onClickClose() {
-    setState(() {
-      widget.currentFormStep = -1;
-    });
-  }
 
   void openCloseBrowse() {
     setState(() {
@@ -199,35 +175,33 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.currentFormStep != -1
-          ? null
-          : AppBar(
-              leading: Stack(
-                children: <Widget>[
-                  Positioned(
-                    width: 10,
-                    height: 10,
-                    right: 6,
-                    bottom: 22,
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(1),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              automaticallyImplyLeading: false,
-              backgroundColor: Colors.white,
-              centerTitle: true,
-              title: const Text(
-                "Panda Customer",
-                style: KAppBodyTextStyle,
+      appBar: AppBar(
+        leading: Stack(
+          children: <Widget>[
+            Positioned(
+              width: 10,
+              height: 10,
+              right: 6,
+              bottom: 22,
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(1),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
+          ],
+        ),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: const Text(
+          "Panda Customer",
+          style: KAppBodyTextStyle,
+        ),
+      ),
       body: Stack(
         children: <Widget>[
           GoogleMap(
@@ -251,7 +225,7 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
               });
             },
             onTap: (val) {
-              onClickClose();
+              print("clicked");
             },
             // ),
           ),
@@ -291,9 +265,15 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
                             displayInfoSnackBar(context,
                                 "we are finding your location please wait");
                           } else {
-                            setState(() {
-                              widget.currentFormStep = 0;
-                            });
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ServiceRequestFormPage(
+                                            addServiceRequestModel:
+                                                AddServiceRequestModel(
+                                                    latitude: lat,
+                                                    longitude: long))));
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -317,16 +297,21 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
                         ),
                         color: Colors.white,
                         onPressed: () {
-                          setState(() {
-                            if (currentPosition == null) {
-                              displayInfoSnackBar(context,
-                                  "we are finding your location please wait");
-                            } else {
-                              setState(() {
-                                widget.currentFormStep = 0;
-                              });
-                            }
-                          });
+                          if (currentPosition == null) {
+                            displayInfoSnackBar(context,
+                                "we are finding your location please wait");
+                          } else {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ServiceRequestFormPage(
+                                            addServiceRequestModel:
+                                                AddServiceRequestModel(
+                                                    latitude: lat,
+                                                    longitude: long))));
+                          }
+
                           // openCloseBrowse();
                         },
                       ),
@@ -338,20 +323,6 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
           ),
         ],
       ),
-      bottomSheet: isBrowse
-          ? Browse(latitude: lat, longitude: long, getFunc: openCloseBrowse)
-          : widget.currentFormStep != -1
-              ? RequestBottomSheetWidget(
-                  latitude: lat,
-                  longtude: long,
-                  currentPosition: currentPosition,
-                  title: formSteps[widget.currentFormStep],
-                  onClickNext: onClickNextButton,
-                  onClickBack: (String value) {
-                    onClickBackButton(value);
-                  },
-                  onClickClose: onClickClose)
-              : null,
     );
   }
 

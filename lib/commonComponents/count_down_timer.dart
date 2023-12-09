@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
 
 class CountdownTimerDemo extends StatefulWidget {
   const CountdownTimerDemo({super.key});
@@ -10,10 +8,7 @@ class CountdownTimerDemo extends StatefulWidget {
   State<CountdownTimerDemo> createState() => _CountdownTimerDemoState();
 }
 
-
-
 class _CountdownTimerDemoState extends State<CountdownTimerDemo> {
-
   Timer? countdownTimer;
   Duration myDuration = const Duration(minutes: 2);
   @override
@@ -47,33 +42,27 @@ class _CountdownTimerDemoState extends State<CountdownTimerDemo> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     String strDigits(int n) => n.toString().padLeft(2, '0');
 
-
     final minutes = strDigits(myDuration.inMinutes.remainder(2));
     final seconds = strDigits(myDuration.inSeconds.remainder(60));
-    return  SizedBox(
-      width:300,
+    return SizedBox(
+      width: 300,
       child: Column(
         children: [
           const SizedBox(
             height: 20,
           ),
-
           Text(
             'Resend OTP in $minutes:$seconds',
             style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-                fontSize: 15),
+                fontWeight: FontWeight.bold, color: Colors.black, fontSize: 15),
           ),
-
-
         ],
       ),
-
     );
   }
 }

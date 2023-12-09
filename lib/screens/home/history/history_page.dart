@@ -16,7 +16,7 @@ class HistoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
 
-    TabBar _tabBar = TabBar(
+    TabBar tabBar = TabBar(
       unselectedLabelColor: Colors.black,
       labelStyle: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold),
       indicator: const BoxDecoration(
@@ -103,14 +103,14 @@ class HistoryPage extends StatelessWidget {
           elevation: 0.0,
           title: const Text(''),
           bottom: PreferredSize(
-            preferredSize: _tabBar.preferredSize,
+            preferredSize: tabBar.preferredSize,
             child: Material(
               child: Container(
                 height: 75,
                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                 child: Card(
                   elevation: 2,
-                  child: _tabBar,
+                  child: tabBar,
                 ),
               ),
             ),

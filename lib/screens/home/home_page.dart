@@ -7,6 +7,7 @@ import 'package:panda/provider/service_request_provider.dart';
 import 'package:panda/screens/home/services/counter_offer.dart';
 import 'package:panda/screens/home/services/rating.dart';
 import 'package:panda/screens/home/services/request_offer.dart';
+import 'package:panda/screens/home/services/service_request/componets/assigned_technician.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
@@ -21,8 +22,8 @@ import 'estimate/estimate_page.dart';
 import 'history/history_page.dart';
 
 class HomePage extends StatefulWidget {
-  bool isFromNoNearByTech;
-  HomePage({required this.isFromNoNearByTech, super.key});
+  dynamic argument;
+  HomePage({this.argument, super.key});
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -30,7 +31,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   int _selectedIndex = 0;
   int title = -1;
-  bool isFromNearBy = false;
   List<int> indexList = [];
   late TutorialCoachMark tutorialCoachMark;
 
@@ -77,7 +77,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      isFromNearBy = false;
       indexList.add(index);
     });
   }
@@ -270,13 +269,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetchApi();
     });
-
-    if (widget.isFromNoNearByTech) {
-      setState(() {
-        _selectedIndex = 2;
-        isFromNearBy = true;
-      });
-    }
   }
 
   @override
@@ -290,7 +282,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void fetchApi() async {
     await sharedPrefs.getIsFromImagePicker();
     if (!sharedPrefs.isFromImagePicker) {
-      context.read<ProfileProvider>().customerProfile(context);
+      await context.read<ProfileProvider>().customerProfile(context);
       context.read<NotificationProvider>().getBadge();
       context.read<NotificationProvider>().getCounterOffer();
       context.read<NotificationProvider>().getRequestOffer();
@@ -312,12 +304,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   List<Widget> get widgetOptions => <Widget>[
-        RequestServicesMap(
-          currentFormStep: title,
-        ),
+        const RequestServicesMap(),
         const EstimatePage(),
         HistoryPage(
-          isFromNearBy: isFromNearBy,
+          isFromNearBy: false,
         ),
         const ProfilePage(),
       ];
@@ -359,7 +349,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       ? CounterOffer(
                           requestId:
                               context.read<NotificationProvider>().requestId)
-                      : null,
+                      : widget.argument != null
+                          ? AssignedTechnician(
+                              addServiceRequestModel: widget.argument)
+                          : null,
           bottomNavigationBar: Stack(
             children: [
               Visibility(
