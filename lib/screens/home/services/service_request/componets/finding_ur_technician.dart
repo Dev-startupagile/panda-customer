@@ -58,15 +58,14 @@ class _FindingYourTechnicianState extends State<FindingYourTechnician> {
     context.read<ServiceRequestProvider>().noNearBy(context);
   }
 
-  void refreshNearByTech() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<NearByProvider>().nearBy(
-          context,
-          widget.addServiceRequestModel.latitude,
-          widget.addServiceRequestModel.longitude,
-          backToHome,
-          false);
-    });
+  void refreshNearByTech() async {
+    print("[nearby] refreshNearByTech called");
+    await context.read<NearByProvider>().nearBy(
+        context,
+        widget.addServiceRequestModel.latitude,
+        widget.addServiceRequestModel.longitude,
+        backToHome,
+        false);
   }
 
   @override

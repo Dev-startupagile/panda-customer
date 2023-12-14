@@ -36,6 +36,8 @@ class NearByProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         isLoading = false;
         isLoaded = true;
+        print("[nearby] result ${response.body}");
+
         final result = nearByModelFromJson(response.body);
         nearby = result.data;
 
