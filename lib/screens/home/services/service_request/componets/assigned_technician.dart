@@ -1,48 +1,78 @@
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:panda/commonComponents/profile_avatar.dart';
+import 'package:panda/function/launcher.dart';
 import 'package:panda/models/add_service_request_model.dart';
+import 'package:panda/models/nearby_model.dart';
 
 import '../../../../../util/ui_constant.dart';
 
 class AssignedTechnician extends StatelessWidget {
-  const AssignedTechnician({Key? key, required this.addServiceRequestModel})
-      : super(key: key);
-  final AddServiceRequestModel addServiceRequestModel;
+  const AssignedTechnician({Key? key, required this.arg}) : super(key: key);
+  final Map<String, dynamic> arg;
   @override
   Widget build(BuildContext context) {
-    DateTime dateTime = DateTime(2022, 12, 24, 2, 30);
+    AddServiceRequestModel addServiceRequestModel = arg["service"];
+    Datum mechanicProfile = arg["data"];
+    DateTime dateTime = DateTime.parse(addServiceRequestModel.date!);
 
     return Card(
       elevation: 2,
-      child: ListTile(
-        title: const Text(
-          "Mobile Technician",
-          style: KAppTitleTextStyle,
-        ),
-        subtitle: Row(
-          children: [
-            const Icon(
-              Icons.circle,
-              color: kPrimaryColorSecondary,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+              leading: profileAvatar(
+                  mechanicProfile.technicianDetail?.profilePicture, null, true),
+              title: Text(
+                mechanicProfile
+                        .technicianDetail?.fullName.capitalizeMaybeNull ??
+                    "",
+                style: KAppTitleTextStyle,
+              ),
+              subtitle: Text(
+                mechanicProfile.technicianDetail?.id ?? "",
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: IconButton(
+                  onPressed: () {
+                    launchPhone(mechanicProfile.technicianDetail?.phoneNumber);
+                  },
+                  icon: const Icon(Icons.phone))),
+          const Divider(),
+          ListTile(
+            title: Text(
+              addServiceRequestModel.serviceType!,
+              style: KLatoRegularTextStyle.copyWith(
+                  fontWeight: FontWeight.w700, color: Colors.black),
             ),
-            Text(
-              "Technician Assigned",
-              style: KLatoRegularTextStyle,
-            )
-          ],
-        ),
-        trailing: Column(
-          children: [
-            Text(
-              "Now",
-              style: KLatoRegularTextStyle,
+            subtitle: Row(
+              children: [
+                const Icon(
+                  Icons.circle,
+                  color: kPrimaryColorSecondary,
+                ),
+                Text(
+                  "Technician Assigned",
+                  style: KLatoRegularTextStyle,
+                )
+              ],
             ),
-            Text(
-              DateFormat('MM/dd/yyyy').format(dateTime),
-              style: KLatoRegularTextStyle,
-            )
-          ],
-        ),
+            trailing: Column(
+              children: [
+                Text(
+                  addServiceRequestModel.title!,
+                  style: KLatoRegularTextStyle,
+                ),
+                Text(
+                  DateFormat('MM/dd/yyyy').format(dateTime),
+                  style: KLatoRegularTextStyle,
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

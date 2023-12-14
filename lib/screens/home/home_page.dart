@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers, avoid_unnecessary_containers, must_be_immutable
 
 import 'dart:io';
+import 'package:panda/commonComponents/popup_dialog.dart';
 import 'package:panda/models/rejection_by_tech.dart';
 import 'package:panda/provider/rating_provider.dart';
 import 'package:panda/provider/service_request_provider.dart';
@@ -50,10 +51,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         .cancelServiceRequest(context, data.serviceId);
   }
 
-  void sendServiceRequest(String id) async {
+  void sendServiceRequest(String id, String requestId) async {
     await context
         .read<ServiceRequestProvider>()
-        .updateServiceRequestByStatus(context, id);
+        .updateServiceRequestByStatus(context, id, requestId);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -279,11 +280,29 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
   }
 
+  void showPendingRequestPopup() {
+    if (context.read<NotificationProvider>().badge > 0) {
+      showPopUpDialogBox(
+          context,
+          "Pending Service Estimate",
+          "There is pending service estimate in your estimates page.",
+          "cancle",
+          "view", () {
+        Navigator.pop(context);
+      }, () {
+        Navigator.pop(context);
+
+        _onItemTapped(1);
+      });
+    }
+  }
+
   void fetchApi() async {
     await sharedPrefs.getIsFromImagePicker();
     if (!sharedPrefs.isFromImagePicker) {
       await context.read<ProfileProvider>().customerProfile(context);
-      context.read<NotificationProvider>().getBadge();
+      await context.read<NotificationProvider>().getBadge();
+
       context.read<NotificationProvider>().getCounterOffer();
       context.read<NotificationProvider>().getRequestOffer();
 
@@ -294,6 +313,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       context.read<NotificationProvider>().getCanceledBadge();
       context.read<NotificationProvider>().getCompletedBadge();
     }
+    showPendingRequestPopup();
     sharedPrefs.saveIsFromImagePicker(false);
   }
 
@@ -350,8 +370,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           requestId:
                               context.read<NotificationProvider>().requestId)
                       : widget.argument != null
-                          ? AssignedTechnician(
-                              addServiceRequestModel: widget.argument)
+                          ? AssignedTechnician(arg: widget.argument)
                           : null,
           bottomNavigationBar: Stack(
             children: [

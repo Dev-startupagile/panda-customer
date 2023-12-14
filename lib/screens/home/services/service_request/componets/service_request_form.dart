@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:panda/function/global_snackbar.dart';
 import 'package:panda/models/add_service_request_model.dart';
 import 'package:panda/provider/service_provider.dart';
 import 'package:panda/provider/uploader_provider.dart';
@@ -118,6 +119,10 @@ class _ServiceRequestFormPageState extends State<ServiceRequestFormPage> {
                           },
                         ),
                         RequestServiceBtn(onTap: () {
+                          if (widget.addServiceRequestModel.serviceId == null) {
+                            displayInfoSnackBar(
+                                context, "please Select Service type");
+                          }
                           Navigator.push(
                               context,
                               MaterialPageRoute(

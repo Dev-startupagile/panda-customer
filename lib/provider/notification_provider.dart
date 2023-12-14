@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:panda/provider/estimate_provider.dart';
 import 'package:panda/util/constants.dart';
 
 import '../function/shared_prefs.dart';
 
-
 class NotificationProvider extends ChangeNotifier {
-
   String estimateBadgeName = "Estimate";
   int badge = 0;
   bool isCounterOffer = false;
@@ -21,25 +20,25 @@ class NotificationProvider extends ChangeNotifier {
   String requestId = "";
   final sharedPrefs = SharedPrefs();
 
-  counterOfferSetter(id){
+  counterOfferSetter(id) {
     isCounterOffer = true;
     requestId = id;
     notifyListeners();
   }
 
-  requestOfferSetter(id){
+  requestOfferSetter(id) {
     isRequestScheduled = true;
     scheduleRequestId = id;
     notifyListeners();
   }
 
-  updateCounterOffer() async{
+  updateCounterOffer() async {
     isCounterOffer = false;
     await sharedPrefs.removeCounterOffer();
     notifyListeners();
   }
 
-  updateRequestOffer() async{
+  updateRequestOffer() async {
     isRequestScheduled = false;
     await sharedPrefs.removeRequestOffer();
     notifyListeners();
@@ -48,14 +47,14 @@ class NotificationProvider extends ChangeNotifier {
   badgeIncrementer() async {
     badge++;
     notifyListeners();
-    await sharedPrefs.saveBadge(badge,estimateBadgeName);
+    await sharedPrefs.saveBadge(badge, estimateBadgeName);
   }
 
   pendingBadgeIncrementer() async {
     pendingBadge++;
     historyBadge = acceptedBadge + pendingBadge + cancelBadge + completedBadge;
     notifyListeners();
-    await sharedPrefs.saveBadge(pendingBadge,pendingConst);
+    await sharedPrefs.saveBadge(pendingBadge, pendingConst);
   }
 
   acceptedBadgeIncrementer() async {
@@ -69,7 +68,7 @@ class NotificationProvider extends ChangeNotifier {
     cancelBadge++;
     historyBadge = acceptedBadge + pendingBadge + cancelBadge + completedBadge;
     notifyListeners();
-    await sharedPrefs.saveBadge(cancelBadge,canceledConst);
+    await sharedPrefs.saveBadge(cancelBadge, canceledConst);
   }
 
   completedBadgeIncrementer() async {
@@ -79,9 +78,8 @@ class NotificationProvider extends ChangeNotifier {
     await sharedPrefs.saveBadge(completedBadge, completedConst);
   }
 
-  getBadge() async {
-    await sharedPrefs.getBadge(estimateBadgeName);
-    badge = sharedPrefs.estimateBadgeNumber ?? 0;
+  Future<void> getBadge() async {
+    badge = await EstimateProvider().countEstimate();
     notifyListeners();
   }
 
@@ -98,7 +96,6 @@ class NotificationProvider extends ChangeNotifier {
     requestId = sharedPrefs.requestId;
     notifyListeners();
   }
-
 
   getRequestOffer() async {
     await sharedPrefs.getRequestOffer();
@@ -138,24 +135,28 @@ class NotificationProvider extends ChangeNotifier {
     badge = 0;
     notifyListeners();
   }
+
   updatePendingBadge() async {
     await sharedPrefs.removeEstimateBadge(pendingConst);
     pendingBadge = 0;
     historyBadge = pendingBadge + acceptedBadge + cancelBadge + completedBadge;
     notifyListeners();
   }
+
   updateAcceptedBadge() async {
     await sharedPrefs.removeEstimateBadge(acceptedConst);
     acceptedBadge = 0;
     historyBadge = pendingBadge + acceptedBadge + cancelBadge + completedBadge;
     notifyListeners();
   }
+
   updateCanceledBadge() async {
     await sharedPrefs.removeEstimateBadge(canceledConst);
     cancelBadge = 0;
     historyBadge = pendingBadge + acceptedBadge + cancelBadge + completedBadge;
     notifyListeners();
   }
+
   updateCompletedBadge() async {
     await sharedPrefs.removeEstimateBadge(completedConst);
     completedBadge = 0;

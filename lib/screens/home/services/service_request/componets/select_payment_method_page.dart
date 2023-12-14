@@ -122,14 +122,17 @@ class _SelectPaymentMethodPageState extends State<SelectPaymentMethodPage> {
                       ],
                     ),
                     RequestServiceBtn(onTap: () async {
-                      await context
+                      widget.addServiceRequestModel.paymentId = paymentId;
+                      var response = await context
                           .read<ServiceRequestProvider>()
                           .sendServiceRequest(
                               context,
                               widget.addServiceRequestModel,
                               context.read<UploaderProvider>().uploadedFileList,
                               widget.addServiceRequestModel.vehicleId);
-
+                      if (response?.statusCode != 201) {
+                        return;
+                      }
                       // ignore: use_build_context_synchronously
                       Navigator.push(
                           context,

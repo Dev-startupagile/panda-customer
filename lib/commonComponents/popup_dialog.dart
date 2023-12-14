@@ -210,3 +210,37 @@ void showReviewPopup(BuildContext context, String name, String to,
     },
   );
 }
+
+void showPopUpDialogBox(
+    BuildContext context,
+    String title,
+    String message,
+    String negativeButton,
+    String positiveButton,
+    Function negativeCallBack,
+    Function positiveCallBack) {
+  showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text(
+              title,
+            ),
+            content: Text(message),
+            //buttons?
+            actions: <Widget>[
+              TextButton(
+                child: Text(negativeButton),
+                onPressed: () {
+                  negativeCallBack();
+                }, //closes popup
+              ),
+              TextButton(
+                child: Text(positiveButton),
+                onPressed: () {
+                  positiveCallBack();
+                }, //closes popup
+              )
+            ],
+          ));
+}

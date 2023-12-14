@@ -150,13 +150,18 @@ class _FindingYourTechnicianState extends State<FindingYourTechnician> {
                                       await context
                                           .read<ServiceRequestProvider>()
                                           .updateServiceRequestByStatus(
-                                              context, value);
+                                              context,
+                                              value,
+                                              widget.addServiceRequestModel
+                                                  .requestId!);
 
                                       // ignore: use_build_context_synchronously
                                       Navigator.pushReplacementNamed(
-                                          context, "/home",
-                                          arguments:
-                                              widget.addServiceRequestModel);
+                                          context, "/home", arguments: {
+                                        "service":
+                                            widget.addServiceRequestModel,
+                                        "data": req
+                                      });
                                     });
                               },
                             ),
