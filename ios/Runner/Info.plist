@@ -19,7 +19,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.4</string>
+	<string>1.6</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -31,7 +31,7 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>We need to access your location for Panda to work accurately</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>Panda wants to access your photo library</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Your location is required for xyz benefits for you</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
