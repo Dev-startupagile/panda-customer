@@ -38,8 +38,10 @@ class ProfileProvider extends ChangeNotifier {
         },
       );
       if (response.statusCode == 200) {
+        print(response.body);
         isLoading = false;
         isLoaded = true;
+
         final result = customerProfileModelFromJson(response.body);
         customerprofile = result.data;
         userId = result.data.personalInformation.id;

@@ -77,6 +77,7 @@ class ServiceRequestProvider extends ChangeNotifier {
         final result =
             sendrequest.sendRequestresponseModelFromJson(response.body);
         requestId = result.data.id;
+        data.requestId = requestId;
         print("calma calmaaa ${result.data.id}");
         notifyListeners();
         displaySuccessSnackBar(context, "you requested service succesfuly");
@@ -289,7 +290,7 @@ class ServiceRequestProvider extends ChangeNotifier {
 
   //TODO: change with grapghql mustation
   Future<http.Response?> updateServiceRequestByStatus(
-      context, technicianId) async {
+      context, technicianId, String argrequestId) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
     notifyListeners();
@@ -297,7 +298,7 @@ class ServiceRequestProvider extends ChangeNotifier {
 
     try {
       notifyListeners();
-      response = await http.patch(Uri.parse('$apiUrl/request/$requestId'),
+      response = await http.patch(Uri.parse('$apiUrl/request/$argrequestId'),
           headers: {
             HttpHeaders.contentTypeHeader: "application/json",
             HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"

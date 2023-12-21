@@ -40,10 +40,10 @@ class _NearByTechnicianState extends State<NearByTechnician>
     Navigator.pop(context);
   }
 
-  void sendServiceRequest(String id) async {
+  void sendServiceRequest(String id, String requestId) async {
     await context
         .read<ServiceRequestProvider>()
-        .updateServiceRequestByStatus(context, id);
+        .updateServiceRequestByStatus(context, id, requestId);
     Navigator.pop(context);
   }
 

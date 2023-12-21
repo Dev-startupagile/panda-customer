@@ -1,4 +1,5 @@
 class AddServiceRequestModel {
+  String? requestId;
   String? serviceId;
   String? serviceType;
   double? longitude;
@@ -12,7 +13,8 @@ class AddServiceRequestModel {
   String? vehicleId;
   bool? isScheduled;
   AddServiceRequestModel(
-      {this.serviceId,
+      {this.requestId,
+      this.serviceId,
       this.serviceType,
       this.longitude,
       this.latitude,
@@ -27,6 +29,7 @@ class AddServiceRequestModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data["requestId"] = requestId;
     data["serviceId"] = serviceId;
     data["serviceType"] = serviceType;
     data["longitude"] = longitude;

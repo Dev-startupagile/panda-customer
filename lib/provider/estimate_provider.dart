@@ -62,6 +62,30 @@ class EstimateProvider extends ChangeNotifier {
     return response;
   }
 
+  Future<int> countEstimate() async {
+    await sharedPrefs.getToken();
+
+    try {
+      var response = await http.get(
+        Uri.parse('$apiUrl/offerEstimation/customer'),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final result = estimateModelFromJson(response.body);
+        estimates = result.data;
+        return estimates.length;
+      } else {
+        return 0;
+      }
+    } catch (e) {
+      return 0;
+    }
+  }
+
   Future<http.Response?> getEstimateById(context, requestId) async {
     http.Response? response;
     await sharedPrefs.getToken();

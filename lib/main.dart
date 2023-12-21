@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart' as ac;
 import 'package:amplify_flutter/amplify_flutter.dart' as af;
 import 'package:firebase_core/firebase_core.dart';
@@ -87,10 +88,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         notification.title == onmywayN ||
         notification.title == arrivedN ||
         notification.title == serviceunderwayN) {
+      List<String> message =
+          formatNotificationMessage(notification.title!, notification.body!);
       return flutterLocalNotificationsPlugin.show(
           notification.hashCode,
-          notification.title,
-          notification.body,
+          message[0],
+          message[1],
           NotificationDetails(
             android: AndroidNotificationDetails(
               channel.id,
@@ -102,6 +105,42 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           ));
     }
   }
+}
+
+List<String> formatNotificationMessage(String title, String body) {
+  if (title == acceptedN) {
+    Map<String, dynamic> data = json.decode(body);
+    return [
+      "Technician have accepted your request",
+      "${data["technicianName"]} has accepted your request."
+    ];
+  }
+  if (title == onmywayN) {
+    Map<String, dynamic> data = json.decode(body);
+    return [
+      "Technician on the way",
+      "Hold on tight, ${data["technicianName"]} is on the way!"
+    ];
+  }
+  if (title == arrivedN) {
+    Map<String, dynamic> data = json.decode(body);
+    return ["Technician has arrived", "${data["technicianName"]} has arrived"];
+  }
+  if (title == estimateN) {
+    // Map<String, dynamic> data = json.decode(body);
+    return [
+      "Technician has sent estimation",
+      "Check out the estimation, technician has sent one for the service!"
+    ];
+  }
+  if (title == reScheduleN) {
+    Map<String, dynamic> data = json.decode(body);
+    return [
+      "Service rescheduled",
+      "${data["technicianName"]} has rescheduled the service."
+    ];
+  }
+  return [title, body];
 }
 
 void _configureAmplify() async {
