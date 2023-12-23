@@ -96,7 +96,7 @@ class _CounterOfferState extends State<CounterOffer> {
                       return const CustomCardSkeletal();
                     })
                 : ListView.builder(
-                    itemCount: 1,
+                    itemCount: value.estimateDetail.length,
                     shrinkWrap: true,
                     controller: _scrollController,
                     itemBuilder: (context, index) {

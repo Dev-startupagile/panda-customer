@@ -32,7 +32,7 @@ class _RatingWidgetState extends State<RatingWidget> {
         .sendRating(context, widget.to, ratingVal, widget.requestId, feedBack);
 
     context.read<RatingProvider>().updateRating();
-    widget.callback(response!);
+    widget.callback(response);
   }
 
   @override

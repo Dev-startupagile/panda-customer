@@ -3,44 +3,40 @@ import 'package:panda/models/contact_us_model.dart';
 import 'package:panda/provider/contactus_provider.dart';
 import 'package:panda/screens/home/profile/profileComponents/profile_textfield.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../../provider/profile_provider.dart';
 import '../../../../util/ui_constant.dart';
 
 class ContactUs extends StatefulWidget {
-
-
   @override
   _ContactUsState createState() => _ContactUsState();
 }
 
 class _ContactUsState extends State<ContactUs> {
-
-  final  _subjectController = TextEditingController();
-  final  _messageController = TextEditingController();
+  final _subjectController = TextEditingController();
+  final _messageController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
-
   @override
   void initState() {
-
     super.initState();
   }
 
-  submitData(){
+  submitData() {
     if (_formKey.currentState!.validate()) {
-        AddContactUsModel addContactUsModel =
-        AddContactUsModel(
-            from: context.read<ProfileProvider>().customerprofile?.personalInformation.id ?? "",
-            subject: _subjectController.text,
-            message: _messageController.text
-        );
+      AddContactUsModel addContactUsModel = AddContactUsModel(
+          from: context
+                  .read<ProfileProvider>()
+                  .customerprofile
+                  ?.personalInformation
+                  .id ??
+              "",
+          subject: _subjectController.text,
+          message: _messageController.text);
 
-        context.read<ContactUsProvider>().contactUs(context, addContactUsModel);
+      context.read<ContactUsProvider>().contactUs(context, addContactUsModel);
     }
-
   }
 
   @override
@@ -64,7 +60,7 @@ class _ContactUsState extends State<ContactUs> {
             ),
           ),
         ),
-        body:SafeArea(
+        body: SafeArea(
           child: SingleChildScrollView(
             child: Container(
               width: width,
@@ -73,9 +69,7 @@ class _ContactUsState extends State<ContactUs> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   SizedBox(height: height * 0.02),
-
                   Padding(
                     padding: EdgeInsets.symmetric(
                         vertical: width * 0.02, horizontal: width * 0.02),
@@ -84,9 +78,7 @@ class _ContactUsState extends State<ContactUs> {
                       style: KAppBodyTextStyle,
                     ),
                   ),
-
                   SizedBox(height: height * 0.02),
-
                   Container(
                     padding: EdgeInsets.symmetric(
                         vertical: width * 0.02, horizontal: width * 0.02),
@@ -94,15 +86,23 @@ class _ContactUsState extends State<ContactUs> {
                       key: _formKey,
                       child: Column(
                         children: [
-
-
-                          customContactUsTextField(Icons.contact_page, false, "text", _subjectController, "Subject", context, submitData),
-
+                          customContactUsTextField(
+                              Icons.contact_page,
+                              false,
+                              "text",
+                              _subjectController,
+                              "Subject",
+                              context,
+                              submitData),
                           SizedBox(height: height * 0.03),
-
-                          customContactUsTextField(Icons.contact_page, true, "text", _messageController, "Message", context, submitData),
-
-
+                          customContactUsTextField(
+                              Icons.contact_page,
+                              true,
+                              "text",
+                              _messageController,
+                              "Message",
+                              context,
+                              submitData),
                           MaterialButton(
                               onPressed: () {
                                 submitData();
@@ -113,22 +113,16 @@ class _ContactUsState extends State<ContactUs> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(2),
                               ),
-                              child: const Text(
-                                  "Send",
-                                  style: KWhiteTextStyle
-                              )
-                          ),
+                              child:
+                                  const Text("Send", style: KWhiteTextStyle)),
                         ],
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),
           ),
-        )
-    );
-
+        ));
   }
 }

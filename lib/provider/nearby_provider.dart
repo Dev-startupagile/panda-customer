@@ -41,7 +41,7 @@ class NearByProvider extends ChangeNotifier {
         final result = nearByModelFromJson(response.body);
         nearby = result.data;
 
-        if (nearby.isEmpty) {
+        if (nearby.isEmpty && backToHome != null) {
           backToHome();
           // Navigator.pushNamed(context, "/from_nearby");
         }

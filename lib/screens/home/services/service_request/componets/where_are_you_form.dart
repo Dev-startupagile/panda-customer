@@ -110,6 +110,7 @@ class _WhereAreYouPageState extends State<WhereAreYouPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<UploaderProvider>().initialValue();
+      currentServiceLocationSetter();
     });
   }
 
@@ -336,7 +337,7 @@ class _WhereAreYouPageState extends State<WhereAreYouPage> {
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          "What Services are you experiencing issues with?",
+                          "What vehicle are you experiencing issues with?",
                           style: TextStyle(color: Colors.black54),
                         ),
                       ),

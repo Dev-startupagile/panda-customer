@@ -192,7 +192,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(25),
                                     child: CachedNetworkImage(
-                                      imageUrl: review.userData.profilePicture,
+                                      imageUrl: review.userData!.profilePicture,
                                       fit: BoxFit.fill,
                                       height: 50,
                                       width: 50,
@@ -214,7 +214,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                         Text(
-                                          review.userData.fullName.capitalize,
+                                          review.userData!.fullName.capitalize,
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w800,
                                               fontSize: 12),

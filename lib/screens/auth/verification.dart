@@ -166,7 +166,7 @@ class _VerificationState extends State<Verification> {
                 Visibility(
                   visible: widget.phoneNumber != null,
                   child: Text(
-                    widget.phoneNumber ?? "",
+                    widget.email ?? "",
                     style: KAppBodyTextStyle.copyWith(
                         color: kPrimaryColor, fontWeight: FontWeight.w700),
                   ),

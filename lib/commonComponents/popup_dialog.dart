@@ -152,6 +152,7 @@ void showConfirmationDialog(
 void showReviewPopup(BuildContext context, String name, String to,
     String? requestId, Function(ReviewModel) callback) {
   showDialog(
+    barrierDismissible: true,
     context: context,
     useSafeArea: true,
     barrierColor: Colors.transparent,
@@ -162,48 +163,52 @@ void showReviewPopup(BuildContext context, String name, String to,
           decoration: BoxDecoration(
             color: Colors.black.withOpacity(.1),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(child: Container()),
-              Material(
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10))),
-                  child: Column(children: [
-                    const SizedBox(height: 5),
-                    const Text(
-                      "Review!",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w900, fontSize: 32),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      "Please review $name",
-                      style: const TextStyle(color: Color(0xffC0BFBD)),
-                    ),
-                    const SizedBox(height: 5),
-                    RatingWidget(
-                      requestId: requestId,
-                      to: to,
-                      callback: (review) {
-                        showConfirmationDialog(context, "Thank you!",
-                            "Successfully reviewed $name", () {
-                          // Navigator.pop(context);
-                          callback(review);
-                        });
-                      },
-                    )
-                  ]),
+          child: Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(child: Container()),
+                Material(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10))),
+                    child: Column(children: [
+                      const SizedBox(height: 5),
+                      const Text(
+                        "Review!",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w900, fontSize: 32),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        "Please review $name",
+                        style: const TextStyle(color: Color(0xffC0BFBD)),
+                      ),
+                      const SizedBox(height: 5),
+                      RatingWidget(
+                        requestId: requestId,
+                        to: to,
+                        callback: (review) {
+                          showConfirmationDialog(context, "Thank you!",
+                              "Successfully reviewed $name", () {
+                            // Navigator.pop(context);
+                            callback(review);
+                          });
+                        },
+                      )
+                    ]),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );

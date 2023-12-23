@@ -61,8 +61,8 @@ class ServiceRequestProvider extends ChangeNotifier {
               "latitude": data.latitude,
               "name": data.name
             },
-            // "isScheduled": data.isScheduled,
-            "isScheduled": true,
+            "isScheduled": data.isScheduled,
+            // "isScheduled": true,
             "schedule": {"date": data.date, "time": data.time},
             "description": {
               "note": data.note,
