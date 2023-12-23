@@ -250,7 +250,7 @@ class _CounterOfferState extends State<CounterOffer> {
                           customRequestList("Tax", '\$${req.vat}'),
 
                           customRequestList(
-                              "Labour Estimation", '\$${req.totalEstimation}'),
+                              "Total", '\$${req.totalEstimation}'),
 
                           Visibility(
                               visible: req.discount != 0,

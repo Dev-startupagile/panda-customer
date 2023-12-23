@@ -244,7 +244,7 @@ class EstimateDetail extends StatelessWidget {
           ),
           customRequestList("Tax", '%${estimateDetail.vat}'),
           customRequestList(
-              "Labour Estimation", '\$${estimateDetail.totalEstimation}'),
+              "Total", '\$${estimateDetail.totalEstimation}'),
           Visibility(
               visible: estimateDetail.discount != 0,
               child: customRequestList(
