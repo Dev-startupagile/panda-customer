@@ -228,7 +228,7 @@ class EstimateDetail extends StatelessWidget {
                                 ]),
                                 Row(children: [
                                   Text(
-                                      "\$${estimateDetail.items[index].price}.00",
+                                      "\$${double.parse(estimateDetail.items[index].price).toStringAsFixed(2)}",
                                       style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.normal)),
@@ -243,8 +243,7 @@ class EstimateDetail extends StatelessWidget {
             height: 10,
           ),
           customRequestList("Tax", '%${estimateDetail.vat}'),
-          customRequestList(
-              "Total", '\$${estimateDetail.totalEstimation}'),
+          customRequestList("Total", '\$${estimateDetail.totalEstimation}'),
           Visibility(
               visible: estimateDetail.discount != 0,
               child: customRequestList(
