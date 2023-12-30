@@ -23,7 +23,7 @@ Widget historyListTile(status, titleText, subtitleText, date, actionMethod,
                   child: Container(
                     decoration: const BoxDecoration(color: Colors.grey),
                     child: Text(
-                      "Re Scheduled",
+                      "Scheduled",
                       style: KLatoTextStyle,
                     ),
                   ),

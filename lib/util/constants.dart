@@ -16,7 +16,7 @@ const String serviceunderwayN = "SERVICE_UNDERWAY";
 const String reScheduleN = "RE_SCHEDULE";
 
 const String canceledN = "Cancele d";
-const String completedN = "Completed";
+const String completedN = "COMPLETED";
 const String counterOfferN = "Counter Offer";
 
 const String rejectedByTechN = "REJECTED_BY_TECH";

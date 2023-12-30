@@ -96,7 +96,7 @@ class _CounterOfferState extends State<CounterOffer> {
                       return const CustomCardSkeletal();
                     })
                 : ListView.builder(
-                    itemCount: 1,
+                    itemCount: value.estimateDetail.length,
                     shrinkWrap: true,
                     controller: _scrollController,
                     itemBuilder: (context, index) {
@@ -250,7 +250,7 @@ class _CounterOfferState extends State<CounterOffer> {
                           customRequestList("Tax", '\$${req.vat}'),
 
                           customRequestList(
-                              "Labour Estimation", '\$${req.totalEstimation}'),
+                              "Total", '\$${req.totalEstimation}'),
 
                           Visibility(
                               visible: req.discount != 0,

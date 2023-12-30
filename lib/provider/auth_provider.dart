@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:panda/commonComponents/loading_dialog.dart';
+import 'package:panda/commonComponents/popup_dialog.dart';
 import 'package:panda/function/global_snackbar.dart';
 import 'package:panda/models/signup_form_model.dart';
 
@@ -25,7 +26,8 @@ class AuthProvider extends ChangeNotifier {
     Navigator.pushNamed(context, "/login");
   }
 
-  Future<http.Response?> signIn(context, email, password, fcmToken) async {
+  Future<http.Response?> signIn(
+      context, email, password, fcmToken, Function toggleSignIncallback) async {
     http.Response? response;
     dialog.openLoadingDialog(context);
     notifyListeners();
@@ -59,7 +61,21 @@ class AuthProvider extends ChangeNotifier {
         notifyListeners();
       } else if (response.statusCode == 404) {
         dialog.closeLoadingDialog(context);
-        displayErrorSnackBar(context, "User Not Found!");
+        showPopUpDialogBox(context, "Account not found",
+            "Please signup to create an account.", "cancle", "Sign up", () {
+          Navigator.pop(context);
+        }, () {
+          Navigator.pop(context);
+
+          toggleSignIncallback();
+        });
+        notifyListeners();
+      } else if (response.statusCode == 403) {
+        Map<String, dynamic> responseData = json.decode(response.body);
+
+        print(response.body);
+        dialog.closeLoadingDialog(context);
+        displayErrorSnackBar(context, responseData['message']);
         notifyListeners();
       } else {
         print(response.body);

@@ -1,20 +1,26 @@
 import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui';
+import 'dart:ui';
 
 import 'package:empty_widget/empty_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:panda/commonComponents/popup_dialog.dart';
 import 'package:panda/function/global_snackbar.dart';
 import 'package:panda/models/add_service_request_model.dart';
 import 'package:panda/models/rejection_by_tech.dart';
+import 'package:panda/provider/nearby_provider.dart';
 import 'package:panda/screens/home/services/service_request/componets/service_request_form.dart';
 import 'package:panda/util/ui_constant.dart';
 
 import '../../../../commonComponents/loading_dialog.dart';
 import '../../../../function/shared_prefs.dart';
 import '../../../../util/constants.dart';
+
+import 'package:provider/provider.dart';
 
 class RequestServicesMap extends StatefulWidget {
   const RequestServicesMap({super.key});
@@ -112,7 +118,14 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _determinePosition());
-
+    // context
+    //     .read<NearByProvider>()
+    //     .nearBy(context, _mainLocation.latitude, _mainLocation.longitude, null,
+    //         false)
+    //     .then((value) => _markers.addAll(context
+    //         .read<NearByProvider>()
+    //         .nearby
+    //         .map((e) => Marker(markerId: markerId))));
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -154,11 +167,6 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
               );
             },
           );
-        }
-        if (notification.title == completedN) {
-          var data = RejectionByTech.fromJson(notification.body!);
-          showReviewPopup(context, data.technicianName, data.requestId,
-              data.technicianId, (_) {});
         }
       }
     });
@@ -340,5 +348,61 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
     });
 
     return _markers;
+  }
+
+  GlobalKey _markerKey = GlobalKey();
+
+  // Future<BitmapDescriptor> createCustomMarkerBitmap(
+  //     CustomMarkerWidget markerWidget) async {
+  //   final RenderRepaintBoundary boundary =
+  //       _markerKey.currentContext.findRenderObject();
+  //   final image = await boundary.toImage(pixelRatio: 2.0);
+  //   final byteData = await image.toByteData(format: ImageByteFormat.png);
+  //   final Uint8List uint8List = byteData!.buffer.asUint8List();
+
+  //   return BitmapDescriptor.fromBytes(uint8List);
+  // }
+}
+
+class CustomMarkerWidget extends StatelessWidget {
+  final bool isOnline;
+  final String profilePicUrl;
+
+  const CustomMarkerWidget({
+    Key? key,
+    required this.isOnline,
+    required this.profilePicUrl,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+      ),
+      child: Stack(
+        children: [
+          CircleAvatar(
+            backgroundImage: NetworkImage(profilePicUrl),
+            radius: 20,
+          ),
+          if (isOnline)
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: Container(
+                height: 10,
+                width: 10,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.green,
+                ),
+              ),
+            )
+        ],
+      ),
+    );
   }
 }

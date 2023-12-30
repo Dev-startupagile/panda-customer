@@ -82,10 +82,10 @@ class _AuthState extends State<Auth> {
     lastnameController = TextEditingController();
     //TODO: DOn't fortget to remove
     emailController =
-        // TextEditingController(text: "baslielselamu2018+pc@gmail.com");
-        emailController = TextEditingController();
-    // passwordController = TextEditingController(text: "Ap2334$56");
-    passwordController = TextEditingController();
+        TextEditingController(text: "baslielselamu2018+pc@gmail.com");
+    // emailController = TextEditingController();
+    passwordController = TextEditingController(text: "Ap2334\$56");
+    // passwordController = TextEditingController();
 
     confirmPasswordController = TextEditingController();
     phoneController = TextEditingController();
@@ -198,76 +198,74 @@ class _AuthState extends State<Auth> {
     }
   }
 
-  submitData() {
+  void submitData() {
     _formKey.currentState!.save();
 
-    if (true) {
-      if (signUp) {
-        if (firstPage) {
-          if (emailController.text.isNotEmpty &&
-              passwordController.text.isNotEmpty) {
-            if (is8Char(passwordController.text) &&
-                containsNumb(passwordController.text) &&
-                containsLowerCase(passwordController.text) &&
-                containsUpperCase(passwordController.text) &&
-                containsSymbols(passwordController.text)) {
-              if (emailValidator(emailController.text) != null) {
-                displayErrorSnackBar(
-                    context, emailValidator(emailController.text) ?? "");
-              } else {
-                setState(() {
-                  firstPage = false;
-                });
-              }
-            } else {
-              displayErrorSnackBar(context, "please enter valid password ");
-            }
-          }
-          return;
-        }
-        if (!firstPage &&
-            firstnameController.text.isNotEmpty &&
-            lastnameController.text.isNotEmpty &&
-            phoneNumber != '') {
-          if (_image != null) {
-            if (nameValidator(firstnameController.text) != null) {
+    if (signUp) {
+      if (firstPage) {
+        if (emailController.text.isNotEmpty &&
+            passwordController.text.isNotEmpty) {
+          if (is8Char(passwordController.text) &&
+              containsNumb(passwordController.text) &&
+              containsLowerCase(passwordController.text) &&
+              containsUpperCase(passwordController.text) &&
+              containsSymbols(passwordController.text)) {
+            if (emailValidator(emailController.text) != null) {
               displayErrorSnackBar(
-                  context, nameValidator(firstnameController.text) ?? "");
-            } else if (nameValidator(lastnameController.text) != null) {
-              displayErrorSnackBar(
-                  context, nameValidator(lastnameController.text) ?? "");
-            } else if (phoneValidation != null) {
-              displayErrorSnackBar(context, phoneValidation ?? "");
-            } else if (passwordValidator(passwordController.text) != null) {
-              displayErrorSnackBar(
-                  context, passwordValidator(passwordController.text) ?? "");
+                  context, emailValidator(emailController.text) ?? "");
             } else {
               setState(() {
-                secondPage = true;
+                firstPage = false;
               });
             }
           } else {
-            displayErrorSnackBar(context, "please upload profile picture ");
+            displayErrorSnackBar(context, "please enter valid password ");
           }
-        } else {
-          displayErrorSnackBar(context, "Please fill out the above form");
         }
-      } else {
-        if (emailController.text.isNotEmpty &&
-            passwordController.text.isNotEmpty) {
-          if (emailValidator(emailController.text) != null) {
+        return;
+      }
+      if (!firstPage &&
+          firstnameController.text.isNotEmpty &&
+          lastnameController.text.isNotEmpty &&
+          phoneNumber != '') {
+        if (_image != null) {
+          if (nameValidator(firstnameController.text) != null) {
             displayErrorSnackBar(
-                context, emailValidator(emailController.text) ?? "");
+                context, nameValidator(firstnameController.text) ?? "");
+          } else if (nameValidator(lastnameController.text) != null) {
+            displayErrorSnackBar(
+                context, nameValidator(lastnameController.text) ?? "");
+          } else if (phoneValidation != null) {
+            displayErrorSnackBar(context, phoneValidation ?? "");
           } else if (passwordValidator(passwordController.text) != null) {
             displayErrorSnackBar(
                 context, passwordValidator(passwordController.text) ?? "");
           } else {
-            context.read<AuthProvider>().signIn(context, emailController.text,
-                passwordController.text, fcmToken);
+            setState(() {
+              secondPage = true;
+            });
           }
         } else {
-          displayErrorSnackBar(context, "Please fill out the above form ");
+          displayErrorSnackBar(context, "please upload profile picture ");
         }
+      } else {
+        displayErrorSnackBar(context, "Please fill out the above form");
+      }
+    } else {
+      if (emailController.text.isNotEmpty &&
+          passwordController.text.isNotEmpty) {
+        if (emailValidator(emailController.text) != null) {
+          displayErrorSnackBar(
+              context, emailValidator(emailController.text) ?? "");
+        } else if (passwordValidator(passwordController.text) != null) {
+          displayErrorSnackBar(
+              context, passwordValidator(passwordController.text) ?? "");
+        } else {
+          context.read<AuthProvider>().signIn(context, emailController.text,
+              passwordController.text, fcmToken, toggleSignIn);
+        }
+      } else {
+        displayErrorSnackBar(context, "Please fill out the above form ");
       }
     }
   }
@@ -326,7 +324,10 @@ class _AuthState extends State<Auth> {
                           Visibility(
                             visible: !signUp,
                             child: Center(
-                              child: Image.asset("assets/logo.png"),
+                              child: Image.asset(
+                                "assets/login-illustrator.jpg",
+                                height: 200,
+                              ),
                             ),
                           ),
                         const SizedBox(height: 10),
@@ -736,12 +737,7 @@ class _AuthState extends State<Auth> {
                                   visible:
                                       !context.watch<AuthProvider>().isLoading,
                                   child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        signUp = !signUp;
-                                      });
-                                      clearControllers();
-                                    },
+                                    onTap: toggleSignIn,
                                     child: signUp
                                         ? Visibility(
                                             visible: !secondPage,
@@ -787,6 +783,14 @@ class _AuthState extends State<Auth> {
             ),
           )),
     );
+  }
+
+  void toggleSignIn() {
+    setState(() {
+      signUp = !signUp;
+      if (!signUp) firstPage = true;
+    });
+    clearControllers();
   }
 
   Future _pickImage(ImageSource source) async {
@@ -842,9 +846,8 @@ class _AuthState extends State<Auth> {
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
           if (signIn) {
-            context
-                .read<AuthProvider>()
-                .signIn(context, email, kDefaultPassword, fcmToken);
+            context.read<AuthProvider>().signIn(
+                context, email, kDefaultPassword, fcmToken, toggleSignIn);
           } else {
             emailController.text = email;
             passwordController.text = kDefaultPassword;

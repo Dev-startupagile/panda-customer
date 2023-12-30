@@ -199,40 +199,37 @@ class RatingProvider extends ChangeNotifier {
     http.Response? response;
     await sharedPrefs.getToken();
 
-    if (true) {
-      isLoading = true;
-      notifyListeners();
-      var review;
-      try {
-        response = await http.post(Uri.parse('$apiUrl/reviews/add_review'),
-            headers: {
-              HttpHeaders.contentTypeHeader: "application/json",
-              HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
-            },
-            body: jsonEncode({
-              "rating": rating,
-              "to_email": to,
-              "requestId": requestId,
-              "review": feedback
-            }));
+    isLoading = true;
+    notifyListeners();
+    var review;
+    try {
+      response = await http.post(Uri.parse('$apiUrl/reviews/add_review'),
+          headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+            HttpHeaders.authorizationHeader: "Bearer ${sharedPrefs.token}"
+          },
+          body: jsonEncode({
+            "rating": rating,
+            "to_email": to,
+            "requestId": requestId,
+            "review": feedback
+          }));
 
-        if (response.statusCode == 201) {
-          isLoading = false;
-          Map<String, dynamic> data = json.decode(response.body);
-          review = ReviewModel.fromMap(data["data"]);
-        } else {
-          throw Exception("Something went wrong code: ${response.statusCode}");
-        }
-      } on SocketException catch (e) {
+      if (response.statusCode == 201) {
         isLoading = false;
-        displayErrorSnackBar(
-            context, "please check your internet and try again");
-      } catch (e) {
-        isLoading = false;
-        displayErrorSnackBar(context, "Something went wrong");
+        Map<String, dynamic> data = json.decode(response.body);
+        review = ReviewModel.fromMap(data["data"]);
+      } else {
+        throw Exception("Something went wrong code: ${response.statusCode}");
       }
-
-      return review;
+    } on SocketException catch (e) {
+      isLoading = false;
+      displayErrorSnackBar(context, "please check your internet and try again");
+    } catch (e) {
+      isLoading = false;
+      displayErrorSnackBar(context, "Something went wrong");
     }
+
+    return review;
   }
 }

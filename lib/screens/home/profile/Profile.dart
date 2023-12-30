@@ -7,6 +7,7 @@ import 'package:panda/provider/auth_provider.dart';
 import 'package:panda/screens/home/profile/profileComponents/list_tile.dart';
 import 'package:panda/screens/home/profile/profileComponents/payment_detail.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../commonComponents/skeletal/custom_profile_skeletal.dart';
 import '../../../provider/profile_provider.dart';
@@ -58,12 +59,14 @@ class ProfilePage extends StatelessWidget {
       );
     }
 
-    void termOfservices() {
-      Navigator.pushNamed(context, "/term_of_services");
+    void termOfservices() async {
+      // Navigator.pushNamed(context, "/term_of_services");
+      await launchUrl(Uri.parse("https://www.panda-mars.com/terms"));
     }
 
-    void privacyPolicy() {
-      Navigator.pushNamed(context, "/privacy_policy");
+    void privacyPolicy() async {
+      // Navigator.pushNamed(context, "/privacy_policy");
+      await launchUrl(Uri.parse("https://www.panda-mars.com/privacy"));
     }
 
     void settings() {

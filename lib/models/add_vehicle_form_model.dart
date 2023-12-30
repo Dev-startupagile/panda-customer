@@ -1,4 +1,4 @@
-class AddVehicleModel{
+class AddVehicleModel {
   String brand;
   String model;
   String make;
@@ -6,23 +6,23 @@ class AddVehicleModel{
   int plateNumber;
   String image;
   String color;
+  String? fuelType;
   String description;
   String tag;
 
+  AddVehicleModel(
+      {required this.brand,
+      required this.model,
+      required this.make,
+      required this.transmission,
+      required this.plateNumber,
+      required this.image,
+      required this.color,
+      required this.description,
+      required this.fuelType,
+      required this.tag});
 
-  AddVehicleModel({
-    required this.brand,
-    required this.model,
-    required this.make,
-    required this.transmission,
-    required this.plateNumber,
-    required this.image,
-    required this.color,
-    required this.description,
-    required this.tag
-  });
-
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["brand"] = brand;
     data["model"] = model;
@@ -32,6 +32,7 @@ class AddVehicleModel{
     data["image"] = image;
     data['color'] = color;
     data['description'] = description;
+    data['fuelType'] = fuelType;
     data['tag'] = tag;
     return data;
   }

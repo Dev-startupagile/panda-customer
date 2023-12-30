@@ -9,7 +9,6 @@ class CustomCardSkeletal extends StatelessWidget {
     return Row(
       children: [
         const SizedBox(width: 16),
-
         const SkeletonContainer.square(
           width: 90,
           height: 50,
@@ -19,7 +18,7 @@ class CustomCardSkeletal extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SkeletonContainer.rounded(
-              width: MediaQuery.of(context).size.width * 0.6,
+              width: MediaQuery.of(context).size.width * .5,
               height: 25,
             ),
             const SizedBox(height: 8),

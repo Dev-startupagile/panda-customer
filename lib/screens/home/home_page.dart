@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers, avoid_unnecessary_containers, must_be_immutable
 
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:panda/commonComponents/popup_dialog.dart';
 import 'package:panda/models/rejection_by_tech.dart';
 import 'package:panda/provider/rating_provider.dart';
@@ -9,6 +10,7 @@ import 'package:panda/screens/home/services/counter_offer.dart';
 import 'package:panda/screens/home/services/rating.dart';
 import 'package:panda/screens/home/services/request_offer.dart';
 import 'package:panda/screens/home/services/service_request/componets/assigned_technician.dart';
+import 'package:panda/util/constants.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
@@ -270,6 +272,55 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetchApi();
     });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("[FirebaseMessaging.onMessage] ${message.notification}");
+      RemoteNotification? notification = message.notification;
+      if (notification == null) return;
+      if (notification.title == estimateN) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return MaterialApp(
+              home: AlertDialog(
+                title: const Text("Estimation Recieved!"),
+                content: const Text(
+                    "The technician has sent an estimate for your service request."),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text("View"),
+                    onPressed: () {
+                      // Close the dialog first
+                      Navigator.pop(context);
+                      _onItemTapped(1);
+                    },
+                  ),
+                  TextButton(
+                    child: const Text("Cancle"),
+                    onPressed: () {
+                      // Close the dialog first
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+
+        setState(() {
+          widget.argument = null;
+        });
+      }
+      if (notification.title == completedN) {
+        var data = RejectionByTech.fromJson(notification.body!);
+        showReviewPopup(
+            context, data.technicianName, data.technicianId, data.requestId,
+            (_) {
+          Navigator.pop(context);
+        });
+      }
+    });
   }
 
   @override
@@ -286,7 +337,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           context,
           "Pending Service Estimate",
           "There is pending service estimate in your estimates page.",
-          "cancle",
+          "ok",
           "view", () {
         Navigator.pop(context);
       }, () {
@@ -350,6 +401,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           }
         },
         child: Scaffold(
+          resizeToAvoidBottomInset: true,
           body: Center(
             child: widgetOptions.elementAt(_selectedIndex),
           ),

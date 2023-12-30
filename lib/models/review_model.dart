@@ -9,7 +9,7 @@ class ReviewModel {
   final String review;
   final String? requestId;
   final double rating;
-  final CustomerInfo userData;
+  final CustomerInfo? userData;
   DateTime updatedAt;
   DateTime createdAt;
 
@@ -33,7 +33,7 @@ class ReviewModel {
       'review': review,
       'requestId': requestId,
       'rating': rating,
-      'user_data': userData.toJson(),
+      'user_data': userData?.toJson(),
       "updatedAt": updatedAt.toIso8601String(),
       "createdAt": createdAt.toIso8601String(),
     };
@@ -47,7 +47,9 @@ class ReviewModel {
       review: map['review'] ?? '',
       requestId: map['requestId'],
       rating: (map['rating'] ?? 0) / 1,
-      userData: CustomerInfo.fromJson(map['user_data']),
+      userData: map['user_data'] == null
+          ? null
+          : CustomerInfo.fromJson(map['user_data']),
       updatedAt: DateTime.parse(map["updatedAt"]),
       createdAt: DateTime.parse(map["createdAt"]),
     );
