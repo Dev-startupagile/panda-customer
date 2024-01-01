@@ -56,6 +56,8 @@ class _AuthState extends State<Auth> {
   String phoneNumber = '';
   String fcmToken = '';
 
+  bool phoneAgreed = false;
+
   late FirebaseMessaging messaging;
   late TextEditingController firstnameController;
   late TextEditingController lastnameController;
@@ -81,11 +83,11 @@ class _AuthState extends State<Auth> {
     firstnameController = TextEditingController();
     lastnameController = TextEditingController();
     //TODO: DOn't fortget to remove
-    emailController =
-        TextEditingController(text: "baslielselamu2018+pc@gmail.com");
-    // emailController = TextEditingController();
-    passwordController = TextEditingController(text: "Ap2334\$56");
-    // passwordController = TextEditingController();
+    // emailController =
+    // TextEditingController(text: "baslielselamu2018+pc@gmail.com");
+    emailController = TextEditingController();
+    // passwordController = TextEditingController(text: "Ap2334\$56");
+    passwordController = TextEditingController();
 
     confirmPasswordController = TextEditingController();
     phoneController = TextEditingController();
@@ -228,6 +230,10 @@ class _AuthState extends State<Auth> {
           firstnameController.text.isNotEmpty &&
           lastnameController.text.isNotEmpty &&
           phoneNumber != '') {
+        if (!phoneAgreed) {
+          return displayErrorSnackBar(
+              context, "You must agree to recieve text messages");
+        }
         if (_image != null) {
           if (nameValidator(firstnameController.text) != null) {
             displayErrorSnackBar(
@@ -505,6 +511,48 @@ class _AuthState extends State<Auth> {
                                                   phoneNumberSetter,
                                               phoneController:
                                                   phoneController)),
+                                      Visibility(
+                                        visible:
+                                            signUp && !firstPage && !secondPage,
+                                        child: Container(
+                                            alignment: Alignment.center,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.9,
+                                            margin: const EdgeInsets.fromLTRB(
+                                                0, 15, 0, 15),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Checkbox(
+                                                    checkColor: Colors.white,
+                                                    value: phoneAgreed,
+                                                    onChanged: (bool? value) {
+                                                      setState(() {
+                                                        phoneAgreed =
+                                                            !phoneAgreed;
+                                                      });
+                                                    },
+                                                  ),
+                                                  const Expanded(
+                                                    child: Text(
+                                                      "By checking this box you agree to receive text messages at the number provided.",
+                                                      style: TextStyle(
+                                                          fontSize: 14),
+                                                      textAlign: TextAlign.left,
+                                                    ),
+                                                  ),
+                                                ])),
+                                      ),
                                     ],
                                   ),
                                 ),
