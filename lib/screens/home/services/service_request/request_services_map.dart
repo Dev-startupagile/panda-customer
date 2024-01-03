@@ -1,26 +1,24 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
-import 'dart:typed_data';
-import 'dart:ui';
-import 'dart:ui';
 
 import 'package:empty_widget/empty_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:panda/function/global_snackbar.dart';
 import 'package:panda/models/add_service_request_model.dart';
 import 'package:panda/models/rejection_by_tech.dart';
-import 'package:panda/provider/nearby_provider.dart';
+import 'package:panda/provider/profile_provider.dart';
+import 'package:panda/screens/home/profile/profileComponents/edit_specific_component.dart';
 import 'package:panda/screens/home/services/service_request/componets/service_request_form.dart';
 import 'package:panda/util/ui_constant.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../commonComponents/loading_dialog.dart';
 import '../../../../function/shared_prefs.dart';
 import '../../../../util/constants.dart';
-
-import 'package:provider/provider.dart';
 
 class RequestServicesMap extends StatefulWidget {
   const RequestServicesMap({super.key});
@@ -268,22 +266,7 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width - 100,
                       child: ElevatedButton(
-                        onPressed: () {
-                          if (currentPosition == null) {
-                            displayInfoSnackBar(context,
-                                "we are finding your location please wait");
-                          } else {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ServiceRequestFormPage(
-                                            addServiceRequestModel:
-                                                AddServiceRequestModel(
-                                                    latitude: lat,
-                                                    longitude: long))));
-                          }
-                        },
+                        onPressed: _serviceRequest,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: kPrimaryColor,
                           padding: const EdgeInsets.symmetric(
@@ -304,24 +287,7 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
                           size: 40,
                         ),
                         color: Colors.white,
-                        onPressed: () {
-                          if (currentPosition == null) {
-                            displayInfoSnackBar(context,
-                                "we are finding your location please wait");
-                          } else {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ServiceRequestFormPage(
-                                            addServiceRequestModel:
-                                                AddServiceRequestModel(
-                                                    latitude: lat,
-                                                    longitude: long))));
-                          }
-
-                          // openCloseBrowse();
-                        },
+                        onPressed: _serviceRequest,
                       ),
                     ),
                   ],
@@ -332,6 +298,57 @@ class _RequestServicesMapState extends State<RequestServicesMap> {
         ],
       ),
     );
+  }
+
+  Future<void> _serviceRequest() async {
+    if (currentPosition == null) {
+      displayInfoSnackBar(context, "we are finding your location please wait");
+    }
+    if (context.read<ProfileProvider>().customerprofile == null) {
+      await context.read<ProfileProvider>().customerProfile(context);
+    }
+    if (context
+                .read<ProfileProvider>()
+                .customerprofile!
+                .personalInformation
+                .fullName ==
+            null ||
+        context
+            .read<ProfileProvider>()
+            .customerprofile!
+            .personalInformation
+            .fullName!
+            .isEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => EditSpecificComponent(
+            email: context
+                    .read<ProfileProvider>()
+                    .customerprofile!
+                    .personalInformation
+                    .id ??
+                "",
+            editType: fullNameConst,
+            editData: context
+                    .read<ProfileProvider>()
+                    .customerprofile!
+                    .personalInformation
+                    .fullName ??
+                '',
+          ),
+        ),
+      );
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ServiceRequestFormPage(
+                  addServiceRequestModel:
+                      AddServiceRequestModel(latitude: lat, longitude: long))));
+    }
+
+    // openCloseBrowse();
   }
 
   Set<Marker> myMarker() {

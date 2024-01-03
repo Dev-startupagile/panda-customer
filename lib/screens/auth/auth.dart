@@ -49,6 +49,7 @@ class _AuthState extends State<Auth> {
   bool signUp = false;
   bool isPasswordNotVisible = true;
   bool firstPage = true;
+  AvaliableSocialLogin? avaliableSocialLogin;
   bool secondPage = false;
   bool isChecked = false;
   String countryCode = '';
@@ -158,45 +159,42 @@ class _AuthState extends State<Auth> {
     _formKey.currentState!.save();
 
     if (stateController.text.isNotEmpty &&
-        cityController.text.isNotEmpty &&
-        streetController.text.isNotEmpty &&
-        zipcodeController.text.isNotEmpty) {
-      if (nameValidator(stateController.text) != null) {
-        displayErrorSnackBar(
-            context, nameValidator(stateController.text) ?? "");
-      } else if (nameValidator(cityController.text) != null) {
-        displayErrorSnackBar(context, nameValidator(cityController.text) ?? "");
-      } else if (streetValidator(streetController.text) != null) {
-        displayErrorSnackBar(
-            context, streetValidator(streetController.text) ?? "");
-      } else if (zipcodeValidator(zipcodeController.text) != null) {
-        displayErrorSnackBar(
-            context, zipcodeValidator(zipcodeController.text) ?? "");
-      } else {
-        if (isChecked) {
-          SignUpModel signupmodel = SignUpModel(
-              firstName: firstnameController.text,
-              lastName: lastnameController.text,
-              profilePicture:
-                  context.read<UploaderProvider>().uplodedFile ?? "",
-              email: emailController.text,
-              // phoneNumber: formatPhoneNumber(phoneNumber),
-              phoneNumber: phoneNumber,
-              state: stateController.text,
-              city: cityController.text,
-              password: passwordController.text,
-              zipCode: int.parse(zipcodeController.text),
-              userRole: "customer",
-              street: streetController.text,
-              fcm_token: fcmToken);
-          context.read<AuthProvider>().signUp(context, signupmodel);
-        } else {
-          displayInfoSnackBar(
-              context, "You have to accept our Terms & Conditions  first");
-        }
-      }
+        nameValidator(stateController.text) != null) {
+      displayErrorSnackBar(context, nameValidator(stateController.text) ?? "");
+    } else if (cityController.text.isNotEmpty &&
+        nameValidator(cityController.text) != null) {
+      displayErrorSnackBar(context, nameValidator(cityController.text) ?? "");
+    } else if (streetController.text.isNotEmpty &&
+        streetValidator(streetController.text) != null) {
+      displayErrorSnackBar(
+          context, streetValidator(streetController.text) ?? "");
+    } else if (zipcodeController.text.isNotEmpty &&
+        zipcodeValidator(zipcodeController.text) != null) {
+      displayErrorSnackBar(
+          context, zipcodeValidator(zipcodeController.text) ?? "");
     } else {
-      displayErrorSnackBar(context, "Please fill out the above form ");
+      if (isChecked) {
+        SignUpModel signupmodel = SignUpModel(
+            firstName: firstnameController.text,
+            lastName: lastnameController.text,
+            profilePicture: context.read<UploaderProvider>().uplodedFile ?? "",
+            email: emailController.text,
+            // phoneNumber: formatPhoneNumber(phoneNumber),
+            phoneNumber: phoneNumber,
+            state: stateController.text,
+            city: cityController.text,
+            password: passwordController.text,
+            zipCode: zipcodeController.text.isNotEmpty
+                ? int.parse(zipcodeController.text)
+                : 000,
+            userRole: "customer",
+            street: streetController.text,
+            fcm_token: fcmToken);
+        context.read<AuthProvider>().signUp(context, signupmodel);
+      } else {
+        displayInfoSnackBar(
+            context, "You have to accept our Terms & Conditions  first");
+      }
     }
   }
 
@@ -309,6 +307,7 @@ class _AuthState extends State<Auth> {
                           });
                         } else {
                           setState(() {
+                            firstPage = true;
                             signUp = false;
                           });
                         }
@@ -567,7 +566,7 @@ class _AuthState extends State<Auth> {
                                           isNumber: false,
                                           icon: Icons.location_city,
                                           nameController: streetController,
-                                          hintText: "Street",
+                                          hintText: "Street (Optional)",
                                           submitData: submitData,
                                           valueChanger: valueChanger,
                                           isEmail: false,
@@ -636,7 +635,7 @@ class _AuthState extends State<Auth> {
                                           isNumber: false,
                                           icon: Icons.location_city,
                                           nameController: cityController,
-                                          hintText: "City",
+                                          hintText: "City (Optional)",
                                           submitData: submitData,
                                           isEmail: false,
                                           isCity: true,
@@ -652,7 +651,7 @@ class _AuthState extends State<Auth> {
                                           isNumber: false,
                                           icon: Icons.location_city,
                                           nameController: stateController,
-                                          hintText: "State",
+                                          hintText: "State (Optional)",
                                           submitData: submitData,
                                           isEmail: false,
                                           isCity: false,
@@ -668,7 +667,7 @@ class _AuthState extends State<Auth> {
                                           isNumber: true,
                                           icon: Icons.code,
                                           nameController: zipcodeController,
-                                          hintText: "Zip Code",
+                                          hintText: "Zip Code (Optional)",
                                           submitData: submitData,
                                           isEmail: false,
                                           isCity: false,
@@ -880,32 +879,53 @@ class _AuthState extends State<Auth> {
         try {
           List<ac.AuthUserAttribute> listOfAttr =
               await af.Amplify.Auth.fetchUserAttributes();
-          String email = listOfAttr
-              .firstWhere((element) => element.userAttributeKey.key == "email")
-              .value;
-          // ac.AuthSession session = await af.Amplify.Auth.fetchAuthSession();
-          // ac.JsonWebToken token = (session as ac.CognitoAuthSession)
-          //     .userPoolTokensResult
-          //     .value
-          //     .accessToken;
-          // print("JWT Token: $token");
-          print("User's email: $email");
-          // Send email and JWT token to backend
-          // ignore: use_build_context_synchronously
+          String? email;
+          String? name;
+          if (listOfAttr
+              .where((element) => element.userAttributeKey.key == "email")
+              .isNotEmpty) {
+            email = listOfAttr
+                .firstWhere(
+                    (element) => element.userAttributeKey.key == "email")
+                .value;
+          }
+          if (listOfAttr
+              .where((element) => element.userAttributeKey.key == "name")
+              .isNotEmpty) {
+            name = listOfAttr
+                .firstWhere((element) => element.userAttributeKey.key == "name")
+                .value;
+          }
           Navigator.pop(context);
+
+          print("User's email: $email");
+
           if (signIn) {
             context.read<AuthProvider>().signIn(
                 context, email, kDefaultPassword, fcmToken, toggleSignIn);
           } else {
-            emailController.text = email;
+            if (socialLogin == AvaliableSocialLogin.google ||
+                socialLogin == AvaliableSocialLogin.apple) {
+              if (name != null && name.contains(" ")) {
+                var bothName = name.split(" ");
+                firstnameController.text = bothName[0];
+                lastnameController.text = bothName[1];
+              } else {
+                firstnameController.text = name ?? '';
+              }
+              emailController.text = email ?? '';
+            }
+
             passwordController.text = kDefaultPassword;
             confirmPasswordController.text = kDefaultPassword;
             setState(() {
               firstPage = false;
+              avaliableSocialLogin = socialLogin;
             });
           }
         } catch (e) {
           print("Error getting user data: $e");
+          Navigator.of(context).pop();
         }
       } else {
         Navigator.pop(context);

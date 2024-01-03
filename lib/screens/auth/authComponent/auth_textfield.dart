@@ -26,33 +26,33 @@ class CustomAuthTextField extends StatefulWidget {
   bool? isPasswordNotVisible;
   Function? changeVisibility;
 
-  CustomAuthTextField({
-    required this.isNumber,
-    required this.icon,
-    required this.nameController,
-    required this.hintText,
-    required this.submitData,
-    this.valueChanger,
-    required this.isEmail,
-    required this.isCity,
-    required this.isZipCode,
-    required this.isStreet,
-    required this.isPassword,
-    this.isDescription,
-    required this.isConfirmPassword,
-    this.isPasswordNotVisible,
-    this.changeVisibility,
-    this.hintPasswordShower,
-    required this.isTag,
-    required this.isState,
-    Key? key}) : super(key: key);
+  CustomAuthTextField(
+      {required this.isNumber,
+      required this.icon,
+      required this.nameController,
+      required this.hintText,
+      required this.submitData,
+      this.valueChanger,
+      required this.isEmail,
+      required this.isCity,
+      required this.isZipCode,
+      required this.isStreet,
+      required this.isPassword,
+      this.isDescription,
+      required this.isConfirmPassword,
+      this.isPasswordNotVisible,
+      this.changeVisibility,
+      this.hintPasswordShower,
+      required this.isTag,
+      required this.isState,
+      Key? key})
+      : super(key: key);
 
   @override
   State<CustomAuthTextField> createState() => _CustomAuthTextFieldState();
 }
 
 class _CustomAuthTextFieldState extends State<CustomAuthTextField> {
-
   String? emailValidation;
   String? streetValidation;
   String? zipcodeValidation;
@@ -63,24 +63,24 @@ class _CustomAuthTextFieldState extends State<CustomAuthTextField> {
   String? passwordValidation;
   String? confirmpasswordValidation;
 
-  void validateForm(value){
-    if(widget.isEmail){
-      setState((){
+  void validateForm(value) {
+    if (widget.isEmail) {
+      setState(() {
         emailValidation = emailValidator(value);
       });
-    }else if(widget.isStreet){
-      setState((){
+    } else if (widget.isStreet) {
+      setState(() {
         streetValidation = streetValidator(value);
       });
-    }else if(widget.isCity){
-      setState((){
+    } else if (widget.isCity) {
+      setState(() {
         streetValidation = streetValidator(value);
       });
-    } else if(widget.isZipCode){
-      setState((){
+    } else if (widget.isZipCode) {
+      setState(() {
         zipcodeValidation = zipcodeValidator(value);
       });
-    }else if(widget.isPassword){
+    } else if (widget.isPassword) {
       final val = passwordValidator(value);
 
       setState(() {
@@ -88,46 +88,44 @@ class _CustomAuthTextFieldState extends State<CustomAuthTextField> {
         confirmpasswordValidation = val;
         widget.hintPasswordShower!();
       });
-
-    }
-    else if(widget.isConfirmPassword){
+    } else if (widget.isConfirmPassword) {
       setState(() {
         confirmpasswordValidation = confirmPasswordValidator(value);
       });
-    }else if(widget.isDescription != null){
+    } else if (widget.isDescription != null) {
       setState(() {
         isDescription = true;
       });
-    } else{
-      setState((){
+    } else {
+      setState(() {
         nameValidation = nameValidator(value);
       });
     }
   }
-   boxShadowColor(){
-     if( emailValidation != null){
-       return Colors.red;
-     }else if(streetValidation != null){
-       return Colors.red;
-     }else if( zipcodeValidation != null){
-       return Colors.red;
-     }else if(nameValidation != null){
-       return Colors.red;
-     } else if(passwordValidation != null ){
-       return Colors.red;
-     } else if( confirmpasswordValidation != null){
-       return Colors.red;
-     }
-     else if( isDescription != null){
-       return Colors.grey.withOpacity(0.2);
-     } else{
-       return Colors.grey.withOpacity(0.2);
-     }
+
+  boxShadowColor() {
+    if (emailValidation != null) {
+      return Colors.red;
+      //  }else if(streetValidation != null){
+      //    return Colors.red;
+      //  }else if( zipcodeValidation != null){
+      //    return Colors.red;
+    } else if (nameValidation != null) {
+      return Colors.red;
+    } else if (passwordValidation != null) {
+      return Colors.red;
+    } else if (confirmpasswordValidation != null) {
+      return Colors.red;
+    } else if (isDescription != null) {
+      return Colors.grey.withOpacity(0.2);
+    } else {
+      return Colors.grey.withOpacity(0.2);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
+    return Padding(
       padding: const EdgeInsets.all(0.0),
       child: Container(
         height: 50,
@@ -136,7 +134,7 @@ class _CustomAuthTextFieldState extends State<CustomAuthTextField> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color:boxShadowColor(),
+              color: boxShadowColor(),
               spreadRadius: 1,
               blurRadius: 2,
               offset: const Offset(0, 3),
@@ -146,69 +144,66 @@ class _CustomAuthTextFieldState extends State<CustomAuthTextField> {
         child: Padding(
           padding: const EdgeInsets.all(0.0),
           child: TextFormField(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller:  widget.nameController,
-              cursorColor: Colors.blueGrey,
-              maxLength: widget.isZipCode? 5 : widget.isDescription != null? 100 : null,
-              inputFormatters: <TextInputFormatter>[
-                if(widget.isTag) UpperCaseTextFormatter()
-                else if(widget.isState) FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
-
-              ],
-              keyboardType:
-                  widget.isNumber?
-                    TextInputType.number:
-                  widget.isEmail?
-                    TextInputType.emailAddress:
-                    TextInputType.streetAddress,
-              textInputAction: TextInputAction.go,
-              obscureText: widget.isPasswordNotVisible ?? false,
-              onChanged: (value){
-                validateForm(value);
-                if(widget.valueChanger != null){
-                  widget.valueChanger!(value);
-                }
-              },
-              onSaved: (value){
-                validateForm(value);
-              },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            controller: widget.nameController,
+            cursorColor: Colors.blueGrey,
+            maxLength: widget.isZipCode
+                ? 5
+                : widget.isDescription != null
+                    ? 100
+                    : null,
+            inputFormatters: <TextInputFormatter>[
+              if (widget.isTag)
+                UpperCaseTextFormatter()
+              else if (widget.isState)
+                FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
+            ],
+            keyboardType: widget.isNumber
+                ? TextInputType.number
+                : widget.isEmail
+                    ? TextInputType.emailAddress
+                    : TextInputType.streetAddress,
+            textInputAction: TextInputAction.go,
+            obscureText: widget.isPasswordNotVisible ?? false,
+            onChanged: (value) {
+              validateForm(value);
+              if (widget.valueChanger != null) {
+                widget.valueChanger!(value);
+              }
+            },
+            onSaved: (value) {
+              validateForm(value);
+            },
             style: const TextStyle(fontSize: 16),
             cursorWidth: 1,
-            decoration:  InputDecoration(
-                  counterText: '',
-                  border: InputBorder.none,
-                  hintText: widget.hintText,
-                  errorStyle: const TextStyle(
-                    color: Colors.transparent,
-                    fontSize: 0,
-                    height: 0
-                  ),
-                  prefixIcon: Icon(
-                    widget.icon,
-                    color: KHintColor,
-                  ),
-                  suffixIcon:
-                  widget.isPassword?
-                  IconButton(
-                      icon:  widget.isPasswordNotVisible!
-                          ? const Icon(
-                        Icons.visibility_off,
-                        color: KHintColor,
-                      )
-                          : const Icon(
-                        Icons.visibility,
-                        color: KHintColor,
-                      ),
-                      onPressed: () =>  widget.changeVisibility!()
-                  )
-                      :
-                  null
-                  ,
+            decoration: InputDecoration(
+              counterText: '',
+              border: InputBorder.none,
+              hintText: widget.hintText,
+              errorStyle: const TextStyle(
+                  color: Colors.transparent, fontSize: 0, height: 0),
+              prefixIcon: Icon(
+                widget.icon,
+                color: KHintColor,
               ),
+              suffixIcon: widget.isPassword
+                  ? IconButton(
+                      icon: widget.isPasswordNotVisible!
+                          ? const Icon(
+                              Icons.visibility_off,
+                              color: KHintColor,
+                            )
+                          : const Icon(
+                              Icons.visibility,
+                              color: KHintColor,
+                            ),
+                      onPressed: () => widget.changeVisibility!())
+                  : null,
             ),
+          ),
         ),
-        ),
-      );
+      ),
+    );
   }
 }
 
@@ -217,7 +212,13 @@ class CustomPhoneTextField extends StatefulWidget {
   Function phoneNumberSetter;
   Function phoneValidationSetter;
   String? phoneValidation;
-  CustomPhoneTextField({ required this.phoneValidation, required this.phoneValidationSetter, required this.phoneNumberSetter, required this.phoneController, Key? key}) : super(key: key);
+  CustomPhoneTextField(
+      {required this.phoneValidation,
+      required this.phoneValidationSetter,
+      required this.phoneNumberSetter,
+      required this.phoneController,
+      Key? key})
+      : super(key: key);
 
   @override
   State<CustomPhoneTextField> createState() => _CustomPhoneTextFieldState();
@@ -228,7 +229,7 @@ class _CustomPhoneTextFieldState extends State<CustomPhoneTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
+    return Padding(
       padding: const EdgeInsets.all(0.0),
       child: Container(
         height: 50,
@@ -238,24 +239,22 @@ class _CustomPhoneTextFieldState extends State<CustomPhoneTextField> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color:
-              widget.phoneValidation != null?
-              Colors.red:
-              Colors.grey.withOpacity(0.2),
+              color: widget.phoneValidation != null
+                  ? Colors.red
+                  : Colors.grey.withOpacity(0.2),
               spreadRadius: 1,
               blurRadius: 2,
               offset: const Offset(0, 3),
             ),
           ],
         ),
-        child:  InternationalPhoneNumberInput(
+        child: InternationalPhoneNumberInput(
           inputBorder: InputBorder.none,
           maxLength: 12,
           onInputChanged: (PhoneNumber number) {
             widget.phoneValidationSetter(phoneValidator(number.phoneNumber));
             widget.phoneNumberSetter(number.phoneNumber);
           },
-
           formatInput: true,
           onInputValidated: (bool value) {},
           selectorConfig: const SelectorConfig(

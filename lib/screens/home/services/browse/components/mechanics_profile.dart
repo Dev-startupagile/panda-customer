@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:panda/commonComponents/popup_dialog.dart';
 import 'package:panda/commonComponents/profile_avatar.dart';
 import 'package:panda/util/ui_constant.dart';
 
@@ -37,7 +38,15 @@ class MechanicsProfile extends StatelessWidget {
               subtitle: Text(mechanicProfile?.technicianDetail?.id ?? ""),
               trailing: IconButton(
                   onPressed: () {
-                    launchPhone(mechanicProfile?.technicianDetail?.phoneNumber);
+                    if (mechanicProfile?.technicianDetail?.phoneNumber ==
+                        null) {
+                      return showInfoDialog(
+                          context,
+                          "Sorry you can't call the technician at this time.",
+                          () => null);
+                    }
+                    launchPhone(
+                        mechanicProfile!.technicianDetail!.phoneNumber!);
                   },
                   icon: const Icon(Icons.phone))),
           Row(
@@ -61,7 +70,15 @@ class MechanicsProfile extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: IconButton(
                     onPressed: () {
-                      launchSms(mechanicProfile?.technicianDetail?.phoneNumber);
+                      if (mechanicProfile?.technicianDetail?.phoneNumber ==
+                          null) {
+                        return showInfoDialog(
+                            context,
+                            "Sorry you can't text the technician at this time.",
+                            () => null);
+                      }
+                      launchSms(
+                          mechanicProfile!.technicianDetail!.phoneNumber!);
                     },
                     icon: const Icon(Icons.message, color: Colors.grey)),
               ),

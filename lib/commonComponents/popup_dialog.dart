@@ -149,6 +149,27 @@ void showConfirmationDialog(
   );
 }
 
+void showInfoDialog(BuildContext context, String msg, Function() callback) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context2) {
+      return AlertDialog(
+        content: Text(msg),
+        actions: <Widget>[
+          TextButton(
+            child: const Text("OK"),
+            onPressed: () {
+              // Close the dialog first
+              Navigator.pop(context);
+              callback();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 void showReviewPopup(BuildContext context, String name, String to,
     String? requestId, Function(ReviewModel) callback) {
   showDialog(
