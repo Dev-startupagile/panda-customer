@@ -18,6 +18,7 @@ class AuthProvider extends ChangeNotifier {
   bool isLoading = false;
   bool isOtpSent = false;
   bool isVerificationLoding = false;
+
   final sharedPrefs = SharedPrefs();
   final dialog = DialogHandler();
 

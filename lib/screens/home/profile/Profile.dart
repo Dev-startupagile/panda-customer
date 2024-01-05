@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:panda/commonComponents/popup_dialog.dart';
 import 'package:panda/commonComponents/profile_avatar.dart';
-import 'package:panda/function/substring.dart';
 import 'package:panda/provider/auth_provider.dart';
 import 'package:panda/screens/home/profile/profileComponents/list_tile.dart';
 import 'package:panda/screens/home/profile/profileComponents/payment_detail.dart';

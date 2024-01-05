@@ -3,11 +3,11 @@ import 'package:url_launcher/url_launcher.dart';
 String? encodeQueryParameters(Map<String, String> params) {
   return params.entries
       .map((MapEntry<String, String> e) =>
-  '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
       .join('&');
 }
 
-void launchEmail(){
+void launchEmail() {
   final Uri emailLaunchUri = Uri(
     scheme: 'mailto',
     path: 'project@t1factory.com',
@@ -18,7 +18,7 @@ void launchEmail(){
   launchUrl(emailLaunchUri);
 }
 
-void launchSms(phoneNumber){
+void launchSms(String phoneNumber) {
   final Uri smsLaunchUri = Uri(
     scheme: 'sms',
     path: phoneNumber,
@@ -28,11 +28,11 @@ void launchSms(phoneNumber){
   );
   launchUrl(smsLaunchUri);
 }
-void launchPhone(phoneNumber){
+
+void launchPhone(String phoneNumber) {
   final Uri smsLaunchUri = Uri(
     scheme: 'tel',
     path: phoneNumber,
-
   );
   launchUrl(smsLaunchUri);
 }

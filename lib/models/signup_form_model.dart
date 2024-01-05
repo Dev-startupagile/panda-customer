@@ -1,33 +1,32 @@
-class SignUpModel{
+class SignUpModel {
   String firstName;
   String lastName;
   String profilePicture;
   String email;
-  String phoneNumber;
+  String? phoneNumber;
   String password;
-  String street;
-  String city;
-  String state;
-  int zipCode;
+  String? street;
+  String? city;
+  String? state;
+  int? zipCode;
   String userRole;
   String fcm_token;
 
-  SignUpModel({
-    required this.firstName,
-    required this.lastName,
-    required this.profilePicture,
-    required this.email,
-    required this.phoneNumber,
-    required this.state,
-    required this.city,
-    required this.password,
-    required this.zipCode,
-    required this.userRole,
-    required this.street,
-    required this.fcm_token
-  });
+  SignUpModel(
+      {required this.firstName,
+      required this.lastName,
+      required this.profilePicture,
+      required this.email,
+      required this.phoneNumber,
+      required this.state,
+      required this.city,
+      required this.password,
+      required this.zipCode,
+      required this.userRole,
+      required this.street,
+      required this.fcm_token});
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["firstName"] = firstName;
     data["lastName"] = lastName;

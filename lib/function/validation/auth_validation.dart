@@ -57,7 +57,7 @@ String? emailValidator(value) {
 
 String? phoneValidator(value) {
   if (value.isEmpty) {
-    return ("Phone Number can not be Empty");
+    return null;
   }
   if (value.length < 10) {
     return ("Enter Valid PhoneNumber");

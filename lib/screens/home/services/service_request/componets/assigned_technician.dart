@@ -1,6 +1,7 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:panda/commonComponents/popup_dialog.dart';
 import 'package:panda/commonComponents/profile_avatar.dart';
 import 'package:panda/function/launcher.dart';
 import 'package:panda/models/add_service_request_model.dart';
@@ -37,7 +38,13 @@ class AssignedTechnician extends StatelessWidget {
               ),
               trailing: IconButton(
                   onPressed: () {
-                    launchPhone(mechanicProfile.technicianDetail?.phoneNumber);
+                    if (mechanicProfile.technicianDetail?.phoneNumber == null) {
+                      return showInfoDialog(
+                          context,
+                          "Sorry you can't call the technician at this time.",
+                          () => null);
+                    }
+                    launchPhone(mechanicProfile.technicianDetail!.phoneNumber!);
                   },
                   icon: const Icon(Icons.phone))),
           const Divider(),

@@ -136,7 +136,7 @@ class CustomerInfo {
     required this.reviewCount,
   });
 
-  String phoneNumber;
+  String? phoneNumber;
   String userRole;
   String subscription;
   DateTime createdAt;
