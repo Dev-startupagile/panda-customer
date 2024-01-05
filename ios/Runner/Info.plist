@@ -27,17 +27,15 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
+	<string>Our app needs to access your Photo Library to set your profile Picture inside our app.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>We need to access your location for Panda to work accurately</string>
+	<string>Our app needs to access your location to Find Nearby Technicians Around You</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Panda wants to access your photo library</string>
+	<string>Our app needs to access your Photo Library to set your profile Picture inside our app.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Your location is required for xyz benefits for you</string>
+	<string>Our app needs to access your location to Find Nearby Technicians Around You</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location is required for xyz benefits for you</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string></string>
+	<string>Our app needs to access your location to Find Nearby Technicians Around You</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
