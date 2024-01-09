@@ -41,7 +41,7 @@ class _AuthState extends State<Auth> {
   final _formKey = GlobalKey<FormState>();
   late PhoneController phonecontroller;
   String? phoneValidation;
-
+  String signupmethod = 'email';
   File? _image;
   String? finalState;
   bool isPasswordValidated = false;
@@ -183,6 +183,7 @@ class _AuthState extends State<Auth> {
             phoneNumber: phoneNumber,
             state: stateController.text,
             city: cityController.text,
+            method: signupmethod,
             password: passwordController.text,
             zipCode: zipcodeController.text.isNotEmpty
                 ? int.parse(zipcodeController.text)
@@ -215,6 +216,7 @@ class _AuthState extends State<Auth> {
                   context, emailValidator(emailController.text) ?? "");
             } else {
               setState(() {
+                signupmethod = 'email';
                 firstPage = false;
               });
             }
@@ -919,6 +921,7 @@ class _AuthState extends State<Auth> {
             passwordController.text = kDefaultPassword;
             confirmPasswordController.text = kDefaultPassword;
             setState(() {
+              signupmethod = socialLogin.name;
               firstPage = false;
               avaliableSocialLogin = socialLogin;
             });
