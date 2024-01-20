@@ -84,8 +84,7 @@ class _AddVehicleState extends State<AddVehicle> {
   void submitData() {
     _formKey.currentState!.save();
 
-    if (_brand.text.isNotEmpty &&
-        _model.text.isNotEmpty &&
+    if (_model.text.isNotEmpty &&
         _make.text.isNotEmpty &&
         _selectedFuelType != null &&
         _selectedFuelType!.isNotEmpty &&
@@ -99,7 +98,7 @@ class _AddVehicleState extends State<AddVehicle> {
         displayErrorSnackBar(context, "please wait until image uploaded");
       } else {
         AddVehicleModel addvehicle = AddVehicleModel(
-            brand: _brand.text,
+            brand: "${_make.text} ${_model.text}",
             model: _model.text,
             make: _make.text,
             transmission: _selectedTransmission!,

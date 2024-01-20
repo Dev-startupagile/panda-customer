@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:panda/core/exceptions/app_http_exceptions.dart';
 import 'package:panda/function/global_snackbar.dart';
 import 'package:http/http.dart' as http;
@@ -178,6 +179,7 @@ class ProfileProvider extends ChangeNotifier {
         dialog.closeLoadingDialog(context);
         Navigator.of(context).pushNamed('/login');
         sharedPrefs.removeFromPrefs();
+        sharedPrefs.clear();
         notifyListeners();
       } else {
         dialog.closeLoadingDialog(context);
@@ -247,6 +249,10 @@ class ProfileProvider extends ChangeNotifier {
     } on SocketException catch (e) {
       dialog.closeLoadingDialog(context);
       displayErrorSnackBar(context, "please check your internet and try again");
+      notifyListeners();
+    } on PlatformException catch (e) {
+      dialog.closeLoadingDialog(context);
+      displayErrorSnackBar(context, e.message ?? "Adding payment card failed!");
       notifyListeners();
     } catch (e) {
       dialog.closeLoadingDialog(context);
