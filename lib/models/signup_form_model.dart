@@ -9,8 +9,9 @@ class SignUpModel {
   String? city;
   String? state;
   int? zipCode;
-  String userRole;
   String fcm_token;
+  String userRole;
+  String method;
 
   SignUpModel(
       {required this.firstName,
@@ -24,6 +25,7 @@ class SignUpModel {
       required this.zipCode,
       required this.userRole,
       required this.street,
+      required this.method,
       required this.fcm_token});
 
   Map<String, dynamic> toJson() {
@@ -40,6 +42,7 @@ class SignUpModel {
     data['userRole'] = userRole;
     data['street'] = street;
     data['fcm_token'] = fcm_token;
+    data['method'] = method;
 
     return data;
   }

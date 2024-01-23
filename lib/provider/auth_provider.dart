@@ -114,16 +114,21 @@ class AuthProvider extends ChangeNotifier {
       if (response.statusCode == 201) {
         dialog.closeLoadingDialog(context);
         sharedPrefs.saveIsFirstLogin();
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Verification(
-                    email: data.email,
-                    isFromReset: false,
-                    phoneNumber: data.phoneNumber,
-                  )),
-        );
+        if (data.method == 'email') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Verification(
+                      email: data.email,
+                      isFromReset: false,
+                      phoneNumber: data.phoneNumber,
+                    )),
+          );
+        } else {
+          final token = verifyResponseModelFromJson(response.body);
+          await sharedPrefs.saveToPrefs(token.token);
+          Navigator.of(context).pushNamed('/home');
+        }
       } else if (response.statusCode == 400) {
         dialog.closeLoadingDialog(context);
         displayErrorSnackBar(context, "User already Exist");

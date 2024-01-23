@@ -53,6 +53,11 @@ class SharedPrefs {
     token = k;
   }
 
+  Future<void> clear() async {
+    await initPrefs();
+    await prefs!.clear();
+  }
+
   Future<void> saveIsFirstLogin() async {
     await initPrefs();
     prefs!.setBool(isFirstLogin, true);
