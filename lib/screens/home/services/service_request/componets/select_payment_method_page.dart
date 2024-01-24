@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:panda/function/global_snackbar.dart';
 import 'package:panda/models/add_service_request_model.dart';
 import 'package:panda/provider/service_request_provider.dart';
 import 'package:panda/provider/uploader_provider.dart';
@@ -123,6 +124,10 @@ class _SelectPaymentMethodPageState extends State<SelectPaymentMethodPage> {
                     ),
                     RequestServiceBtn(onTap: () async {
                       widget.addServiceRequestModel.paymentId = paymentId;
+                      if (widget.addServiceRequestModel.paymentId == null) {
+                        return displayInfoSnackBar(
+                            context, "please select payment method first!");
+                      }
                       var response = await context
                           .read<ServiceRequestProvider>()
                           .sendServiceRequest(

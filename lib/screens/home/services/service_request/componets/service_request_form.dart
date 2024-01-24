@@ -120,15 +120,16 @@ class _ServiceRequestFormPageState extends State<ServiceRequestFormPage> {
                         ),
                         RequestServiceBtn(onTap: () {
                           if (widget.addServiceRequestModel.serviceId == null) {
-                            displayInfoSnackBar(
+                            return displayInfoSnackBar(
                                 context, "please Select Service type");
+                          } else {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => WhereAreYouPage(
+                                        addServiceRequestModel:
+                                            widget.addServiceRequestModel)));
                           }
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => WhereAreYouPage(
-                                      addServiceRequestModel:
-                                          widget.addServiceRequestModel)));
                         }),
                       ],
                     );
