@@ -422,7 +422,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           requestId:
                               context.read<NotificationProvider>().requestId)
                       : widget.argument != null
-                          ? AssignedTechnician(arg: widget.argument)
+                          ? AssignedTechnician(
+                              arg: widget.argument,
+                              callback: () {
+                                widget.argument = null;
+                                setState(() {});
+                              })
                           : null,
           bottomNavigationBar: Stack(
             children: [

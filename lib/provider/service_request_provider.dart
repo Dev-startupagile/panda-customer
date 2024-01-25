@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:panda/function/global_snackbar.dart';
@@ -263,6 +264,7 @@ class ServiceRequestProvider extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
+        print(response.body);
         final result = requestStatusModelFromJson(response.body);
 
         requests = result.data;

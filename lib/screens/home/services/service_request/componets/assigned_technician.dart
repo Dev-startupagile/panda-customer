@@ -10,8 +10,11 @@ import 'package:panda/models/nearby_model.dart';
 import '../../../../../util/ui_constant.dart';
 
 class AssignedTechnician extends StatelessWidget {
-  const AssignedTechnician({Key? key, required this.arg}) : super(key: key);
+  const AssignedTechnician(
+      {Key? key, required this.arg, required this.callback})
+      : super(key: key);
   final Map<String, dynamic> arg;
+  final Function callback;
   @override
   Widget build(BuildContext context) {
     AddServiceRequestModel addServiceRequestModel = arg["service"];
@@ -36,17 +39,41 @@ class AssignedTechnician extends StatelessWidget {
                 mechanicProfile.technicianDetail?.id ?? "",
                 overflow: TextOverflow.ellipsis,
               ),
-              trailing: IconButton(
-                  onPressed: () {
-                    if (mechanicProfile.technicianDetail?.phoneNumber == null) {
-                      return showInfoDialog(
-                          context,
-                          "Sorry you can't call the technician at this time.",
-                          () => null);
-                    }
-                    launchPhone(mechanicProfile.technicianDetail!.phoneNumber!);
-                  },
-                  icon: const Icon(Icons.phone))),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        if (mechanicProfile.technicianDetail?.phoneNumber ==
+                            null) {
+                          return showInfoDialog(
+                              context,
+                              "Sorry you can't call the technician at this time.",
+                              () => null);
+                        }
+                        launchPhone(
+                            mechanicProfile.technicianDetail!.phoneNumber!);
+                      },
+                      icon: const Icon(Icons.phone)),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      callback();
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                            color: Colors.red, shape: BoxShape.circle),
+                        child: const Icon(
+                          Icons.close,
+                          size: 18,
+                          color: Colors.white,
+                        )),
+                  )
+                ],
+              )),
           const Divider(),
           ListTile(
             title: Text(
