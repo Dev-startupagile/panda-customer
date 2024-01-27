@@ -234,26 +234,26 @@ class _AuthState extends State<Auth> {
           return displayErrorSnackBar(
               context, "You must agree to recieve text messages");
         }
-        if (_image != null) {
-          if (nameValidator(firstnameController.text) != null) {
-            displayErrorSnackBar(
-                context, nameValidator(firstnameController.text) ?? "");
-          } else if (nameValidator(lastnameController.text) != null) {
-            displayErrorSnackBar(
-                context, nameValidator(lastnameController.text) ?? "");
-          } else if (phoneValidation != null) {
-            displayErrorSnackBar(context, phoneValidation ?? "");
-          } else if (passwordValidator(passwordController.text) != null) {
-            displayErrorSnackBar(
-                context, passwordValidator(passwordController.text) ?? "");
-          } else {
-            setState(() {
-              secondPage = true;
-            });
-          }
+        // if (_image != null) {
+        if (nameValidator(firstnameController.text) != null) {
+          displayErrorSnackBar(
+              context, nameValidator(firstnameController.text) ?? "");
+        } else if (nameValidator(lastnameController.text) != null) {
+          displayErrorSnackBar(
+              context, nameValidator(lastnameController.text) ?? "");
+        } else if (phoneValidation != null) {
+          displayErrorSnackBar(context, phoneValidation ?? "");
+        } else if (passwordValidator(passwordController.text) != null) {
+          displayErrorSnackBar(
+              context, passwordValidator(passwordController.text) ?? "");
         } else {
-          displayErrorSnackBar(context, "please upload profile picture ");
+          setState(() {
+            secondPage = true;
+          });
         }
+        // } else {
+        //   displayErrorSnackBar(context, "please upload profile picture ");
+        // }
       } else {
         displayErrorSnackBar(context, "Please fill out the above form");
       }
