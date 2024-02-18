@@ -6,6 +6,7 @@ import 'package:panda/commonComponents/profile_avatar.dart';
 import 'package:panda/function/global_snackbar.dart';
 import 'package:panda/screens/home/history/historyComponent/history_list_tile.dart';
 import 'dart:core';
+import 'package:provider/provider.dart';
 
 import '../../../../commonComponents/buttons/main_button.dart';
 import '../../../../util/ui_constant.dart';
@@ -44,7 +45,7 @@ class EstimateDetail extends StatelessWidget {
     // notifyListeners();
   }
 
-  void decline(context) async {
+  void decline(BuildContext context) async {
     await context
         .read<EstimateProvider>()
         .declineEstimate(context, estimateDetail.id);
